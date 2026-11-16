@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小宇宙 · 创意作品集</title>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#ff1f3c;
+    --red-dark:#e01030;
+    --yellow:#ffd23f;
+    --pink:#ff7eb6;
+    --blue:#4d96ff;
+    --green:#6BCB77;
+    --ink:#1a1a1a;
+    --cream:#fff8ec;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:"ZCOOL KuaiLe","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    overflow-x:hidden;
+    cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Ccircle cx='14' cy='14' r='10' fill='%23ff1f3c'/%3E%3Ccircle cx='11' cy='11' r='3' fill='%23fff'/%3E%3C/svg%3E") 14 14, auto;
+  }
+
+  /* ========== 封面 ========== */
+  .cover{
+    height:100vh;
+    background:var(--red);
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    position:relative;overflow:hidden;
+    transition:transform .55s cubic-bezier(.6,0,.9,.4), opacity .55s;
+  }
+  .cover.zooming{transform:scale(3.2);opacity:0;}
+  .cover .bg-word{
+    position:absolute;font-size:clamp(60px,12vw,150px);
+    color:rgba(255,255,255,.08);
+    white-space:nowrap;top:8%;
+    animation:slide 18s linear infinite;
+    letter-spacing:6px;
+  }
+  @keyframes slide{from{transform:translateX(15vw)}to{transform:translateX(-95vw)}}
+  .cover-title{
+    color:#fff;font-size:clamp(34px,6vw,72px);
+    letter-spacing:8px;margin-bottom:8px;
+    text-shadow:4px 4px 0 var(--red-dark);
+    animation:floaty 3s ease-in-out infinite;
+    z-index:2;
+  }
+  .cover-sub{
+    color:#ffd9df;font-size:clamp(14px,2vw,20px);
+    letter-spacing:4px;margin-bottom:24px;z-index:2;
+  }
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+  .girl-wrap{
+    position:relative;z-index:2;
+    width:min(46vh,360px);
+    transition:transform .2s;
+  }
+  .girl-wrap:active{transform:scale(.96);}
+  #girlSVG{width:100%;display:block;filter:drop-shadow(0 14px 0 rgba(0,0,0,.15));}
+  #mouth{transform-origin:center;transform:scaleY(.12);transition:transform .45s cubic-bezier(.5,1.6,.4,1);}
+  .girl-wrap.open #mouth{transform:scaleY(1);}
+  .hint{
+    position:absolute;left:50%;bottom:-56px;transform:translateX(-50%);
+    color:#fff;font-size:15px;letter-spacing:3px;white-space:nowrap;
+    animation:blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+
+  .wiggle-stars{position:absolute;font-size:26px;animation:spin 9s linear infinite;opacity:.9;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* 吞屏黑幕 */
+  .swallow{
+    position:fixed;inset:0;background:#000;
+    border-radius:50%;
+    width:20px;height:20px;left:50%;top:50%;
+    transform:translate(-50%,-50%) scale(0);
+    pointer-events:none;z-index:99;
+  }
+  .swallow.grow{animation:grow .55s ease-in forwards;}
+  @keyframes grow{to{transform:translate(-50%,-50%) scale(120);}}
+
+  /* ========== 跑马灯 ========== */
+  .marquee{
+    background:var(--ink);color:var(--yellow);
+    padding:14px 0;overflow:hidden;white-space:nowrap;
+    font-size:20px;letter-spacing:5px;
+    transform:rotate(-1.2deg) scale(1.03);
+    border-top:4px dashed var(--cream);
+    border-bottom:4px dashed var(--cream);
+  }
+  .marquee span{display:inline-block;animation:marq 22s linear infinite;}
+  @keyframes marq{to{transform:translateX(-50%)}}
+
+  /* ========== 作品区 ========== */
+  .works{
+    max-width:1200px;margin:0 auto;
+    padding:90px 24px 60px;
+    text-align:center;
+  }
+  .sec-title{
+    font-size:clamp(32px,5vw,56px);letter-spacing:6px;
+    display:inline-block;position:relative;margin-bottom:16px;
+  }
+  .sec-title::after{
+    content:"";position:absolute;left:0;right:0;bottom:2px;
+    height:14px;background:var(--yellow);z-index:-1;
+    transform:rotate(-1deg);
+  }
+  .sec-desc{color:#888;margin-bottom:56px;letter-spacing:2px;font-size:15px;}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:36px;
+  }
+  .card{
+    background:#fff;border:3px solid var(--ink);
+    border-radius:22px;overflow:hidden;
+    box-shadow:8px 8px 0 var(--ink);
+    transition:transform .25s, box-shadow .25s;
+    transform-style:preserve-3d;
+    position:relative;
+  }
+  .card:nth-child(odd){--tilt:-1.6deg;}
+  .card:nth-child(even){--tilt:1.6deg;}
+  .card{transform:rotate(var(--tilt));}
+  .card:hover{box-shadow:14px 14px 0 var(--yellow);}
+  .card .thumb{
+    aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;
+    overflow:hidden;background:#f4f0e6;
+  }
+  .card .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+  .card:hover .thumb img{transform:scale(1.07) rotate(1deg);}
+  .card .info{padding:18px 20px 22px;text-align:left;}
+  .card .tag{
+    display:inline-block;font-size:12px;letter-spacing:2px;
+    padding:4px 12px;border-radius:999px;color:#fff;margin-bottom:10px;
+  }
+  .card h3{font-size:21px;letter-spacing:2px;margin-bottom:6px;}
+  .card p{font-size:13px;color:#777;letter-spacing:1px;line-height:1.7;}
+  .t-red{background:var(--red);} .t-blue{background:var(--blue);}
+  .t-pink{background:var(--pink);} .t-green{background:var(--green);}
+  .t-dark{background:var(--ink);}
+
+  .card.more{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-height:420px;background:repeating-linear-gradient(45deg,#fff8ec,#fff8ec 14px,#ffefd2 14px,#ffefd2 28px);
+    cursor:pointer;
+  }
+  .card.more .big{font-size:52px;animation:bounce 1.6s ease-in-out infinite;}
+  @keyframes bounce{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-14px) rotate(6deg)}}
+  .card.more h3{margin-top:14px;}
+
+  /* ========== 关于 & 页脚 ========== */
+  .about{
+    background:var(--ink);color:#fff;
+    padding:100px 24px;text-align:center;position:relative;overflow:hidden;
+  }
+  .about .sec-title{color:var(--yellow);}
+  .about .sec-title::after{background:var(--red);}
+  .about p{max-width:560px;margin:0 auto 14px;color:#bbb;line-height:2;letter-spacing:2px;font-size:15px;}
+  .stickers{font-size:34px;display:flex;gap:26px;justify-content:center;margin-top:30px;}
+  .stickers span{display:inline-block;transition:transform .3s;cursor:pointer;}
+  .stickers span:hover{transform:scale(1.5) rotate(18deg);}
+  footer{
+    background:#111;color:#666;text-align:center;
+    padding:22px;font-size:13px;letter-spacing:3px;
+  }
+
+  /* ========== 音乐唱片 ========== */
+  .vinyl{
+    position:fixed;right:26px;bottom:26px;z-index:100;
+    width:64px;height:64px;border-radius:50%;
+    background:radial-gradient(circle,#111 30%,#333 31%,#111 60%,var(--red) 61%,var(--red) 100%);
+    border:3px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,.35);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:transform .3s;
+  }
+  .vinyl:hover{transform:scale(1.12);}
+  .vinyl::before{content:"🎵";font-size:20px;}
+  .vinyl.spinning{animation:vinyl 2.4s linear infinite;}
+  @keyframes vinyl{to{transform:rotate(360deg);}}
+  .vinyl.spinning:hover{animation-play-state:paused;transform:scale(1.12);}
+  .music-tip{
+    position:fixed;right:100px;bottom:42px;z-index:100;
+    background:#fff;border:2px solid var(--ink);border-radius:12px;
+    padding:6px 14px;font-size:13px;letter-spacing:2px;
+    box-shadow:4px 4px 0 var(--ink);
+    opacity:0;transition:opacity .3s;pointer-events:none;
+  }
+  .music-tip.show{opacity:1;}
+
+  /* 彩带纸屑 & 音符 */
+  .confetti{
+    position:fixed;width:10px;height:14px;z-index:999;pointer-events:none;
+    animation:drop 1.1s ease-in forwards;
+  }
+  @keyframes drop{
+    to{transform:translate(var(--dx),110vh) rotate(720deg);opacity:0;}
+  }
+  .note{
+    position:fixed;z-index:998;pointer-events:none;font-size:18px;
+    animation:rise 1.2s ease-out forwards;
+  }
+  @keyframes rise{
+    to{transform:translate(var(--dx),-90px) rotate(30deg);opacity:0;}
+  }
+
+  /* 滚动出现 */
+  .reveal{opacity:0;transform:translateY(50px) rotate(1deg);transition:all .7s cubic-bezier(.2,.9,.3,1.2);}
+  .reveal.on{opacity:1;transform:translateY(0) rotate(var(--tilt,0deg));}
+
+  @media (max-width:600px){
+    .grid{gap:24px;}
+    .cover-title{letter-spacing:4px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- 封面：小女孩 -->
+<section class="cover" id="cover">
+  <div class="bg-word">HELLO! HELLO! HELLO! WELCOME! 你好呀！ HELLO! HELLO!</div>
+  <div class="wiggle-stars" style="left:12%;top:16%;">✦</div>
+  <div class="wiggle-stars" style="right:14%;top:22%;animation-duration:6s;">✦</div>
+  <div class="wiggle-stars" style="left:20%;bottom:18%;animation-duration:12s;">✦</div>
+  <div class="wiggle-stars" style="right:18%;bottom:26%;animation-duration:8s;">✦</div>
+
+  <h1 class="cover-title">欢迎来到我的小宇宙</h1>
+  <p class="cover-sub">A PLAYFUL PORTFOLIO · 点我看看会发生什么</p>
+
+  <div class="girl-wrap" id="girl">
+    <svg id="girlSVG" viewBox="0 0 300 340">
+      <!-- 发髻 -->
+      <circle cx="150" cy="52" r="30" fill="#1a1a1a"/>
+      <rect x="140" y="60" width="20" height="26" fill="#1a1a1a"/>
+      <!-- 头发 -->
+      <path d="M150 58 C68 58 44 130 46 210 C46 268 70 300 96 300 L96 170 C96 110 118 88 150 88 C182 88 204 110 204 170 L204 300 C230 300 254 268 254 210 C256 130 232 58 150 58 Z" fill="#1a1a1a"/>
+      <!-- 脸 -->
+      <ellipse cx="150" cy="185" rx="62" ry="72" fill="#ffe3d0"/>
+      <!-- 刘海 -->
+      <path d="M92 150 C92 100 118 84 150 84 C182 84 208 100 208 150 C186 132 168 126 150 126 C132 126 114 132 92 150 Z" fill="#1a1a1a"/>
+      <!-- 红框眼镜 -->
+      <circle cx="122" cy="182" r="26" fill="#fff" stroke="#ff1f3c" stroke-width="6"/>
+      <circle cx="178" cy="182" r="26" fill="#fff" stroke="#ff1f3c" stroke-width="6"/>
+      <line x1="148" y1="180" x2="152" y2="180" stroke="#ff1f3c" stroke-width="6"/>
+      <!-- 眼睛 -->
+      <circle id="eyeL" cx="122" cy="184" r="7" fill="#1a1a1a"/>
+      <circle id="eyeR" cx="178" cy="184" r="7" fill="#1a1a1a"/>
+      <circle cx="124" cy="181" r="2.5" fill="#fff"/>
+      <circle cx="180" cy="181" r="2.5" fill="#fff"/>
+      <!-- 腮红 -->
+      <ellipse cx="106" cy="212" rx="12" ry="7" fill="#ff9aa8" opacity=".8"/>
+      <ellipse cx="194" cy="212" rx="12" ry="7" fill="#ff9aa8" opacity=".8"/>
+      <!-- 嘴巴（点击张大） -->
+      <ellipse id="mouth" cx="150" cy="232" rx="18" ry="20" fill="#7a1020"/>
+      <ellipse id="tongue" cx="150" cy="242" rx="10" ry="6" fill="#ff6b81" opacity="0"/>
+      <!-- 蝴蝶结 -->
+      <path d="M212 120 l22 -12 -4 16 14 10 -20 4 Z" fill="#ff1f3c"/>
+    </svg>
+    <div class="hint">按住不放 · 喂我一颗彩蛋 ↓</div>
+  </div>
+</section>
+
+<div class="swallow" id="swallow"></div>
+
+<!-- 跑马灯 -->
+<div class="marquee"><span>🎨 视觉设计 ✦ 品牌海报 ✦ H5 互动 ✦ 电商视觉 ✦ 创意企划 ✦ 快乐制造中 ✦ 🎨 视觉设计 ✦ 品牌海报 ✦ H5 互动 ✦ 电商视觉 ✦ 创意企划 ✦ 快乐制造中 ✦ </span></div>
+
+<!-- 作品 -->
+<section class="works" id="works">
+  <h2 class="sec-title">我的快乐作品</h2>
+  <p class="sec-desc">hover 会歪头，点击会撒花 · 每一张都是心血</p>
+  <div class="grid">
+
+    <div class="card reveal">
+      <div class="thumb"><img src="assets/sony1.jpg" alt="SONY 超级降噪海报"></div>
+      <div class="info">
+        <span class="tag t-red">品牌海报</span>
+        <h3>SONY × 超感听觉发布</h3>
+        <p>超级降噪 · 超级沉浸，云上悬浮城邦的沉浸式空间降噪想象。</p>
+      </div>
+    </div>
+
+    <div class="card reveal">
+      <div class="thumb"><img src="assets/sony2.jpg" alt="SONY 深海声学城邦"></div>
+      <div class="info">
+        <span class="tag t-red">品牌海报</span>
+        <h3>SONY · 未来之声构筑城邦</h3>
+        <p>深海声学浮城，把「听」做成一场深海漫游。</p>
+      </div>
+    </div>
+
+    <div class="card reveal">
+      <div class="thumb"><img src="assets/douyin.jpg" alt="抖音像素创艺官"></div>
+      <div class="info">
+        <span class="tag t-blue">活动主视觉</span>
+        <h3>去和世界交手 · 抖音像素创艺官</h3>
+        <p>像素积木撞进蓝天，4 月 10 日冒险启程。</p>
+      </div>
+    </div>
+
+    <div class="card reveal">
+      <div class="thumb"><img src="assets/h5-bee.jpg" alt="快乐测试 H5"></div>
+      <div class="info">
+        <span class="tag t-pink">H5 互动</span>
+        <h3>测测你的狂玩崽冰人格</h3>
+        <p>长图 H5 全案：测试互动 + 人格社交卡 + 玩法转化。</p>
+      </div>
+    </div>
+
+    <div class="card reveal">
+      <div class="thumb"><img src="assets/chando.jpg" alt="自然堂直播视觉"></div>
+      <div class="info">
+        <span class="tag t-green">电商视觉</span>
+        <h3>自然堂草本洗护 · 植萃养发专场</h3>
+        <p>直播间专属视觉，温和修护，还原发丝原生感。</p>
+      </div>
+    </div>
+
+    <div class="card more reveal" id="moreCard">
+      <div class="big">🥚</div>
+      <h3>还有更多小可爱</h3>
+      <p style="text-align:center">点一下，听听蛋里藏着什么惊喜</p>
+    </div>
+  </div>
+</section>
+
+<!-- 关于 -->
+<section class="about">
+  <h2 class="sec-title">关于我</h2>
+  <p>一个靠快乐发电的视觉创作者。</p>
+  <p>海报、H5、电商视觉、品牌企划都爱折腾，坚信「好看」和「好玩」必须兼得。</p>
+  <p>如果你也有一个想被认真对待的疯狂点子 —— 来找我聊聊！</p>
+  <div class="stickers">
+    <span title="微信">💬</span>
+    <span title="邮箱">📮</span>
+    <span title="站酷">🎨</span>
+    <span title="小红书">📕</span>
+    <span title="别点我 👀">🍌</span>
+  </div>
+</section>
+
+<footer>© 小宇宙作品集 · MADE WITH 🍬 AND CODE</footer>
+
+<!-- 唱片音乐 -->
+<div class="vinyl" id="vinyl" title="播放 / 暂停音乐"></div>
+<div class="music-tip" id="musicTip">♪ Diamonds & Thorns</div>
+<audio id="bgm" src="assets/bgm.mp3" loop preload="auto"></audio>
+
+<script>
+/* ===== 封面：按住张嘴 → 吞屏转场 ===== */
+const girl = document.getElementById('girl');
+const mouth = document.getElementById('mouth');
+const tongue = document.getElementById('tongue');
+const cover = document.getElementById('cover');
+const swallow = document.getElementById('swallow');
+let opened = false;
+
+function openMouth(){
+  girl.classList.add('open');
+  tongue.style.opacity = 1;
+  spawnNotes(window.innerWidth/2, window.innerHeight/2 + 60);
+}
+function closeMouth(){ girl.classList.remove('open'); tongue.style.opacity = 0; }
+
+girl.addEventListener('pointerdown', e => {
+  e.preventDefault();
+  if (opened) return;
+  opened = true;
+  openMouth();
+  setTimeout(() => {
+    swallow.classList.add('grow');
+    cover.classList.add('zooming');
+    setTimeout(() => {
+      document.getElementById('works').scrollIntoView({behavior:'auto'});
+      setTimeout(() => {
+        swallow.classList.remove('grow');
+        cover.classList.remove('zooming');
+        closeMouth();
+        opened = false;
+        burst(window.innerWidth/2, window.innerHeight/2);
+      }, 120);
+    }, 480);
+  }, 520);
+});
+girl.addEventListener('pointerup', () => { if(!opened) closeMouth(); });
+
+/* 眼睛跟随鼠标 */
+const eyeL = document.getElementById('eyeL'), eyeR = document.getElementById('eyeR');
+document.addEventListener('mousemove', e => {
+  const r = girl.getBoundingClientRect();
+  const dx = Math.max(-4, Math.min(4, (e.clientX - (r.left + r.width/2)) / 60));
+  const dy = Math.max(-4, Math.min(4, (e.clientY - (r.top + r.height/3)) / 60));
+  eyeL.setAttribute('transform', `translate(${dx},${dy})`);
+  eyeR.setAttribute('transform', `translate(${dx},${dy})`);
+});
+
+/* ===== 卡片 3D 歪头 ===== */
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - .5;
+    const y = (e.clientY - r.top) / r.height - .5;
+    card.style.transform = `perspective(800px) rotateY(${x*10}deg) rotateX(${-y*10}deg) rotate(var(--tilt)) scale(1.02)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+  card.addEventListener('click', e => burst(e.clientX, e.clientY));
+});
+
+/* 彩蛋：更多卡片 */
+const moreCard = document.getElementById('moreCard');
+const eggs = ['🎉','🍭','🚀','🐣','🌈','🍩'];
+let eggIdx = 0;
+moreCard.addEventListener('click', () => {
+  const big = moreCard.querySelector('.big');
+  big.textContent = eggs[eggIdx++ % eggs.length];
+  big.animate([{transform:'scale(.5)'},{transform:'scale(1.4)'},{transform:'scale(1)'}],{duration:400});
+});
+
+/* 彩带纸屑 */
+const colors = ['#ff1f3c','#ffd23f','#4d96ff','#6BCB77','#ff7eb6'];
+function burst(x, y){
+  for (let i = 0; i < 22; i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = x + 'px';
+    c.style.top = y + 'px';
+    c.style.background = colors[i % colors.length];
+    c.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
+    c.style.setProperty('--dx', (Math.random()*400 - 200) + 'px');
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 1200);
+  }
+}
+/* 音符 */
+const noteChars = ['🎵','🎶','♪','♫'];
+function spawnNotes(x, y){
+  for (let i = 0; i < 6; i++){
+    const n = document.createElement('div');
+    n.className = 'note';
+    n.textContent = noteChars[i % noteChars.length];
+    n.style.left = (x + (Math.random()*160 - 80)) + 'px';
+    n.style.top = y + 'px';
+    n.style.setProperty('--dx', (Math.random()*120 - 60) + 'px');
+    document.body.appendChild(n);
+    setTimeout(() => n.remove(), 1300);
+  }
+}
+/* 光标拖音符 */
+let lastNote = 0;
+document.addEventListener('mousemove', e => {
+  const now = Date.now();
+  if (now - lastNote > 180 && Math.random() > .55){
+    lastNote = now;
+    spawnNotes(e.clientX, e.clientY);
+  }
+});
+
+/* ===== 唱片音乐 ===== */
+const vinyl = document.getElementById('vinyl');
+const bgm = document.getElementById('bgm');
+const tip = document.getElementById('musicTip');
+let tipTimer;
+function showTip(){
+  tip.classList.add('show');
+  clearTimeout(tipTimer);
+  tipTimer = setTimeout(() => tip.classList.remove('show'), 2200);
+}
+vinyl.addEventListener('click', () => {
+  if (bgm.paused){ bgm.play(); vinyl.classList.add('spinning'); }
+  else { bgm.pause(); vinyl.classList.remove('spinning'); }
+  showTip();
+});
+/* 首次任意点击后自动起播（浏览器要求用户先交互） */
+window.addEventListener('pointerdown', function once(){
+  if (bgm.paused){ bgm.play().then(() => vinyl.classList.add('spinning')).catch(()=>{}); }
+  window.removeEventListener('pointerdown', once);
+});
+
+/* ===== 滚动出现 ===== */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => { if (en.isIntersecting) en.target.classList.add('on'); });
+}, {threshold:.15});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* 彩蛋：连点香蕉 */
+const banana = document.querySelector('.stickers span:last-child');
+let bCount = 0;
+banana.addEventListener('click', () => {
+  if (++bCount >= 5){
+    banana.textContent = '🤯';
+    burst(window.innerWidth/2, window.innerHeight/2);
+    setTimeout(() => banana.textContent = '🍌', 1500);
+    bCount = 0;
+  }
+});
+</script>
+</body>
+</html>
