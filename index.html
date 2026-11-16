@@ -17,6 +17,7 @@
     --ink:#1a1a1a;
     --cream:#f7f1e3;
     --paper:#fffdf7;
+    --line:#3a3a3a;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html,body{height:100%;overflow:hidden;}
@@ -90,79 +91,93 @@
   }
   .p2-bigword{
     position:absolute;right:120px;top:30px;
-    font-size:clamp(40px,6vw,84px);color:rgba(26,26,26,.08);
+    font-size:clamp(40px,6vw,84px);color:rgba(26,26,26,.07);
     letter-spacing:10px;writing-mode:vertical-rl;
     pointer-events:none;
   }
   .intro-zone{
     display:flex;flex-direction:column;align-items:center;
-    margin-right:8vw;position:relative;z-index:2;max-width:46vw;
+    position:relative;z-index:2;
   }
   .intro-title{font-size:clamp(26px,3.6vw,44px);letter-spacing:6px;margin-bottom:6px;}
   .intro-title em{font-style:normal;color:var(--red);}
-  .intro-sub{color:#8a8272;letter-spacing:3px;font-size:14px;margin-bottom:8px;}
-  .intro-tip{color:var(--red);font-size:15px;letter-spacing:3px;animation:blink 1.6s ease-in-out infinite;}
-  .phone-zone{position:relative;width:min(30vh,300px);margin-top:10px;cursor:pointer;}
-  #phoneSVG{width:100%;display:block;filter:drop-shadow(6px 8px 0 rgba(26,26,26,.12));transition:transform .3s;}
-  .phone-zone:hover #phoneSVG{transform:translateY(-4px) rotate(-1deg);}
-  #handset{transition:transform .8s cubic-bezier(.3,1.4,.4,1);}
-  .phone-zone.picked #handset{transform:translate(-70px,-130px) rotate(-24deg);}
-  .ring-txt{
-    position:absolute;top:-10px;left:60%;color:var(--red);font-size:18px;
-    letter-spacing:2px;opacity:0;transition:opacity .3s;
-  }
-  .phone-zone.picked .ring-txt{opacity:1;animation:ringPop .8s ease;}
-  @keyframes ringPop{0%{transform:scale(.4)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+  .intro-sub{color:#8a8272;letter-spacing:3px;font-size:14px;margin-bottom:8px;text-align:center;}
+  .intro-tip{color:var(--red);font-size:15px;letter-spacing:3px;animation:blink 1.6s ease-in-out infinite;margin-top:8px;}
 
-  /* 简历抽屉 */
-  .resume-panel{
-    position:absolute;left:5vw;top:50%;transform:translate(-130%,-50%) rotate(-3deg);
-    width:min(520px,86vw);max-height:82vh;
+  /* 粉色电话机 */
+  .phone-zone{
+    position:relative;width:min(48vh,440px);
+    cursor:pointer;transition:transform .3s;
+  }
+  .phone-zone:hover{transform:translateY(-4px) rotate(-1deg);}
+  #phoneSVG{width:100%;display:block;filter:drop-shadow(8px 10px 0 rgba(26,26,26,.12));}
+  .dial-spin{animation:dialSpin 1s cubic-bezier(.3,1.4,.4,1);}
+  @keyframes dialSpin{
+    0%{transform:rotate(0deg);}
+    45%{transform:rotate(-120deg);}
+    100%{transform:rotate(0deg);}
+  }
+  .dial-num{cursor:pointer;}
+  .dial-num circle{transition:r .2s, fill .2s;}
+  .dial-num:hover circle{r:17;fill:var(--yellow);}
+  .dial-num text{pointer-events:none;font-family:inherit;font-weight:bold;}
+  .ring-txt{
+    position:absolute;top:-16px;left:50%;transform:translateX(-50%);
+    color:var(--red);font-size:20px;letter-spacing:3px;
+    opacity:0;white-space:nowrap;
+  }
+  .ring-txt.show{opacity:1;animation:ringPop .8s ease;}
+  @keyframes ringPop{0%{transform:translateX(-50%) scale(.4)}60%{transform:translateX(-50%) scale(1.3)}100%{transform:translateX(-50%) scale(1)}}
+
+  /* 信息卡片 */
+  .info-card{
+    position:absolute;left:6vw;top:50%;
+    transform:translate(-140%,-50%) rotate(-3deg) scale(.8);
+    width:min(480px,88vw);max-height:76vh;overflow-y:auto;
     background:var(--paper);border:3px solid var(--ink);border-radius:18px;
     box-shadow:10px 10px 0 rgba(255,31,60,.25);
-    padding:28px 30px;overflow-y:auto;z-index:5;
-    transition:transform .7s cubic-bezier(.2,.9,.3,1.15);
+    padding:26px 28px;z-index:5;
+    opacity:0;visibility:hidden;
+    transition:all .55s cubic-bezier(.2,.9,.3,1.15);
   }
-  .resume-panel.open{transform:translate(0,-50%) rotate(-1deg);}
-  .resume-panel::-webkit-scrollbar{width:8px;}
-  .resume-panel::-webkit-scrollbar-thumb{background:var(--pink);border-radius:4px;}
-  .rp-close{
-    position:sticky;top:0;float:right;width:34px;height:34px;border-radius:50%;
-    background:var(--red);color:#fff;border:none;font-size:18px;cursor:pointer;z-index:2;
+  .info-card.open{opacity:1;visibility:visible;transform:translate(0,-50%) rotate(-1deg) scale(1);}
+  .info-card::-webkit-scrollbar{width:8px;}
+  .info-card::-webkit-scrollbar-thumb{background:var(--pink);border-radius:4px;}
+  .ic-head{
+    display:flex;align-items:center;gap:12px;
+    border-bottom:3px dashed var(--ink);padding-bottom:12px;margin-bottom:14px;
   }
-  .rp-close:hover{transform:rotate(90deg);}
-  .rp-head{border-bottom:3px dashed var(--ink);padding-bottom:14px;margin-bottom:16px;}
-  .rp-head h2{font-size:34px;letter-spacing:6px;}
-  .rp-head h2 span{color:var(--red);font-size:14px;letter-spacing:3px;margin-left:10px;vertical-align:middle;background:var(--yellow);padding:2px 10px;border-radius:999px;border:2px solid var(--ink);}
-  .rp-head p{color:#6b6455;font-size:13px;letter-spacing:2px;margin-top:6px;line-height:1.8;}
-  .rp-contact{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
-  .rp-contact a{
-    color:var(--ink);text-decoration:none;font-size:13px;letter-spacing:1px;
-    background:var(--cream);border:2px solid var(--ink);border-radius:999px;padding:5px 14px;
-    transition:all .2s;
+  .ic-badge{
+    flex:none;width:46px;height:46px;border-radius:50%;
+    background:var(--red);color:#fff;font-size:22px;
+    display:flex;align-items:center;justify-content:center;
+    border:3px solid var(--ink);
   }
-  .rp-contact a:hover{background:var(--red);color:#fff;transform:translateY(-2px);}
-  .rp-sec h3{
-    font-size:17px;letter-spacing:3px;color:var(--red);margin:18px 0 8px;
-    display:flex;align-items:center;gap:8px;
+  .ic-head h3{font-size:21px;letter-spacing:3px;}
+  .ic-head small{display:block;font-size:11px;color:#a39a88;letter-spacing:2px;margin-top:2px;}
+  .ic-close{
+    margin-left:auto;flex:none;width:32px;height:32px;border-radius:50%;
+    background:var(--ink);color:#fff;border:none;font-size:16px;cursor:pointer;
+    transition:transform .25s;
   }
-  .rp-sec h3::before{content:"";width:14px;height:14px;background:var(--yellow);border:2px solid var(--ink);border-radius:4px;transform:rotate(15deg);}
-  .rp-sec p{font-size:13.5px;line-height:2;color:#3d382f;letter-spacing:.5px;text-align:justify;}
-  .rp-job{display:flex;flex-wrap:wrap;gap:8px;}
-  .rp-job span{
-    font-size:12.5px;letter-spacing:1px;background:var(--red);color:#fff;
-    padding:5px 13px;border-radius:999px;border:2px solid var(--ink);
+  .ic-close:hover{transform:rotate(90deg);background:var(--red);}
+  .ic-body p{font-size:13.5px;line-height:2;color:#3d382f;letter-spacing:.5px;text-align:justify;margin-bottom:8px;}
+  .ic-body .row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+  .ic-body .chip{
+    font-size:12.5px;letter-spacing:1px;background:var(--yellow);
+    border:2px solid var(--ink);border-radius:999px;padding:5px 13px;
   }
-  .rp-skill{background:var(--cream);border:2px solid var(--ink);border-radius:12px;padding:10px 14px;margin-bottom:10px;}
-  .rp-skill b{font-size:14px;letter-spacing:2px;color:var(--red-dark);display:block;margin-bottom:4px;}
-  .rp-skill p{font-size:12.5px;line-height:1.9;color:#3d382f;}
-  .rp-item{margin-bottom:14px;}
-  .rp-item h4{font-size:15px;letter-spacing:1px;margin-bottom:4px;}
-  .rp-item h4 i{font-style:normal;color:var(--red);font-size:12px;margin-left:8px;}
-  .rp-item p{font-size:12.5px;line-height:1.9;color:#3d382f;text-align:justify;}
-  .rp-item .out{font-size:12px;color:var(--red-dark);margin-top:4px;letter-spacing:.5px;}
-  .rp-certs{display:flex;flex-wrap:wrap;gap:8px;}
-  .rp-certs span{font-size:12.5px;background:var(--yellow);border:2px solid var(--ink);border-radius:999px;padding:5px 13px;letter-spacing:1px;}
+  .ic-body .chip.red{background:var(--red);color:#fff;}
+  .ic-body .chip.pink{background:var(--pink);}
+  .ic-body b{color:var(--red-dark);letter-spacing:2px;}
+  .ic-body .skill{background:var(--cream);border:2px solid var(--ink);border-radius:12px;padding:10px 14px;margin-bottom:10px;}
+  .ic-body .skill b{display:block;margin-bottom:4px;font-size:14px;}
+  .ic-body .skill p{font-size:12.5px;line-height:1.9;margin:0;}
+  .ic-body .proj{margin-bottom:14px;border-left:4px solid var(--red);padding-left:12px;}
+  .ic-body .proj h4{font-size:15px;letter-spacing:1px;margin-bottom:4px;}
+  .ic-body .proj h4 i{font-style:normal;color:var(--red);font-size:12px;margin-left:8px;}
+  .ic-body .proj p{font-size:12.5px;line-height:1.9;margin:0;}
+  .ic-body .proj .out{color:var(--red-dark);font-size:12px;margin-top:4px;}
 
   /* 右侧竖排菜单 */
   .side-menu{
@@ -178,9 +193,9 @@
     box-shadow:5px 5px 0 var(--ink);
     transition:all .25s;
   }
-  .side-menu button:nth-child(2){transform:rotate(-2deg);}
-  .side-menu button:nth-child(3){transform:rotate(2deg);}
-  .side-menu button:nth-child(4){transform:rotate(-2deg);}
+  .side-menu button:nth-of-type(1){transform:rotate(-2deg);}
+  .side-menu button:nth-of-type(2){transform:rotate(2deg);}
+  .side-menu button:nth-of-type(3){transform:rotate(-2deg);}
   .side-menu button:hover{background:var(--red);color:#fff;transform:scale(1.08) rotate(0deg);box-shadow:7px 7px 0 var(--yellow);}
   .side-menu button:active{transform:scale(.95);}
 
@@ -191,9 +206,7 @@
     position:relative;z-index:2;
     width:min(92vw,980px);justify-content:center;
   }
-  .p3-head{
-    position:absolute;top:36px;left:0;right:0;text-align:center;z-index:5;
-  }
+  .p3-head{position:absolute;top:36px;left:0;right:0;text-align:center;z-index:5;}
   .p3-head h2{font-size:clamp(22px,3vw,34px);letter-spacing:6px;}
   .p3-head h2 em{font-style:normal;color:var(--red);}
   .p3-head p{font-size:13px;color:#8a8272;letter-spacing:3px;margin-top:4px;}
@@ -205,7 +218,6 @@
   }
   .back-btn:hover{background:var(--ink);color:#fff;transform:translateY(-2px);}
 
-  /* 烤箱本体 */
   .oven{
     position:relative;width:min(60vw,560px);
     background:var(--pink);
@@ -244,7 +256,6 @@
   .dish p{font-size:12.5px;color:#6b6455;letter-spacing:1px;line-height:1.7;text-align:center;max-width:90%;}
   .dish .empty-big{font-size:64px;animation:bounce 1.6s ease-in-out infinite;}
   @keyframes bounce{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-14px) rotate(6deg)}}
-  /* 烤箱光 & 蒸汽 */
   .oven-light{
     position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;
     background:radial-gradient(circle at 50% 60%,rgba(255,190,80,.45),rgba(255,120,60,.12) 60%,transparent 75%);
@@ -265,11 +276,7 @@
   .oven-feet{display:flex;justify-content:space-between;padding:0 40px;margin-top:-4px;}
   .oven-feet span{width:34px;height:16px;background:#4a4a4a;border:3px solid var(--ink);border-radius:0 0 8px 8px;}
 
-  /* 旋钮列 */
-  .knob-col{
-    display:flex;flex-direction:column;align-items:center;gap:34px;
-    margin-left:34px;
-  }
+  .knob-col{display:flex;flex-direction:column;align-items:center;gap:34px;margin-left:34px;}
   .knob-label{font-size:12px;letter-spacing:2px;color:#6b6455;margin-bottom:-24px;}
   .knob{
     width:74px;height:74px;border-radius:50%;
@@ -285,8 +292,6 @@
   }
   .knob:hover{filter:brightness(1.08);}
   .knob:active{transform:scale(.92);}
-  .knob.turn{animation:knobTurn .5s cubic-bezier(.3,1.5,.5,1);}
-  @keyframes knobTurn{from{transform:rotate(0)}to{transform:rotate(120deg)}}
   .temp-readout{
     background:var(--ink);color:var(--yellow);
     border-radius:12px;padding:8px 18px;
@@ -295,48 +300,28 @@
   }
   .temp-readout small{display:block;font-size:11px;color:#fff;letter-spacing:1px;margin-top:2px;}
 
-  /* ========== 唱片音乐 ========== */
-  .vinyl{
-    position:fixed;right:26px;bottom:26px;z-index:100;
-    width:60px;height:60px;border-radius:50%;
-    background:radial-gradient(circle,#111 30%,#333 31%,#111 60%,var(--red) 61%,var(--red) 100%);
-    border:3px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,.35);
-    cursor:pointer;display:flex;align-items:center;justify-content:center;
-    transition:transform .3s;
-  }
-  .vinyl:hover{transform:scale(1.12);}
-  .vinyl::before{content:"🎵";font-size:18px;}
-  .vinyl.spinning{animation:vinyl 2.4s linear infinite;}
-  @keyframes vinyl{to{transform:rotate(360deg);}}
-  .vinyl.spinning:hover{animation-play-state:paused;transform:scale(1.12);}
-  .music-tip{
-    position:fixed;right:96px;bottom:40px;z-index:100;
-    background:#fff;border:2px solid var(--ink);border-radius:12px;
-    padding:6px 14px;font-size:13px;letter-spacing:2px;
-    box-shadow:4px 4px 0 var(--ink);
-    opacity:0;transition:opacity .3s;pointer-events:none;
-  }
-  .music-tip.show{opacity:1;}
-
   /* 纸屑 & 音符 */
   .confetti{position:fixed;width:10px;height:14px;z-index:999;pointer-events:none;animation:drop 1.1s ease-in forwards;}
   @keyframes drop{to{transform:translate(var(--dx),110vh) rotate(720deg);opacity:0;}}
   .note{position:fixed;z-index:998;pointer-events:none;font-size:18px;animation:rise 1.2s ease-out forwards;}
   @keyframes rise{to{transform:translate(var(--dx),-90px) rotate(30deg);opacity:0;}}
 
-  @media (max-width:860px){
-    .intro-zone{margin-right:0;}
+  @media (max-width:960px){
+    .info-card{
+      left:50%;top:50%;
+      transform:translate(-50%,-135%) rotate(-2deg) scale(.9);
+      width:92vw;max-height:72vh;z-index:20;
+    }
+    .info-card.open{transform:translate(-50%,-50%) rotate(-1deg) scale(1);}
     .p2-bigword{display:none;}
+    .phone-zone{width:min(40vh,340px);}
     .side-menu button{padding:14px 7px;font-size:14px;letter-spacing:5px;}
-    .resume-panel{left:50%;transform:translate(-50%,-130%) rotate(-2deg);width:92vw;}
-    .resume-panel.open{transform:translate(-50%,-50%) rotate(-1deg);}
     .oven-stage{flex-direction:column;gap:24px;margin-top:70px;}
-    .knob-col{flex-direction:row;margin-left:0;margin-top:6px;}
+    .knob-col{flex-direction:row;margin-left:0;margin-top:6px;gap:18px;}
     .knob-label{display:none;}
     .knob{width:58px;height:58px;}
     .oven{width:88vw;padding:24px 20px 20px;}
     .oven-window{height:44vh;}
-    .knob-col{gap:18px;}
   }
 </style>
 </head>
@@ -388,120 +373,57 @@
     <div class="intro-zone">
       <h2 class="intro-title">你好，我是<em>黄旭楚</em></h2>
       <p class="intro-sub">湖北美术学院 · 艺术与科技（影视动画方向）· AIGC 视觉创作者</p>
-      <p class="intro-tip">📞 拿起电话，听我自我介绍 →</p>
 
       <div class="phone-zone" id="phoneZone">
-        <div class="ring-txt">叮铃铃~</div>
-        <svg id="phoneSVG" viewBox="0 0 300 240">
-          <!-- 电话线 -->
-          <path d="M52 190 C20 190 20 150 52 150 C84 150 84 110 52 110" fill="none" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
-          <!-- 机身 -->
-          <path d="M75 200 L90 130 C92 118 102 110 115 110 L205 110 C218 110 228 118 230 130 L245 200 Z" fill="#1a1a1a"/>
-          <path d="M85 195 L98 135 C100 126 107 120 116 120 L204 120 C213 120 220 126 222 135 L235 195 Z" fill="#f7f1e3"/>
-          <!-- 拨号盘 -->
-          <circle cx="160" cy="160" r="34" fill="#1a1a1a"/>
-          <circle cx="160" cy="160" r="26" fill="#fffdf7"/>
-          <g fill="#1a1a1a">
-            <circle cx="160" cy="140" r="5"/><circle cx="174" cy="144" r="5"/><circle cx="182" cy="156" r="5"/>
-            <circle cx="179" cy="170" r="5"/><circle cx="168" cy="179" r="5"/><circle cx="152" cy="179" r="5"/>
-            <circle cx="141" cy="170" r="5"/><circle cx="138" cy="156" r="5"/><circle cx="146" cy="144" r="5"/>
-          </g>
-          <circle cx="160" cy="160" r="7" fill="#ff1f3c"/>
-          <!-- 支架 -->
-          <rect x="100" y="70" width="120" height="42" rx="14" fill="#1a1a1a"/>
-          <!-- 听筒（可拿起） -->
+        <div class="ring-txt" id="ringTxt">叮铃铃~</div>
+        <svg id="phoneSVG" viewBox="0 0 360 300">
+          <!-- 卷曲电话线 -->
+          <path d="M300 150 C345 150 345 175 300 175 C255 175 255 200 300 200 C345 200 345 225 300 225"
+                fill="none" stroke="#8a1e3a" stroke-width="7" stroke-linecap="round" opacity=".85"/>
+          <!-- 机身（粉色蜡笔风） -->
+          <path d="M95 262 L110 130 C112 112 126 100 145 100 L225 100 C244 100 258 112 260 130 L275 262 Z"
+                fill="#ffb3c8" stroke="#3a3a3a" stroke-width="6" stroke-linejoin="round"/>
+          <path d="M108 254 L120 136" stroke="#ff8fb0" stroke-width="10" stroke-linecap="round" opacity=".7"/>
+          <path d="M258 254 L248 140" stroke="#ff8fb0" stroke-width="10" stroke-linecap="round" opacity=".7"/>
+          <!-- 底部脚 -->
+          <rect x="112" y="258" width="46" height="14" rx="6" fill="#3a3a3a"/>
+          <rect x="212" y="258" width="46" height="14" rx="6" fill="#3a3a3a"/>
+          <!-- 听筒支架 -->
+          <path d="M100 96 L120 64 L250 64 L270 96 Z" fill="#ff9fbc" stroke="#3a3a3a" stroke-width="6" stroke-linejoin="round"/>
+          <!-- 听筒 -->
           <g id="handset">
-            <rect x="66" y="30" width="188" height="34" rx="17" fill="#1a1a1a"/>
-            <circle cx="76" cy="47" r="24" fill="#1a1a1a"/>
-            <circle cx="244" cy="47" r="24" fill="#1a1a1a"/>
-            <rect x="66" y="36" width="188" height="10" rx="5" fill="#ff1f3c"/>
+            <path d="M60 52 C60 28 90 14 185 14 C280 14 310 28 310 52 L310 58 C310 66 302 70 294 70 L76 70 C68 70 60 66 60 58 Z"
+                  fill="#ffb3c8" stroke="#3a3a3a" stroke-width="6" stroke-linejoin="round"/>
+            <path d="M62 40 C62 26 92 18 185 18 C278 18 308 26 308 40" fill="none" stroke="#ff8fb0" stroke-width="8" stroke-linecap="round" opacity=".8"/>
+            <circle cx="72" cy="50" r="20" fill="#ff9fbc" stroke="#3a3a3a" stroke-width="6"/>
+            <circle cx="298" cy="50" r="20" fill="#ff9fbc" stroke="#3a3a3a" stroke-width="6"/>
+          </g>
+          <!-- 拨号盘 -->
+          <g id="dialG">
+            <circle cx="185" cy="182" r="66" fill="#e87fae" stroke="#3a3a3a" stroke-width="6"/>
+            <circle cx="185" cy="182" r="42" fill="#ffb3c8" stroke="#3a3a3a" stroke-width="5"/>
+            <circle cx="185" cy="182" r="12" fill="#ff9fbc" stroke="#3a3a3a" stroke-width="4"/>
+            <!-- 数字孔：由 JS 生成 -->
+            <g id="dialNums"></g>
+            <!-- 挡杆 -->
+            <rect x="232" y="120" width="8" height="34" rx="4" fill="#3a3a3a" transform="rotate(30 236 137)"/>
           </g>
         </svg>
       </div>
+      <p class="intro-tip">☎ 拨号盘上的每个数字，都藏着我的一个小秘密 →</p>
     </div>
 
-    <!-- 简历抽屉 -->
-    <div class="resume-panel" id="resumePanel">
-      <button class="rp-close" id="rpClose">×</button>
-      <div class="rp-head">
-        <h2>黄旭楚<span>个人简历 · AIGC 方向</span></h2>
-        <p>湖北美术学院 · 艺术与科技（影视动画方向）· 本科在读</p>
-        <div class="rp-contact">
-          <a href="tel:13080656398">📞 13080656398</a>
-          <a href="mailto:3435025144@qq.com">📮 3435025144@qq.com</a>
+    <!-- 信息卡片 -->
+    <div class="info-card" id="infoCard">
+      <div class="ic-head">
+        <div class="ic-badge" id="icBadge">1</div>
+        <div>
+          <h3 id="icTitle">基本信息</h3>
+          <small id="icSub">您拨打的号码是 1</small>
         </div>
+        <button class="ic-close" id="icClose">×</button>
       </div>
-
-      <div class="rp-sec">
-        <h3>求职意向</h3>
-        <div class="rp-job">
-          <span>AIGC 视觉设计师</span><span>AI 内容生成师</span><span>概念美术</span><span>AI 动画</span><span>数字内容设计师</span>
-        </div>
-      </div>
-
-      <div class="rp-sec">
-        <h3>个人简介</h3>
-        <p>湖北美术学院艺术与科技专业在读，深耕 AIGC 视觉创作赛道，拥有扎实美术功底、镜头叙事能力与 AI 工作流搭建经验。擅长把创意概念转化为精准提示词，把控画面风格、构图、光影、叙事逻辑，熟练完成 AI 出图、图生视频、分镜、角色/场景概念设计，同时会结合后期软件修图、统一画面质感、解决 AI 崩坏问题。</p>
-        <p style="margin-top:6px;">熟悉国风、影视写实、版画、插画等多种视觉风格，独立完成多个课程项目，具备从前期策划、AI 批量生成、素材筛选精修到成片输出的完整流程能力，擅长文化类、叙事向、展览类数字内容创作。</p>
-      </div>
-
-      <div class="rp-sec">
-        <h3>专业技能</h3>
-        <div class="rp-skill"><b>✅ AIGC 核心能力</b><p>精通提示词工程、正向/反向提示词撰写、风格控制、镜头参数设定；熟练文生图、图生图、ControlNet、Lora 模型调用、参考图约束；擅长角色一致性、场景延续性、分镜批量生成，能规避 AI 手部、透视、结构崩坏问题；可制作 AI 短视频、动态镜头、MV 分镜、概念海报。</p></div>
-        <div class="rp-skill"><b>✅ 美术与影视基础</b><p>素描色彩、人体结构、镜头语言、分镜脚本、色彩调性把控；擅长国风、电影质感、新中式、版画、插画等风格。</p></div>
-        <div class="rp-skill"><b>✅ 后期 & 辅助软件</b><p>PS、AI、AE、PR、C4D，用于 AI 素材精修、调色、抠图、版式排版、视频剪辑、画面统一；TouchDesigner、MeshLab 可搭配 AI 资产做交互视觉、三维素材处理。</p></div>
-        <div class="rp-skill"><b>✅ 文案策划</b><p>项目概念、脚本、叙事文案、中英双语提示词撰写。</p></div>
-      </div>
-
-      <div class="rp-sec">
-        <h3>项目经历</h3>
-        <div class="rp-item">
-          <h4>新国风木偶戏叙事动画项目<i>｜AIGC 主视觉 / 分镜师</i></h4>
-          <p>以「传统文化传承」为主题，搭建整套 AI 生产流程：撰写剧本、拆分分镜，设计角色木偶设定，定制 Lora 与风格提示词，批量生成连贯镜头画面，把控水墨国风电影质感，统一角色形象、光影色调；对 AI 生成素材做后期修复、剪辑合成，输出完整叙事短片。</p>
-          <p class="out">▸ 核心产出：连贯分镜序列、角色统一的 AI 动画素材、成片视频</p>
-        </div>
-        <div class="rp-item">
-          <h4>敦煌文物数字重生项目<i>｜AIGC 概念设计师</i></h4>
-          <p>围绕敦煌文化主题，用 AIGC 完成文物复原效果图、氛围场景、粒子消散动态海报、展览主视觉；通过 ControlNet 约束纹样、构图，搭配后期软件做文物数字化再创作，兼顾历史纹样准确性与艺术表现力，作品用于课程展览。</p>
-          <p class="out">▸ 核心产出：敦煌主题概念图、动态视觉海报、展板视觉素材</p>
-        </div>
-        <div class="rp-item">
-          <h4>楚地有声 · 湖北方言可视化项目<i>｜AIGC 视觉设计师</i></h4>
-          <p>提取荆楚地域文化符号，用 AI 生成方言主题插画、信息可视化配图，统一荆楚青绿配色体系，配合展板排版，完成整套地域文化视觉体系，适配展馆展出。</p>
-          <p class="out">▸ 核心产出：系列文化插画、信息图表配图、主视觉海报</p>
-        </div>
-        <div class="rp-item">
-          <h4>VR 沙滩艺术疗愈项目<i>｜AIGC 场景概念设计</i></h4>
-          <p>负责沉浸式疗愈场景的概念草图、氛围图生成，用提示词控制柔和通透色调、空间构图，输出大量 VR 前期参考场景图，给后续交互制作提供视觉基准。</p>
-        </div>
-      </div>
-
-      <div class="rp-sec">
-        <h3>实践经历</h3>
-        <div class="rp-item">
-          <h4>AIGC 创作复盘与工作流沉淀</h4>
-          <p>持续整理提示词模板、风格库、镜头参数库，总结角色保形、场景连贯的方案，能够高效批量产出符合需求的视觉素材，快速迭代修改方案。</p>
-        </div>
-        <div class="rp-item">
-          <h4>展览视觉落地实践</h4>
-          <p>多次负责展览主视觉、展板配图，以 AI 生成素材为基底，精修调整、统一版式，完成课程结展视觉落地。</p>
-        </div>
-      </div>
-
-      <div class="rp-sec">
-        <h3>获奖与证书</h3>
-        <div class="rp-certs">
-          <span>普通话证书</span><span>高中教师资格证</span><span>英语六级</span><span>湖北美术学院 2025 年二等奖学金</span><span>课程创作项目评优 · 优秀作品</span>
-        </div>
-      </div>
-
-      <div class="rp-sec">
-        <h3>自我评价</h3>
-        <div class="rp-item"><p>1. 美术底子扎实，懂镜头、懂叙事，不是单纯输入提示词，而是用 AI 作为创作工具，能把控画面审美、逻辑和风格统一，解决 AI 常见结构、一致性难题。</p></div>
-        <div class="rp-item"><p>2. 熟悉 AIGC 全链路：概念策划 → 提示词调试 → ControlNet/Lora 控制 → 素材精修 → 剪辑成片，适配概念美术、AI 动画、短视频视觉、文创配图等岗位。</p></div>
-        <div class="rp-item"><p>3. 擅长国风、传统文化题材创作，出图稳定，修改迭代快，善于理解需求，按照项目调性调整画面。</p></div>
-        <div class="rp-item"><p>4. 同时具备基础后期、三维辅助能力，AI 素材可以直接对接 AE、PR、TouchDesigner 进行二次加工，适配数字艺术团队工作模式。</p></div>
-      </div>
+      <div class="ic-body" id="icBody"></div>
     </div>
 
     <!-- 右侧竖排菜单 -->
@@ -513,7 +435,7 @@
   </div>
 </section>
 
-<!-- ========== 第三面 · AIGC 烤箱 ========== -->
+<!-- ========== 第三面 · 烤箱 ========== -->
 <section class="page p3" id="p3">
   <button class="back-btn" id="backBtn">← 回到自我介绍</button>
   <div class="p3-head">
@@ -536,18 +458,12 @@
     <div class="knob-col">
       <div class="knob-label">温度 / 作品</div>
       <div class="knob" id="knobWork" title="转动换作品"></div>
-      <div class="knob" id="knobMusic" title="音乐开关"></div>
-      <div class="knob-label">开/关门</div>
+      <div class="knob-label">开 / 关门</div>
       <div class="knob" id="knobDoor" title="开门回去"></div>
       <div class="temp-readout" id="tempReadout">180°C<small>预热中…</small></div>
     </div>
   </div>
 </section>
-
-<!-- 音乐唱片 -->
-<div class="vinyl" id="vinyl" title="播放 / 暂停音乐"></div>
-<div class="music-tip" id="musicTip">♪ Diamonds & Thorns</div>
-<audio id="bgm" src="assets/bgm.mp3" loop preload="auto"></audio>
 
 <script>
 /* ============ 页面切换 ============ */
@@ -601,22 +517,153 @@ document.addEventListener('mousemove', e => {
   eyeR.setAttribute('transform', `translate(${dx},${dy})`);
 });
 
-/* ============ 第二面 · 电话 & 简历 ============ */
-const phoneZone = document.getElementById('phoneZone');
-const resumePanel = document.getElementById('resumePanel');
-phoneZone.addEventListener('click', () => {
-  const opening = !phoneZone.classList.contains('picked');
-  phoneZone.classList.toggle('picked');
-  resumePanel.classList.toggle('open', opening);
-  if (opening){
-    const r = phoneZone.getBoundingClientRect();
-    spawnNotes(r.left + r.width/2, r.top);
-    setTimeout(()=> resumePanel.scrollTo({top:0,behavior:'smooth'}), 700);
-  }
+/* ============ 第二面 · 拨号电话 ============ */
+/* 生成拨号盘数字（标准转盘电话布局，顺时针 1→0） */
+const dialNums = document.getElementById('dialNums');
+const cx = 185, cy = 182, R = 54;
+const order = [1,2,3,4,5,6,7,8,9,0];
+const startAngle = -58;               // 1 的起始角度
+const NS = 'http://www.w3.org/2000/svg';
+order.forEach((n, i) => {
+  const a = (startAngle + i * 29.5) * Math.PI / 180;
+  const x = cx + R * Math.sin(a);
+  const y = cy - R * Math.cos(a);
+  const g = document.createElementNS(NS, 'g');
+  g.setAttribute('class', 'dial-num');
+  g.dataset.n = n;
+  const c = document.createElementNS(NS, 'circle');
+  c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 15);
+  c.setAttribute('fill', '#fffdf7'); c.setAttribute('stroke', '#3a3a3a'); c.setAttribute('stroke-width', 4);
+  const t = document.createElementNS(NS, 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y + 6);
+  t.setAttribute('text-anchor', 'middle'); t.setAttribute('font-size', 16);
+  t.setAttribute('fill', '#e05a8c');
+  t.textContent = n;
+  g.appendChild(c); g.appendChild(t);
+  dialNums.appendChild(g);
 });
-document.getElementById('rpClose').addEventListener('click', () => {
-  resumePanel.classList.remove('open');
-  phoneZone.classList.remove('picked');
+
+/* 每个数字对应的信息 */
+const INFO = {
+  1: { title:'基本信息', body:`
+      <div class="row">
+        <span class="chip red">姓名：黄旭楚</span>
+        <span class="chip">性别：女</span>
+        <span class="chip">学历：本科在读</span>
+      </div>
+      <div class="row">
+        <span class="chip pink">院校：湖北美术学院</span>
+        <span class="chip pink">专业：艺术与科技（影视动画方向）</span>
+      </div>
+      <div class="row">
+        <span class="chip">📞 <a href="tel:13080656398" style="color:inherit;text-decoration:none;">13080656398</a></span>
+        <span class="chip">📮 <a href="mailto:3435025144@qq.com" style="color:inherit;text-decoration:none;">3435025144@qq.com</a></span>
+      </div>`},
+  2: { title:'求职意向', body:`
+      <div class="row">
+        <span class="chip red">AIGC 视觉设计师</span>
+        <span class="chip red">AI 内容生成师</span>
+        <span class="chip red">概念美术</span>
+        <span class="chip red">AI 动画</span>
+        <span class="chip red">数字内容设计师</span>
+      </div>`},
+  3: { title:'个人简介', body:`
+      <p>湖北美术学院艺术与科技专业在读，深耕 <b>AIGC 视觉创作赛道</b>，拥有扎实美术功底、镜头叙事能力与 AI 工作流搭建经验。</p>
+      <p>擅长把创意概念转化为精准提示词，把控画面风格、构图、光影、叙事逻辑，熟练完成 AI 出图、图生视频、分镜、角色/场景概念设计，同时结合后期软件修图、统一画面质感、解决 AI 崩坏问题。</p>
+      <p>熟悉国风、影视写实、版画、插画等多种视觉风格，具备从前期策划、AI 批量生成、素材筛选精修到成片输出的<b>完整流程能力</b>，擅长文化类、叙事向、展览类数字内容创作。</p>`},
+  4: { title:'专业技能 · AIGC 核心', body:`
+      <div class="skill"><b>✅ AIGC 核心能力</b>
+      <p>精通提示词工程、正向/反向提示词撰写、风格控制、镜头参数设定；熟练文生图、图生图、ControlNet、Lora 模型调用、参考图约束；擅长角色一致性、场景延续性、分镜批量生成，能规避 AI 手部、透视、结构崩坏问题；可制作 AI 短视频、动态镜头、MV 分镜、概念海报。</p></div>`},
+  5: { title:'专业技能 · 美术与软件', body:`
+      <div class="skill"><b>✅ 美术与影视基础</b>
+      <p>素描色彩、人体结构、镜头语言、分镜脚本、色彩调性把控；擅长国风、电影质感、新中式、版画、插画等风格。</p></div>
+      <div class="skill"><b>✅ 后期 & 辅助软件</b>
+      <p>PS、AI、AE、PR、C4D，用于 AI 素材精修、调色、抠图、版式排版、视频剪辑、画面统一；TouchDesigner、MeshLab 可搭配 AI 资产做交互视觉、三维素材处理。</p></div>
+      <div class="skill"><b>✅ 文案策划</b>
+      <p>项目概念、脚本、叙事文案、中英双语提示词撰写。</p></div>`},
+  6: { title:'项目经历 · 上篇', body:`
+      <div class="proj"><h4>新国风木偶戏叙事动画项目<i>｜AIGC 主视觉 / 分镜师</i></h4>
+      <p>以「传统文化传承」为主题搭建整套 AI 生产流程：撰写剧本、拆分分镜，设计角色木偶设定，定制 Lora 与风格提示词，批量生成连贯镜头画面，把控水墨国风电影质感；对 AI 素材做后期修复、剪辑合成，输出完整叙事短片。</p>
+      <p class="out">▸ 产出：连贯分镜序列、角色统一的 AI 动画素材、成片视频</p></div>
+      <div class="proj"><h4>敦煌文物数字重生项目<i>｜AIGC 概念设计师</i></h4>
+      <p>用 AIGC 完成文物复原效果图、氛围场景、粒子消散动态海报、展览主视觉；ControlNet 约束纹样与构图，兼顾历史纹样准确性与艺术表现力，作品用于课程展览。</p>
+      <p class="out">▸ 产出：敦煌主题概念图、动态视觉海报、展板视觉素材</p></div>`},
+  7: { title:'项目经历 · 下篇', body:`
+      <div class="proj"><h4>楚地有声 · 湖北方言可视化项目<i>｜AIGC 视觉设计师</i></h4>
+      <p>提取荆楚地域文化符号，AI 生成方言主题插画、信息可视化配图，统一荆楚青绿配色体系，完成整套地域文化视觉体系，适配展馆展出。</p>
+      <p class="out">▸ 产出：系列文化插画、信息图表配图、主视觉海报</p></div>
+      <div class="proj"><h4>VR 沙滩艺术疗愈项目<i>｜AIGC 场景概念设计</i></h4>
+      <p>负责沉浸式疗愈场景的概念草图、氛围图生成，用提示词控制柔和通透色调、空间构图，输出大量 VR 前期参考场景图。</p></div>`},
+  8: { title:'实践经历', body:`
+      <div class="proj"><h4>AIGC 创作复盘与工作流沉淀</h4>
+      <p>持续整理提示词模板、风格库、镜头参数库，总结角色保形、场景连贯的方案，高效批量产出符合需求的视觉素材，快速迭代修改方案。</p></div>
+      <div class="proj"><h4>展览视觉落地实践</h4>
+      <p>多次负责展览主视觉、展板配图，以 AI 生成素材为基底，精修调整、统一版式，完成课程结展视觉落地。</p></div>`},
+  9: { title:'获奖与证书', body:`
+      <div class="row">
+        <span class="chip">普通话证书</span>
+        <span class="chip">高中教师资格证</span>
+        <span class="chip">英语六级</span>
+        <span class="chip pink">湖北美术学院 2025 年二等奖学金</span>
+        <span class="chip pink">课程创作项目评优 · 优秀作品</span>
+      </div>`},
+  0: { title:'自我评价', body:`
+      <p><b>1.</b> 美术底子扎实，懂镜头、懂叙事，用 AI 作为创作工具把控画面审美、逻辑和风格统一，解决 AI 常见结构、一致性难题。</p>
+      <p><b>2.</b> 熟悉 AIGC 全链路：概念策划 → 提示词调试 → ControlNet/Lora 控制 → 素材精修 → 剪辑成片。</p>
+      <p><b>3.</b> 擅长国风、传统文化题材创作，出图稳定，修改迭代快，善于理解需求、按项目调性调整画面。</p>
+      <p><b>4.</b> 具备基础后期、三维辅助能力，AI 素材可直接对接 AE、PR、TouchDesigner 二次加工。</p>`},
+};
+
+const phoneZone = document.getElementById('phoneZone');
+const dialG = document.getElementById('dialG');
+const ringTxt = document.getElementById('ringTxt');
+const infoCard = document.getElementById('infoCard');
+const icBadge = document.getElementById('icBadge');
+const icTitle = document.getElementById('icTitle');
+const icSub = document.getElementById('icSub');
+const icBody = document.getElementById('icBody');
+
+/* 拨号音（本地合成，无外部音频文件） */
+let audioCtx;
+function dialBeep(){
+  try{
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = 'sine'; o.frequency.value = 480 + Math.random()*240;
+    g.gain.setValueAtTime(.15, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001, audioCtx.currentTime + .18);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(); o.stop(audioCtx.currentTime + .2);
+  }catch(e){}
+}
+
+function showInfo(n){
+  const info = INFO[n];
+  if (!info) return;
+  dialBeep();
+  ringTxt.textContent = `叮铃铃~ 你拨打了 ${n} 号`;
+  ringTxt.classList.remove('show');
+  void ringTxt.offsetWidth;
+  ringTxt.classList.add('show');
+  dialG.classList.remove('dial-spin');
+  void dialG.getBoundingClientRect();
+  dialG.classList.add('dial-spin');
+  icBadge.textContent = n;
+  icTitle.textContent = info.title;
+  icSub.textContent = `您拨打的号码是 ${n} · ${info.title}`;
+  icBody.innerHTML = info.body;
+  infoCard.classList.add('open');
+  infoCard.scrollTop = 0;
+  const r = phoneZone.getBoundingClientRect();
+  spawnNotes(r.left + r.width/2, r.top + 20);
+}
+dialNums.addEventListener('click', e => {
+  const g = e.target.closest('.dial-num');
+  if (g) showInfo(g.dataset.n);
+});
+document.getElementById('icClose').addEventListener('click', () => {
+  infoCard.classList.remove('open');
+  ringTxt.classList.remove('show');
 });
 
 /* ============ 第三面 · 烤箱 ============ */
@@ -667,19 +714,15 @@ function renderDish(animated){
   tempReadout.innerHTML = `${t}°C<small>${cat.name} · 第 ${curIdx+1}/${cat.works.length} 道</small>`;
   oven.classList.add('baking');
 }
-function turnKnob(){
+knobWork.addEventListener('click', e => {
   knobAngle += 120;
   knobWork.style.transform = `rotate(${knobAngle}deg)`;
   curIdx = (curIdx + 1) % WORKS[curCat].works.length;
   renderDish(true);
-}
-knobWork.addEventListener('click', e => {
-  turnKnob();
   const r = e.currentTarget.getBoundingClientRect();
   spawnNotes(r.left + r.width/2, r.top);
 });
 
-/* 右侧菜单 → 烤箱 */
 document.querySelectorAll('.side-menu button').forEach(btn => {
   btn.addEventListener('click', () => {
     curCat = btn.dataset.cat;
@@ -689,37 +732,7 @@ document.querySelectorAll('.side-menu button').forEach(btn => {
     burst(window.innerWidth/2, window.innerHeight/2);
   });
 });
-
-/* 返回按钮 */
 document.getElementById('backBtn').addEventListener('click', () => showPage('p2'));
-
-/* 音乐旋钮 & 唱片 */
-const bgm = document.getElementById('bgm');
-const vinyl = document.getElementById('vinyl');
-const knobMusic = document.getElementById('knobMusic');
-const tip = document.getElementById('musicTip');
-let tipTimer;
-function toggleMusic(){
-  if (bgm.paused){ bgm.play(); vinyl.classList.add('spinning'); }
-  else { bgm.pause(); vinyl.classList.remove('spinning'); }
-  showTip();
-}
-function showTip(){
-  tip.classList.add('show');
-  clearTimeout(tipTimer);
-  tipTimer = setTimeout(()=> tip.classList.remove('show'), 2200);
-}
-vinyl.addEventListener('click', toggleMusic);
-knobMusic.addEventListener('click', () => {
-  knobMusic.style.transform = knobMusic.style.transform === 'rotate(180deg)' ? 'rotate(0deg)' : 'rotate(180deg)';
-  toggleMusic();
-});
-window.addEventListener('pointerdown', function once(){
-  if (bgm.paused){ bgm.play().then(()=> vinyl.classList.add('spinning')).catch(()=>{}); }
-  window.removeEventListener('pointerdown', once);
-});
-
-/* 开门旋钮 → 回第二面 */
 document.getElementById('knobDoor').addEventListener('click', () => {
   oven.classList.remove('baking');
   showPage('p2');
@@ -761,7 +774,7 @@ document.addEventListener('mousemove', e => {
   }
 });
 
-/* 初始化烤箱默认内容 */
+/* 初始化 */
 renderDish(false);
 </script>
 </body>
