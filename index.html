@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>黄旭楚 · 小宇宙 | AIGC 视觉作品集</title>
-<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --tomato:#ff4d3d;
@@ -47,35 +47,83 @@
   .swallow.grow{animation:grow .6s ease-in forwards;}
   @keyframes grow{to{transform:translate(-50%,-50%) scale(140);}}
 
-  /* ============ 第一页 · 海报封面 + 嘴巴镜头推进 ============ */
-  .p1{background:#e63950;cursor:pointer;}
-  .cover-zoom{position:absolute;inset:0;overflow:hidden;}
-  .cover-stage{position:absolute;will-change:transform;}
-  .cover-float{width:100%;height:100%;animation:floaty 5.5s ease-in-out infinite;}
-  .cover-stage.no-float .cover-float{animation:none;}
-  .cover-float img{width:100%;height:100%;display:block;user-select:none;-webkit-user-drag:none;}
-  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-  .eye-layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
-  #eyeOL,#eyeOR{transition:transform .1s linear;}
-  #mouthOL{
-    opacity:0;transform-box:fill-box;transform-origin:center;
-    transition:transform 1s cubic-bezier(.55,0,.85,.4), opacity .2s;
+  /* ============ 第一页 · RETRO EDITORIAL 杂志封面 ============ */
+  .p1{background:var(--cream);}
+  .p1::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;
+    background-image:radial-gradient(rgba(31,28,26,.065) 1px, transparent 1.4px);
+    background-size:18px 18px;
   }
-  .vignette{
-    position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(115% 115% at 50% 45%, transparent 62%, rgba(110,0,10,.3));
+  .mag-scene{position:absolute;inset:0;will-change:transform;}
+  .mag-top{
+    position:absolute;top:0;left:0;right:0;z-index:4;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:20px 4vw 13px;border-bottom:2.5px solid var(--ink);
+    font-family:"Space Mono",monospace;font-size:12px;letter-spacing:3px;
   }
+  .mag-top b{color:var(--tomato);font-weight:700;}
+  .mag-headline{position:absolute;left:4vw;top:9vh;z-index:3;}
+  .mag-hello{
+    font-family:"Archivo Black",Impact,"Arial Black",sans-serif;
+    font-size:clamp(64px,12vw,150px);line-height:.85;color:var(--tomato);
+    letter-spacing:-1px;text-shadow:5px 5px 0 rgba(31,28,26,.12);
+  }
+  .mag-name{
+    font-weight:900;font-size:clamp(34px,5.6vw,76px);letter-spacing:10px;
+    color:var(--ink);margin-top:6px;
+  }
+  .mag-sub{
+    font-family:"Space Mono",monospace;font-size:clamp(11px,1.2vw,14px);
+    letter-spacing:4px;margin-top:13px;color:var(--ink);
+    border-bottom:3px solid var(--tomato);display:inline-block;padding-bottom:6px;
+  }
+  .mag-toy{
+    position:absolute;left:50%;top:56%;transform:translate(-50%,-44%);
+    width:min(46vh,36vw,440px);z-index:2;
+  }
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .mag-float{animation:floaty 5s ease-in-out infinite;}
+  .mag-scene.no-float .mag-float{animation:none;}
+  #toySVG{width:100%;display:block;filter:drop-shadow(0 26px 26px rgba(31,28,26,.2));}
+  .mag-hey{
+    position:absolute;left:5vw;top:52vh;z-index:3;
+    font-family:"Archivo Black",Impact,sans-serif;
+    font-size:clamp(15px,2vw,24px);color:var(--ink);
+    letter-spacing:2px;transform:rotate(-7deg);
+  }
+  .mag-hey svg{display:block;margin-top:4px;}
+  .mag-tip{
+    position:absolute;left:50%;bottom:11vh;transform:translateX(-50%);z-index:3;
+    font-size:clamp(12px,1.4vw,16px);letter-spacing:4px;color:var(--tomato);
+    animation:blinkTip 1.8s ease-in-out infinite;white-space:nowrap;
+  }
+  .mag-bottom{
+    position:absolute;bottom:0;left:0;right:0;z-index:4;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:13px 4vw 18px;border-top:2.5px solid var(--ink);
+    font-family:"Space Mono",monospace;font-size:11px;letter-spacing:3px;
+  }
+  .mag-bottom .mid{color:var(--tomato);letter-spacing:5px;}
+  .deco{position:absolute;pointer-events:none;z-index:1;color:var(--tomato);}
+  .deco.star{font-size:clamp(16px,2.2vw,28px);}
+  .deco.star.big{font-size:clamp(24px,3.4vw,42px);animation:spinSlow 14s linear infinite;}
+  @keyframes spinSlow{to{transform:rotate(360deg);}}
+  .deco.plus{font-family:"Space Mono",monospace;font-size:15px;color:var(--ink);opacity:.45;}
+  /* 嘴巴：唯一入口 */
+  #mouthGrp{cursor:pointer;}
+  #magMouth{transform-box:fill-box;transform-origin:center;transition:transform .25s, fill .25s;}
+  #mouthGrp:hover #magMouth{transform:scale(1.18);fill:#a31230;}
+  #mouthRing{transform-box:fill-box;transform-origin:center;transition:opacity .3s;}
+  #mouthGrp:hover #mouthRing{opacity:1;animation:ringSpin 7s linear infinite;}
+  @keyframes ringSpin{to{transform:rotate(360deg);}}
+  /* 张嘴 + 镜头推进 */
+  #mouthGrp{transform-box:fill-box;transform-origin:center;transition:transform .85s cubic-bezier(.55,0,.85,.4);}
+  #toySVG.open #mouthGrp{transform:scale(6);}
   #blackHole{
     position:fixed;inset:0;background:#0d0507;
     z-index:150;pointer-events:none;display:none;
   }
   @keyframes blinkTip{0%,100%{opacity:.95}50%{opacity:.4}}
-  .press-tip{
-    position:absolute;left:50%;bottom:2.5vh;transform:translateX(-50%);
-    color:rgba(255,255,255,.95);font-size:14px;letter-spacing:5px;z-index:5;
-    animation:blinkTip 1.8s ease-in-out infinite;white-space:nowrap;
-    text-shadow:0 2px 8px rgba(90,0,10,.55);
-  }
 
   /* ============ 固定侧边导航 ============ */
   .side-nav{
@@ -357,6 +405,14 @@
 
   /* ============ 响应式 ============ */
   @media (max-width:960px){
+    .mag-headline{top:11vh;}
+    .mag-name{letter-spacing:6px;}
+    .mag-toy{top:57%;width:min(64vw,320px);}
+    .mag-hey{top:auto;bottom:29vh;left:5vw;font-size:14px;}
+    .mag-hey svg{width:52px;height:35px;}
+    .mag-tip{bottom:12vh;font-size:12px;letter-spacing:3px;}
+    .mag-top,.mag-bottom{font-size:9px;letter-spacing:2px;padding-left:5vw;padding-right:5vw;}
+    .deco.plus{display:none;}
     .side-nav{right:8px;gap:7px;}
     .side-nav button{padding:9px 5px;font-size:11px;letter-spacing:2px;box-shadow:2px 2px 0 var(--ink);}
     .side-nav .nav-mini{display:none;}
@@ -380,39 +436,133 @@
 
 <div class="swallow" id="swallow"></div>
 
-<!-- ============ 第一页 · 海报封面 ============ -->
+<!-- ============ 第一页 · RETRO EDITORIAL 杂志封面 ============ -->
 <section class="page p1 active" id="p1">
-  <div class="cover-zoom">
-    <div class="cover-stage" id="coverStage">
-      <div class="cover-float">
-        <img id="coverImg" src="assets/cover-poster.png" alt="黄旭楚 · AIGC VISUAL CREATOR">
-        <svg class="eye-layer" viewBox="0 0 1080 608" preserveAspectRatio="none">
-          <!-- 眼睛叠加层：盖住原图眼睛，高光随鼠标移动 -->
-          <g id="eyeOL">
-            <ellipse cx="507" cy="352" rx="43" ry="46" fill="#2a1e18"/>
-            <g class="glint">
-              <circle cx="521" cy="337" r="11" fill="#fff"/>
-              <circle cx="496" cy="367" r="5" fill="#fff" opacity=".85"/>
-              <circle cx="534" cy="362" r="3" fill="#ff9a8c" opacity=".6"/>
+  <div class="mag-scene" id="magScene">
+
+    <!-- 顶部刊头 -->
+    <div class="mag-top">
+      <span><b>XU CHU'S</b> CREATIVE WORLD</span>
+      <span>VOL. 01 / 2026</span>
+    </div>
+
+    <!-- 主标题区 -->
+    <div class="mag-headline">
+      <h1 class="mag-hello">HELLO!</h1>
+      <div class="mag-name">我是黄旭楚</div>
+      <div class="mag-sub">WELCOME TO MY LITTLE UNIVERSE.</div>
+    </div>
+
+    <!-- 装饰 -->
+    <div class="deco star big" style="left:57vw;top:15vh;">✦</div>
+    <div class="deco star" style="left:7vw;top:60vh;">✦</div>
+    <div class="deco star" style="right:9vw;top:62vh;">✦</div>
+    <div class="deco plus" style="left:45vw;top:12vh;">+</div>
+    <div class="deco plus" style="right:6vw;bottom:26vh;">+</div>
+    <div class="deco plus" style="left:2.5vw;top:40vh;">+</div>
+
+    <!-- 人物（原创 3D 感插画） -->
+    <div class="mag-toy">
+      <div class="mag-float">
+        <svg id="toySVG" viewBox="0 0 300 360">
+          <defs>
+            <radialGradient id="skinG" cx="42%" cy="34%" r="75%">
+              <stop offset="0" stop-color="#fff4e8"/><stop offset=".6" stop-color="#ffe6d2"/><stop offset="1" stop-color="#f3c3a5"/>
+            </radialGradient>
+            <radialGradient id="hairG" cx="35%" cy="25%" r="85%">
+              <stop offset="0" stop-color="#4a4440"/><stop offset=".55" stop-color="#26221f"/><stop offset="1" stop-color="#100e0c"/>
+            </radialGradient>
+            <linearGradient id="dressG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ff6a58"/><stop offset="1" stop-color="#d92842"/>
+            </linearGradient>
+            <radialGradient id="blushG" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#ffb0a6" stop-opacity=".9"/><stop offset="1" stop-color="#ffb0a6" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- 地面投影 -->
+          <ellipse cx="150" cy="352" rx="94" ry="11" fill="rgba(31,28,26,.16)"/>
+          <!-- 身体 -->
+          <path d="M78 358 C78 300 108 272 150 272 C192 272 222 300 222 358 Z" fill="url(#dressG)" stroke="#141210" stroke-width="6" stroke-linejoin="round"/>
+          <path d="M122 280 C136 296 164 296 178 280" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="150" cy="310" r="8" fill="#f4c542" stroke="#141210" stroke-width="3.5"/>
+          <!-- 小手扒边 -->
+          <ellipse cx="104" cy="332" rx="17" ry="13" fill="url(#skinG)" stroke="#141210" stroke-width="4.5" transform="rotate(-18 104 332)"/>
+          <ellipse cx="196" cy="332" rx="17" ry="13" fill="url(#skinG)" stroke="#141210" stroke-width="4.5" transform="rotate(18 196 332)"/>
+          <!-- 侧发团 -->
+          <ellipse cx="76" cy="196" rx="27" ry="54" fill="url(#hairG)" stroke="#141210" stroke-width="5"/>
+          <ellipse cx="224" cy="196" rx="27" ry="54" fill="url(#hairG)" stroke="#141210" stroke-width="5"/>
+
+          <g id="toyHead">
+            <!-- 后层头发 -->
+            <path d="M150 28 C72 28 44 96 46 180 C47 224 61 254 80 262 L84 180 C86 116 112 90 150 90 C188 90 214 116 216 180 L220 262 C239 254 253 224 254 180 C256 96 228 28 150 28 Z" fill="url(#hairG)" stroke="#141210" stroke-width="5" stroke-linejoin="round"/>
+            <!-- 脸 -->
+            <circle cx="150" cy="172" r="65" fill="url(#skinG)" stroke="#e8b490" stroke-width="2"/>
+            <!-- 刘海 -->
+            <path d="M87 158 C87 94 113 72 150 72 C187 72 213 94 213 158 C196 133 176 123 150 123 C124 123 104 133 87 158 Z" fill="url(#hairG)" stroke="#141210" stroke-width="4" stroke-linejoin="round"/>
+            <!-- 头发光泽 -->
+            <path d="M106 94 C122 82 146 77 166 81" fill="none" stroke="#7a7069" stroke-width="6" stroke-linecap="round" opacity=".6"/>
+            <ellipse cx="120" cy="84" rx="14" ry="6" fill="#fff" opacity=".22" transform="rotate(-18 120 84)"/>
+            <!-- 星星发夹 -->
+            <path d="M194 94 l5.5 -13 5.5 13 14 2 -10.5 10 3 14 -12 -7.5 -12 7.5 3 -14 -10.5 -10 Z" fill="#f4c542" stroke="#141210" stroke-width="3" stroke-linejoin="round"/>
+            <!-- 眼睛（可跟随） -->
+            <g id="eyeL">
+              <ellipse cx="119" cy="182" rx="15.5" ry="16.5" fill="#141210"/>
+              <g class="glint">
+                <circle cx="124" cy="176" r="5.8" fill="#fff"/>
+                <circle cx="113.5" cy="188" r="2.8" fill="#fff" opacity=".85"/>
+                <circle cx="128" cy="189" r="1.8" fill="#ff9a8c" opacity=".7"/>
+              </g>
+            </g>
+            <g id="eyeR">
+              <ellipse cx="181" cy="182" rx="15.5" ry="16.5" fill="#141210"/>
+              <g class="glint">
+                <circle cx="186" cy="176" r="5.8" fill="#fff"/>
+                <circle cx="175.5" cy="188" r="2.8" fill="#fff" opacity=".85"/>
+                <circle cx="190" cy="189" r="1.8" fill="#ff9a8c" opacity=".7"/>
+              </g>
+            </g>
+            <!-- 睫毛/眉毛 -->
+            <path d="M102 174 l-9 -5 M106 167 l-7 -8 M198 167 l7 -8 M202 174 l9 -5" stroke="#141210" stroke-width="2.6" stroke-linecap="round"/>
+            <path d="M108 156 q10 -6 22 -2 M170 154 q12 -4 22 2" stroke="#3d3a38" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <!-- 腮红雀斑 -->
+            <ellipse cx="101" cy="205" rx="15" ry="9" fill="url(#blushG)"/>
+            <ellipse cx="199" cy="205" rx="15" ry="9" fill="url(#blushG)"/>
+            <g fill="#e8938a" opacity=".75">
+              <circle cx="96" cy="200" r="1.5"/><circle cx="104" cy="209" r="1.5"/><circle cx="92" cy="208" r="1.5"/>
+              <circle cx="204" cy="200" r="1.5"/><circle cx="196" cy="209" r="1.5"/><circle cx="208" cy="208" r="1.5"/>
+            </g>
+            <!-- 鼻子 -->
+            <path d="M148 193 q2 3 4 0" stroke="#d9a08e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <!-- 嘴巴：唯一入口 -->
+            <g id="mouthGrp">
+              <circle id="mouthRing" cx="150" cy="219" r="27" fill="none" stroke="#e63950" stroke-width="2.5" stroke-dasharray="6 8" opacity="0"/>
+              <ellipse id="magMouth" cx="150" cy="219" rx="13" ry="14" fill="#8a1030"/>
+              <ellipse id="magTongue" cx="150" cy="226" rx="7" ry="4.5" fill="#ff6b81" opacity="0"/>
             </g>
           </g>
-          <g id="eyeOR">
-            <ellipse cx="652" cy="337" rx="44" ry="47" fill="#2a1e18"/>
-            <g class="glint">
-              <circle cx="666" cy="322" r="11" fill="#fff"/>
-              <circle cx="641" cy="352" r="5" fill="#fff" opacity=".85"/>
-              <circle cx="679" cy="347" r="3" fill="#ff9a8c" opacity=".6"/>
-            </g>
-          </g>
-          <!-- 嘴巴叠加层：转场时张大 -->
-          <ellipse id="mouthOL" cx="585" cy="435" rx="55" ry="46" fill="#7a0f1e"/>
-          <ellipse id="mouthTongue" cx="585" cy="452" rx="26" ry="15" fill="#ff6b81" opacity="0"/>
         </svg>
       </div>
     </div>
-    <div class="vignette"></div>
+
+    <!-- 人物旁装饰文字 + 手绘箭头 -->
+    <div class="mag-hey">HEY! LOOK AT ME!
+      <svg width="72" height="48" viewBox="0 0 72 48" fill="none">
+        <path d="M4 6 C28 4 54 12 62 34" stroke="#e63950" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M51 30 L63 36 L64 23" stroke="#e63950" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- 嘴巴下方交互提示 -->
+    <div class="mag-tip">点击我的嘴巴，开启创意冒险</div>
+
+    <!-- 底部 -->
+    <div class="mag-bottom">
+      <span>DESIGN · ART · IMAGINATION</span>
+      <span class="mid">A LITTLE WORLD FULL OF BIG IDEAS.</span>
+      <span>EST. 2026</span>
+    </div>
   </div>
-  <div class="press-tip">PRESS TO EXPLORE · 按下画面，镜头将推进她的小宇宙</div>
 </section>
 <div id="blackHole"></div>
 
@@ -761,37 +911,21 @@ navBtns.forEach(btn => {
   });
 });
 
-/* ============ 第一页 · 海报封面：眼神跟随 + 嘴巴镜头推进 ============ */
-const coverStage = document.getElementById('coverStage');
-const coverImg = document.getElementById('coverImg');
+/* ============ 第一页 · 杂志封面：眼神跟随 + 嘴巴唯一入口 ============ */
+const magScene = document.getElementById('magScene');
+const toySvg = document.getElementById('toySVG');
+const magMouth = document.getElementById('magMouth');
+const mouthGrp = document.getElementById('mouthGrp');
+const magTongue = document.getElementById('magTongue');
 const blackHole = document.getElementById('blackHole');
-const mouthOL = document.getElementById('mouthOL');
-const mouthTongue = document.getElementById('mouthTongue');
-/* 关键坐标（海报图内，viewBox 1080x608 单位）——若眼睛/嘴巴对位有偏差，微调这里即可 */
-const CV = { mouth:{x:585, y:435}, eyes:['eyeOL','eyeOR'] };
-let cvScale = 1, cvPos = {x:0, y:0}, cvReady = false, zooming = false;
-
-function layoutCover(){
-  const vw = innerWidth, vh = innerHeight;
-  const nw = coverImg.naturalWidth || 1080, nh = coverImg.naturalHeight || 608;
-  cvScale = Math.max(vw/nw, vh/nh);
-  const w = nw*cvScale, h = nh*cvScale;
-  cvPos = {x:(vw-w)/2, y:(vh-h)/2};
-  coverStage.style.width = w+'px';
-  coverStage.style.height = h+'px';
-  coverStage.style.left = cvPos.x+'px';
-  coverStage.style.top = cvPos.y+'px';
-}
-coverImg.addEventListener('load', () => { layoutCover(); cvReady = true; });
-if (coverImg.complete && coverImg.naturalWidth) { layoutCover(); cvReady = true; }
-addEventListener('resize', () => { if (currentPage==='p1' && !zooming) layoutCover(); });
+let zooming = false;
 
 /* 眼睛跟随鼠标 */
 document.addEventListener('mousemove', e => {
   if (currentPage !== 'p1' || zooming) return;
   const dx = Math.max(-1, Math.min(1, (e.clientX - innerWidth/2) / (innerWidth*0.45)));
   const dy = Math.max(-1, Math.min(1, (e.clientY - innerHeight*0.55) / (innerHeight*0.45)));
-  CV.eyes.forEach(id => {
+  ['eyeL','eyeR'].forEach(id => {
     const g = document.getElementById(id);
     g.setAttribute('transform', `translate(${(dx*7).toFixed(1)},${(dy*5).toFixed(1)})`);
     g.querySelector('.glint').setAttribute('transform', `translate(${(dx*15).toFixed(1)},${(dy*11).toFixed(1)})`);
@@ -800,7 +934,7 @@ document.addEventListener('mousemove', e => {
 /* 自动眨眼 */
 setInterval(() => {
   if (currentPage !== 'p1' || zooming) return;
-  CV.eyes.forEach(id => {
+  ['eyeL','eyeR'].forEach(id => {
     const g = document.getElementById(id);
     g.style.transformBox = 'fill-box'; g.style.transformOrigin = 'center';
     g.style.transform = 'scaleY(.06)';
@@ -809,22 +943,19 @@ setInterval(() => {
 }, 4600);
 
 /* 嘴巴镜头推进转场：以嘴巴中心为缩放焦点，圆形遮罩扩张吞屏 */
-const p1El = document.getElementById('p1');
 function startZoom(){
-  if (zooming || !cvReady) return;
+  if (zooming) return;
   zooming = true;
   const vw = innerWidth, vh = innerHeight;
-  const sw = parseFloat(coverStage.style.width), sh = parseFloat(coverStage.style.height);
-  const mx = cvPos.x + CV.mouth.x/1080 * sw;   /* 嘴巴在视口中的坐标 */
-  const my = cvPos.y + CV.mouth.y/608 * sh;
-  /* 嘴巴张大 */
-  mouthOL.style.opacity = 1;
-  mouthTongue.style.opacity = 1;
-  mouthOL.style.transform = 'scale(3.6)';
-  coverStage.classList.add('no-float');
-  /* 镜头推进：缩放中心 = 嘴巴中心，同时把嘴巴平移到屏幕正中 */
+  const r = magMouth.getBoundingClientRect();
+  const mx = r.left + r.width/2, my = r.top + r.height/2;   /* 嘴巴中心实时坐标 */
+  /* 人物张嘴 */
+  toySvg.classList.add('open');
+  magTongue.style.opacity = 1;
+  magScene.classList.add('no-float');
+  /* 镜头推进：缩放焦点 = 嘴巴中心，同时把嘴巴移到屏幕正中 */
   const tx = vw/2 - mx, ty = vh/2 - my;
-  const MAX_S = 17;
+  const MAX_S = 15;
   const maxR = Math.hypot(Math.max(mx, vw-mx), Math.max(my, vh-my)) + 60;
   blackHole.style.display = 'block';
   blackHole.style.opacity = 1;
@@ -835,8 +966,8 @@ function startZoom(){
     const t = Math.min(1, (now-t0)/DUR);
     const ez = t<.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2;   /* 缓入缓出 */
     const s = 1 + (MAX_S-1)*ez;
-    coverStage.style.transformOrigin = `${CV.mouth.x/1080*sw}px ${CV.mouth.y/608*sh}px`;
-    coverStage.style.transform = `translate(${tx}px,${ty}px) scale(${s.toFixed(3)})`;
+    magScene.style.transformOrigin = `${mx}px ${my}px`;
+    magScene.style.transform = `translate(${tx}px,${ty}px) scale(${s.toFixed(3)})`;
     const bt = Math.max(0, (t-.28)/.72);
     blackHole.style.clipPath = `circle(${(maxR*bt*bt).toFixed(1)}px at ${mx}px ${my}px)`;
     if (t < 1){ requestAnimationFrame(frame); return; }
@@ -848,17 +979,16 @@ function startZoom(){
     setTimeout(() => {
       blackHole.style.display = 'none';
       blackHole.style.transition = '';
-      coverStage.style.transform = '';
-      mouthOL.style.opacity = 0;
-      mouthOL.style.transform = '';
-      mouthTongue.style.opacity = 0;
-      coverStage.classList.remove('no-float');
+      magScene.style.transform = '';
+      toySvg.classList.remove('open');
+      magTongue.style.opacity = 0;
+      magScene.classList.remove('no-float');
       zooming = false;
     }, 600);
   }
   requestAnimationFrame(frame);
 }
-p1El.addEventListener('pointerdown', e => { e.preventDefault(); startZoom(); });
+mouthGrp.addEventListener('pointerdown', e => { e.preventDefault(); startZoom(); });
 
 /* ============ 第二页 · 电话拨号 ============ */
 /* 只画 1-5（分类号），其余孔为装饰 */
