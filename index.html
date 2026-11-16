@@ -3,83 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>小宇宙 · 创意作品集</title>
+<title>黄旭楚 · AIGC 视觉作品集</title>
 <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
 <style>
   :root{
     --red:#ff1f3c;
     --red-dark:#e01030;
     --yellow:#ffd23f;
-    --pink:#ff7eb6;
+    --pink:#ffb3c8;
+    --pink-deep:#ff8fb0;
     --blue:#4d96ff;
     --green:#6BCB77;
     --ink:#1a1a1a;
-    --cream:#fff8ec;
+    --cream:#f7f1e3;
+    --paper:#fffdf7;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html,body{height:100%;overflow:hidden;}
   body{
     font-family:"ZCOOL KuaiLe","PingFang SC","Microsoft YaHei",sans-serif;
-    background:var(--cream);
-    color:var(--ink);
-    overflow-x:hidden;
+    background:var(--cream);color:var(--ink);
     cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Ccircle cx='14' cy='14' r='10' fill='%23ff1f3c'/%3E%3Ccircle cx='11' cy='11' r='3' fill='%23fff'/%3E%3C/svg%3E") 14 14, auto;
   }
 
-  /* ========== 封面 ========== */
-  .cover{
-    height:100vh;
-    background:var(--red);
+  /* ========== 翻页系统 ========== */
+  .page{
+    position:fixed;inset:0;
     display:flex;flex-direction:column;
     align-items:center;justify-content:center;
-    position:relative;overflow:hidden;
-    transition:transform .55s cubic-bezier(.6,0,.9,.4), opacity .55s;
+    opacity:0;visibility:hidden;
+    transform:scale(.92);
+    transition:opacity .5s, transform .5s cubic-bezier(.2,.9,.3,1.2), visibility .5s;
+    overflow:hidden;
   }
-  .cover.zooming{transform:scale(3.2);opacity:0;}
+  .page.active{opacity:1;visibility:visible;transform:scale(1);z-index:2;}
+  .page.leaving{transform:scale(1.15);opacity:0;z-index:3;}
+
+  /* ========== 第一面 · 封面 ========== */
+  .p1{background:var(--red);}
   .cover .bg-word{
     position:absolute;font-size:clamp(60px,12vw,150px);
-    color:rgba(255,255,255,.08);
-    white-space:nowrap;top:8%;
-    animation:slide 18s linear infinite;
-    letter-spacing:6px;
+    color:rgba(255,255,255,.08);white-space:nowrap;top:8%;
+    animation:slide 18s linear infinite;letter-spacing:6px;
   }
   @keyframes slide{from{transform:translateX(15vw)}to{transform:translateX(-95vw)}}
   .cover-title{
-    color:#fff;font-size:clamp(34px,6vw,72px);
-    letter-spacing:8px;margin-bottom:8px;
+    color:#fff;font-size:clamp(30px,5vw,64px);letter-spacing:8px;margin-bottom:8px;
     text-shadow:4px 4px 0 var(--red-dark);
-    animation:floaty 3s ease-in-out infinite;
-    z-index:2;
+    animation:floaty 3s ease-in-out infinite;z-index:2;
   }
-  .cover-sub{
-    color:#ffd9df;font-size:clamp(14px,2vw,20px);
-    letter-spacing:4px;margin-bottom:24px;z-index:2;
-  }
+  .cover-sub{color:#ffd9df;font-size:clamp(13px,1.8vw,18px);letter-spacing:4px;margin-bottom:20px;z-index:2;}
   @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-
-  .girl-wrap{
-    position:relative;z-index:2;
-    width:min(46vh,360px);
-    transition:transform .2s;
-  }
+  .girl-wrap{position:relative;z-index:2;width:min(44vh,340px);transition:transform .2s;}
   .girl-wrap:active{transform:scale(.96);}
   #girlSVG{width:100%;display:block;filter:drop-shadow(0 14px 0 rgba(0,0,0,.15));}
   #mouth{transform-origin:center;transform:scaleY(.12);transition:transform .45s cubic-bezier(.5,1.6,.4,1);}
   .girl-wrap.open #mouth{transform:scaleY(1);}
   .hint{
-    position:absolute;left:50%;bottom:-56px;transform:translateX(-50%);
+    position:absolute;left:50%;bottom:-52px;transform:translateX(-50%);
     color:#fff;font-size:15px;letter-spacing:3px;white-space:nowrap;
     animation:blink 1.4s ease-in-out infinite;
   }
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
-
   .wiggle-stars{position:absolute;font-size:26px;animation:spin 9s linear infinite;opacity:.9;}
   @keyframes spin{to{transform:rotate(360deg)}}
 
   /* 吞屏黑幕 */
   .swallow{
-    position:fixed;inset:0;background:#000;
-    border-radius:50%;
+    position:fixed;background:#000;border-radius:50%;
     width:20px;height:20px;left:50%;top:50%;
     transform:translate(-50%,-50%) scale(0);
     pointer-events:none;z-index:99;
@@ -87,110 +78,239 @@
   .swallow.grow{animation:grow .55s ease-in forwards;}
   @keyframes grow{to{transform:translate(-50%,-50%) scale(120);}}
 
-  /* ========== 跑马灯 ========== */
-  .marquee{
-    background:var(--ink);color:var(--yellow);
-    padding:14px 0;overflow:hidden;white-space:nowrap;
-    font-size:20px;letter-spacing:5px;
-    transform:rotate(-1.2deg) scale(1.03);
-    border-top:4px dashed var(--cream);
-    border-bottom:4px dashed var(--cream);
+  /* ========== 第二面 · 个人介绍 ========== */
+  .p2{background:var(--cream);}
+  .p2-inner{
+    position:relative;width:100%;height:100%;
+    display:flex;align-items:center;justify-content:center;
   }
-  .marquee span{display:inline-block;animation:marq 22s linear infinite;}
-  @keyframes marq{to{transform:translateX(-50%)}}
+  .p2-deco{
+    position:absolute;top:34px;left:40px;color:#b8b0a0;
+    font-size:14px;letter-spacing:4px;
+  }
+  .p2-bigword{
+    position:absolute;right:120px;top:30px;
+    font-size:clamp(40px,6vw,84px);color:rgba(26,26,26,.08);
+    letter-spacing:10px;writing-mode:vertical-rl;
+    pointer-events:none;
+  }
+  .intro-zone{
+    display:flex;flex-direction:column;align-items:center;
+    margin-right:8vw;position:relative;z-index:2;max-width:46vw;
+  }
+  .intro-title{font-size:clamp(26px,3.6vw,44px);letter-spacing:6px;margin-bottom:6px;}
+  .intro-title em{font-style:normal;color:var(--red);}
+  .intro-sub{color:#8a8272;letter-spacing:3px;font-size:14px;margin-bottom:8px;}
+  .intro-tip{color:var(--red);font-size:15px;letter-spacing:3px;animation:blink 1.6s ease-in-out infinite;}
+  .phone-zone{position:relative;width:min(30vh,300px);margin-top:10px;cursor:pointer;}
+  #phoneSVG{width:100%;display:block;filter:drop-shadow(6px 8px 0 rgba(26,26,26,.12));transition:transform .3s;}
+  .phone-zone:hover #phoneSVG{transform:translateY(-4px) rotate(-1deg);}
+  #handset{transition:transform .8s cubic-bezier(.3,1.4,.4,1);}
+  .phone-zone.picked #handset{transform:translate(-70px,-130px) rotate(-24deg);}
+  .ring-txt{
+    position:absolute;top:-10px;left:60%;color:var(--red);font-size:18px;
+    letter-spacing:2px;opacity:0;transition:opacity .3s;
+  }
+  .phone-zone.picked .ring-txt{opacity:1;animation:ringPop .8s ease;}
+  @keyframes ringPop{0%{transform:scale(.4)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
 
-  /* ========== 作品区 ========== */
-  .works{
-    max-width:1200px;margin:0 auto;
-    padding:90px 24px 60px;
-    text-align:center;
+  /* 简历抽屉 */
+  .resume-panel{
+    position:absolute;left:5vw;top:50%;transform:translate(-130%,-50%) rotate(-3deg);
+    width:min(520px,86vw);max-height:82vh;
+    background:var(--paper);border:3px solid var(--ink);border-radius:18px;
+    box-shadow:10px 10px 0 rgba(255,31,60,.25);
+    padding:28px 30px;overflow-y:auto;z-index:5;
+    transition:transform .7s cubic-bezier(.2,.9,.3,1.15);
   }
-  .sec-title{
-    font-size:clamp(32px,5vw,56px);letter-spacing:6px;
-    display:inline-block;position:relative;margin-bottom:16px;
+  .resume-panel.open{transform:translate(0,-50%) rotate(-1deg);}
+  .resume-panel::-webkit-scrollbar{width:8px;}
+  .resume-panel::-webkit-scrollbar-thumb{background:var(--pink);border-radius:4px;}
+  .rp-close{
+    position:sticky;top:0;float:right;width:34px;height:34px;border-radius:50%;
+    background:var(--red);color:#fff;border:none;font-size:18px;cursor:pointer;z-index:2;
   }
-  .sec-title::after{
-    content:"";position:absolute;left:0;right:0;bottom:2px;
-    height:14px;background:var(--yellow);z-index:-1;
-    transform:rotate(-1deg);
+  .rp-close:hover{transform:rotate(90deg);}
+  .rp-head{border-bottom:3px dashed var(--ink);padding-bottom:14px;margin-bottom:16px;}
+  .rp-head h2{font-size:34px;letter-spacing:6px;}
+  .rp-head h2 span{color:var(--red);font-size:14px;letter-spacing:3px;margin-left:10px;vertical-align:middle;background:var(--yellow);padding:2px 10px;border-radius:999px;border:2px solid var(--ink);}
+  .rp-head p{color:#6b6455;font-size:13px;letter-spacing:2px;margin-top:6px;line-height:1.8;}
+  .rp-contact{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+  .rp-contact a{
+    color:var(--ink);text-decoration:none;font-size:13px;letter-spacing:1px;
+    background:var(--cream);border:2px solid var(--ink);border-radius:999px;padding:5px 14px;
+    transition:all .2s;
   }
-  .sec-desc{color:#888;margin-bottom:56px;letter-spacing:2px;font-size:15px;}
+  .rp-contact a:hover{background:var(--red);color:#fff;transform:translateY(-2px);}
+  .rp-sec h3{
+    font-size:17px;letter-spacing:3px;color:var(--red);margin:18px 0 8px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .rp-sec h3::before{content:"";width:14px;height:14px;background:var(--yellow);border:2px solid var(--ink);border-radius:4px;transform:rotate(15deg);}
+  .rp-sec p{font-size:13.5px;line-height:2;color:#3d382f;letter-spacing:.5px;text-align:justify;}
+  .rp-job{display:flex;flex-wrap:wrap;gap:8px;}
+  .rp-job span{
+    font-size:12.5px;letter-spacing:1px;background:var(--red);color:#fff;
+    padding:5px 13px;border-radius:999px;border:2px solid var(--ink);
+  }
+  .rp-skill{background:var(--cream);border:2px solid var(--ink);border-radius:12px;padding:10px 14px;margin-bottom:10px;}
+  .rp-skill b{font-size:14px;letter-spacing:2px;color:var(--red-dark);display:block;margin-bottom:4px;}
+  .rp-skill p{font-size:12.5px;line-height:1.9;color:#3d382f;}
+  .rp-item{margin-bottom:14px;}
+  .rp-item h4{font-size:15px;letter-spacing:1px;margin-bottom:4px;}
+  .rp-item h4 i{font-style:normal;color:var(--red);font-size:12px;margin-left:8px;}
+  .rp-item p{font-size:12.5px;line-height:1.9;color:#3d382f;text-align:justify;}
+  .rp-item .out{font-size:12px;color:var(--red-dark);margin-top:4px;letter-spacing:.5px;}
+  .rp-certs{display:flex;flex-wrap:wrap;gap:8px;}
+  .rp-certs span{font-size:12.5px;background:var(--yellow);border:2px solid var(--ink);border-radius:999px;padding:5px 13px;letter-spacing:1px;}
 
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:36px;
+  /* 右侧竖排菜单 */
+  .side-menu{
+    position:absolute;right:26px;top:50%;transform:translateY(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:26px;z-index:6;
   }
-  .card{
-    background:#fff;border:3px solid var(--ink);
-    border-radius:22px;overflow:hidden;
-    box-shadow:8px 8px 0 var(--ink);
-    transition:transform .25s, box-shadow .25s;
-    transform-style:preserve-3d;
-    position:relative;
+  .side-menu::before{content:"MENU";writing-mode:vertical-rl;font-size:11px;letter-spacing:6px;color:#b8b0a0;margin-bottom:4px;}
+  .side-menu button{
+    writing-mode:vertical-rl;background:var(--paper);
+    border:3px solid var(--ink);border-radius:999px;
+    padding:22px 10px;font-size:17px;letter-spacing:8px;
+    font-family:inherit;color:var(--ink);cursor:pointer;
+    box-shadow:5px 5px 0 var(--ink);
+    transition:all .25s;
   }
-  .card:nth-child(odd){--tilt:-1.6deg;}
-  .card:nth-child(even){--tilt:1.6deg;}
-  .card{transform:rotate(var(--tilt));}
-  .card:hover{box-shadow:14px 14px 0 var(--yellow);}
-  .card .thumb{
-    aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;
-    overflow:hidden;background:#f4f0e6;
-  }
-  .card .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
-  .card:hover .thumb img{transform:scale(1.07) rotate(1deg);}
-  .card .info{padding:18px 20px 22px;text-align:left;}
-  .card .tag{
-    display:inline-block;font-size:12px;letter-spacing:2px;
-    padding:4px 12px;border-radius:999px;color:#fff;margin-bottom:10px;
-  }
-  .card h3{font-size:21px;letter-spacing:2px;margin-bottom:6px;}
-  .card p{font-size:13px;color:#777;letter-spacing:1px;line-height:1.7;}
-  .t-red{background:var(--red);} .t-blue{background:var(--blue);}
-  .t-pink{background:var(--pink);} .t-green{background:var(--green);}
-  .t-dark{background:var(--ink);}
+  .side-menu button:nth-child(2){transform:rotate(-2deg);}
+  .side-menu button:nth-child(3){transform:rotate(2deg);}
+  .side-menu button:nth-child(4){transform:rotate(-2deg);}
+  .side-menu button:hover{background:var(--red);color:#fff;transform:scale(1.08) rotate(0deg);box-shadow:7px 7px 0 var(--yellow);}
+  .side-menu button:active{transform:scale(.95);}
 
-  .card.more{
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    min-height:420px;background:repeating-linear-gradient(45deg,#fff8ec,#fff8ec 14px,#ffefd2 14px,#ffefd2 28px);
-    cursor:pointer;
+  /* ========== 第三面 · 烤箱 ========== */
+  .p3{background:var(--cream);}
+  .oven-stage{
+    display:flex;align-items:center;gap:0;
+    position:relative;z-index:2;
+    width:min(92vw,980px);justify-content:center;
   }
-  .card.more .big{font-size:52px;animation:bounce 1.6s ease-in-out infinite;}
+  .p3-head{
+    position:absolute;top:36px;left:0;right:0;text-align:center;z-index:5;
+  }
+  .p3-head h2{font-size:clamp(22px,3vw,34px);letter-spacing:6px;}
+  .p3-head h2 em{font-style:normal;color:var(--red);}
+  .p3-head p{font-size:13px;color:#8a8272;letter-spacing:3px;margin-top:4px;}
+  .back-btn{
+    position:absolute;top:32px;left:28px;z-index:6;
+    background:var(--paper);border:3px solid var(--ink);border-radius:999px;
+    padding:8px 20px;font-size:14px;letter-spacing:2px;font-family:inherit;
+    cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:all .2s;
+  }
+  .back-btn:hover{background:var(--ink);color:#fff;transform:translateY(-2px);}
+
+  /* 烤箱本体 */
+  .oven{
+    position:relative;width:min(60vw,560px);
+    background:var(--pink);
+    border:6px solid var(--ink);border-radius:34px 34px 26px 26px;
+    padding:34px 34px 26px;
+    box-shadow:12px 12px 0 rgba(26,26,26,.15);
+  }
+  .oven-window{
+    position:relative;background:#fffdf7;
+    border:5px solid var(--ink);border-radius:26px;
+    height:min(46vh,380px);overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:inset 0 0 0 6px #e8e2d4;
+  }
+  .oven-glass{
+    position:absolute;inset:0;z-index:3;pointer-events:none;
+    background:linear-gradient(115deg,rgba(255,255,255,.5) 0%,rgba(255,255,255,0) 30%);
+  }
+  .oven-handle{
+    position:absolute;top:16px;left:50%;transform:translateX(-50%);
+    width:64%;height:14px;background:#4a4a4a;border:3px solid var(--ink);
+    border-radius:999px;z-index:4;
+  }
+  .dish{
+    width:100%;height:100%;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:12px;padding:34px 20px 16px;
+    transition:opacity .35s, transform .35s;
+  }
+  .dish.switching{opacity:0;transform:scale(.9) rotate(-2deg);}
+  .dish img{
+    max-width:100%;max-height:70%;object-fit:contain;
+    border:3px solid var(--ink);border-radius:12px;background:#fff;
+    box-shadow:5px 5px 0 rgba(26,26,26,.12);
+  }
+  .dish h3{font-size:18px;letter-spacing:2px;}
+  .dish p{font-size:12.5px;color:#6b6455;letter-spacing:1px;line-height:1.7;text-align:center;max-width:90%;}
+  .dish .empty-big{font-size:64px;animation:bounce 1.6s ease-in-out infinite;}
   @keyframes bounce{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-14px) rotate(6deg)}}
-  .card.more h3{margin-top:14px;}
-
-  /* ========== 关于 & 页脚 ========== */
-  .about{
-    background:var(--ink);color:#fff;
-    padding:100px 24px;text-align:center;position:relative;overflow:hidden;
+  /* 烤箱光 & 蒸汽 */
+  .oven-light{
+    position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;
+    background:radial-gradient(circle at 50% 60%,rgba(255,190,80,.45),rgba(255,120,60,.12) 60%,transparent 75%);
+    transition:opacity .4s;
   }
-  .about .sec-title{color:var(--yellow);}
-  .about .sec-title::after{background:var(--red);}
-  .about p{max-width:560px;margin:0 auto 14px;color:#bbb;line-height:2;letter-spacing:2px;font-size:15px;}
-  .stickers{font-size:34px;display:flex;gap:26px;justify-content:center;margin-top:30px;}
-  .stickers span{display:inline-block;transition:transform .3s;cursor:pointer;}
-  .stickers span:hover{transform:scale(1.5) rotate(18deg);}
-  footer{
-    background:#111;color:#666;text-align:center;
-    padding:22px;font-size:13px;letter-spacing:3px;
+  .oven.baking .oven-light{opacity:1;animation:flicker 2.2s ease-in-out infinite;}
+  @keyframes flicker{0%,100%{opacity:.65}50%{opacity:1}}
+  .steam{position:absolute;bottom:8px;font-size:20px;opacity:0;z-index:5;pointer-events:none;}
+  .oven.baking .steam{animation:steamUp 2.4s ease-in-out infinite;}
+  .steam:nth-of-type(1){left:30%;animation-delay:0s;}
+  .steam:nth-of-type(2){left:50%;animation-delay:.6s;}
+  .steam:nth-of-type(3){left:68%;animation-delay:1.1s;}
+  @keyframes steamUp{
+    0%{opacity:0;transform:translateY(0) scale(.7);}
+    30%{opacity:.9;}
+    100%{opacity:0;transform:translateY(-120px) scale(1.4) rotate(14deg);}
   }
+  .oven-feet{display:flex;justify-content:space-between;padding:0 40px;margin-top:-4px;}
+  .oven-feet span{width:34px;height:16px;background:#4a4a4a;border:3px solid var(--ink);border-radius:0 0 8px 8px;}
 
-  /* ========== 音乐唱片 ========== */
+  /* 旋钮列 */
+  .knob-col{
+    display:flex;flex-direction:column;align-items:center;gap:34px;
+    margin-left:34px;
+  }
+  .knob-label{font-size:12px;letter-spacing:2px;color:#6b6455;margin-bottom:-24px;}
+  .knob{
+    width:74px;height:74px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#d8d2c4,#b8b0a0 70%);
+    border:4px solid var(--ink);position:relative;cursor:pointer;
+    box-shadow:0 5px 0 rgba(26,26,26,.3);
+    transition:transform .45s cubic-bezier(.3,1.5,.5,1);
+  }
+  .knob::after{
+    content:"";position:absolute;left:50%;top:8px;width:9px;height:26px;
+    background:var(--ink);border-radius:5px;transform:translateX(-50%);
+    transform-origin:50% 29px;
+  }
+  .knob:hover{filter:brightness(1.08);}
+  .knob:active{transform:scale(.92);}
+  .knob.turn{animation:knobTurn .5s cubic-bezier(.3,1.5,.5,1);}
+  @keyframes knobTurn{from{transform:rotate(0)}to{transform:rotate(120deg)}}
+  .temp-readout{
+    background:var(--ink);color:var(--yellow);
+    border-radius:12px;padding:8px 18px;
+    font-size:15px;letter-spacing:2px;text-align:center;
+    box-shadow:4px 4px 0 rgba(26,26,26,.2);min-width:150px;
+  }
+  .temp-readout small{display:block;font-size:11px;color:#fff;letter-spacing:1px;margin-top:2px;}
+
+  /* ========== 唱片音乐 ========== */
   .vinyl{
     position:fixed;right:26px;bottom:26px;z-index:100;
-    width:64px;height:64px;border-radius:50%;
+    width:60px;height:60px;border-radius:50%;
     background:radial-gradient(circle,#111 30%,#333 31%,#111 60%,var(--red) 61%,var(--red) 100%);
     border:3px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,.35);
     cursor:pointer;display:flex;align-items:center;justify-content:center;
     transition:transform .3s;
   }
   .vinyl:hover{transform:scale(1.12);}
-  .vinyl::before{content:"🎵";font-size:20px;}
+  .vinyl::before{content:"🎵";font-size:18px;}
   .vinyl.spinning{animation:vinyl 2.4s linear infinite;}
   @keyframes vinyl{to{transform:rotate(360deg);}}
   .vinyl.spinning:hover{animation-play-state:paused;transform:scale(1.12);}
   .music-tip{
-    position:fixed;right:100px;bottom:42px;z-index:100;
+    position:fixed;right:96px;bottom:40px;z-index:100;
     background:#fff;border:2px solid var(--ink);border-radius:12px;
     padding:6px 14px;font-size:13px;letter-spacing:2px;
     box-shadow:4px 4px 0 var(--ink);
@@ -198,252 +318,427 @@
   }
   .music-tip.show{opacity:1;}
 
-  /* 彩带纸屑 & 音符 */
-  .confetti{
-    position:fixed;width:10px;height:14px;z-index:999;pointer-events:none;
-    animation:drop 1.1s ease-in forwards;
-  }
-  @keyframes drop{
-    to{transform:translate(var(--dx),110vh) rotate(720deg);opacity:0;}
-  }
-  .note{
-    position:fixed;z-index:998;pointer-events:none;font-size:18px;
-    animation:rise 1.2s ease-out forwards;
-  }
-  @keyframes rise{
-    to{transform:translate(var(--dx),-90px) rotate(30deg);opacity:0;}
-  }
+  /* 纸屑 & 音符 */
+  .confetti{position:fixed;width:10px;height:14px;z-index:999;pointer-events:none;animation:drop 1.1s ease-in forwards;}
+  @keyframes drop{to{transform:translate(var(--dx),110vh) rotate(720deg);opacity:0;}}
+  .note{position:fixed;z-index:998;pointer-events:none;font-size:18px;animation:rise 1.2s ease-out forwards;}
+  @keyframes rise{to{transform:translate(var(--dx),-90px) rotate(30deg);opacity:0;}}
 
-  /* 滚动出现 */
-  .reveal{opacity:0;transform:translateY(50px) rotate(1deg);transition:all .7s cubic-bezier(.2,.9,.3,1.2);}
-  .reveal.on{opacity:1;transform:translateY(0) rotate(var(--tilt,0deg));}
-
-  @media (max-width:600px){
-    .grid{gap:24px;}
-    .cover-title{letter-spacing:4px;}
+  @media (max-width:860px){
+    .intro-zone{margin-right:0;}
+    .p2-bigword{display:none;}
+    .side-menu button{padding:14px 7px;font-size:14px;letter-spacing:5px;}
+    .resume-panel{left:50%;transform:translate(-50%,-130%) rotate(-2deg);width:92vw;}
+    .resume-panel.open{transform:translate(-50%,-50%) rotate(-1deg);}
+    .oven-stage{flex-direction:column;gap:24px;margin-top:70px;}
+    .knob-col{flex-direction:row;margin-left:0;margin-top:6px;}
+    .knob-label{display:none;}
+    .knob{width:58px;height:58px;}
+    .oven{width:88vw;padding:24px 20px 20px;}
+    .oven-window{height:44vh;}
+    .knob-col{gap:18px;}
   }
 </style>
 </head>
 <body>
 
-<!-- 封面：小女孩 -->
-<section class="cover" id="cover">
-  <div class="bg-word">HELLO! HELLO! HELLO! WELCOME! 你好呀！ HELLO! HELLO!</div>
+<!-- ========== 第一面 · 封面 ========== -->
+<section class="page p1 active" id="p1">
+  <div class="bg-word">HELLO! 你好呀! WELCOME! HELLO! 你好呀! WELCOME! HELLO! </div>
   <div class="wiggle-stars" style="left:12%;top:16%;">✦</div>
   <div class="wiggle-stars" style="right:14%;top:22%;animation-duration:6s;">✦</div>
   <div class="wiggle-stars" style="left:20%;bottom:18%;animation-duration:12s;">✦</div>
   <div class="wiggle-stars" style="right:18%;bottom:26%;animation-duration:8s;">✦</div>
 
-  <h1 class="cover-title">欢迎来到我的小宇宙</h1>
-  <p class="cover-sub">A PLAYFUL PORTFOLIO · 点我看看会发生什么</p>
+  <h1 class="cover-title">黄旭楚 · 小宇宙</h1>
+  <p class="cover-sub">AIGC 视觉作品集 · 按住我看看会发生什么</p>
 
   <div class="girl-wrap" id="girl">
     <svg id="girlSVG" viewBox="0 0 300 340">
-      <!-- 发髻 -->
       <circle cx="150" cy="52" r="30" fill="#1a1a1a"/>
       <rect x="140" y="60" width="20" height="26" fill="#1a1a1a"/>
-      <!-- 头发 -->
       <path d="M150 58 C68 58 44 130 46 210 C46 268 70 300 96 300 L96 170 C96 110 118 88 150 88 C182 88 204 110 204 170 L204 300 C230 300 254 268 254 210 C256 130 232 58 150 58 Z" fill="#1a1a1a"/>
-      <!-- 脸 -->
       <ellipse cx="150" cy="185" rx="62" ry="72" fill="#ffe3d0"/>
-      <!-- 刘海 -->
       <path d="M92 150 C92 100 118 84 150 84 C182 84 208 100 208 150 C186 132 168 126 150 126 C132 126 114 132 92 150 Z" fill="#1a1a1a"/>
-      <!-- 红框眼镜 -->
       <circle cx="122" cy="182" r="26" fill="#fff" stroke="#ff1f3c" stroke-width="6"/>
       <circle cx="178" cy="182" r="26" fill="#fff" stroke="#ff1f3c" stroke-width="6"/>
       <line x1="148" y1="180" x2="152" y2="180" stroke="#ff1f3c" stroke-width="6"/>
-      <!-- 眼睛 -->
       <circle id="eyeL" cx="122" cy="184" r="7" fill="#1a1a1a"/>
       <circle id="eyeR" cx="178" cy="184" r="7" fill="#1a1a1a"/>
       <circle cx="124" cy="181" r="2.5" fill="#fff"/>
       <circle cx="180" cy="181" r="2.5" fill="#fff"/>
-      <!-- 腮红 -->
       <ellipse cx="106" cy="212" rx="12" ry="7" fill="#ff9aa8" opacity=".8"/>
       <ellipse cx="194" cy="212" rx="12" ry="7" fill="#ff9aa8" opacity=".8"/>
-      <!-- 嘴巴（点击张大） -->
       <ellipse id="mouth" cx="150" cy="232" rx="18" ry="20" fill="#7a1020"/>
       <ellipse id="tongue" cx="150" cy="242" rx="10" ry="6" fill="#ff6b81" opacity="0"/>
-      <!-- 蝴蝶结 -->
       <path d="M212 120 l22 -12 -4 16 14 10 -20 4 Z" fill="#ff1f3c"/>
     </svg>
-    <div class="hint">按住不放 · 喂我一颗彩蛋 ↓</div>
+    <div class="hint">按住不放 · 我要张嘴啦 ↓</div>
   </div>
 </section>
 
 <div class="swallow" id="swallow"></div>
 
-<!-- 跑马灯 -->
-<div class="marquee"><span>🎨 视觉设计 ✦ 品牌海报 ✦ H5 互动 ✦ 电商视觉 ✦ 创意企划 ✦ 快乐制造中 ✦ 🎨 视觉设计 ✦ 品牌海报 ✦ H5 互动 ✦ 电商视觉 ✦ 创意企划 ✦ 快乐制造中 ✦ </span></div>
+<!-- ========== 第二面 · 个人介绍 ========== -->
+<section class="page p2" id="p2">
+  <div class="p2-inner">
+    <div class="p2-deco">2022—2025 · Photography &amp; AIGC</div>
+    <div class="p2-bigword">HELLO</div>
 
-<!-- 作品 -->
-<section class="works" id="works">
-  <h2 class="sec-title">我的快乐作品</h2>
-  <p class="sec-desc">hover 会歪头，点击会撒花 · 每一张都是心血</p>
-  <div class="grid">
+    <div class="intro-zone">
+      <h2 class="intro-title">你好，我是<em>黄旭楚</em></h2>
+      <p class="intro-sub">湖北美术学院 · 艺术与科技（影视动画方向）· AIGC 视觉创作者</p>
+      <p class="intro-tip">📞 拿起电话，听我自我介绍 →</p>
 
-    <div class="card reveal">
-      <div class="thumb"><img src="assets/sony1.jpg" alt="SONY 超级降噪海报"></div>
-      <div class="info">
-        <span class="tag t-red">品牌海报</span>
-        <h3>SONY × 超感听觉发布</h3>
-        <p>超级降噪 · 超级沉浸，云上悬浮城邦的沉浸式空间降噪想象。</p>
+      <div class="phone-zone" id="phoneZone">
+        <div class="ring-txt">叮铃铃~</div>
+        <svg id="phoneSVG" viewBox="0 0 300 240">
+          <!-- 电话线 -->
+          <path d="M52 190 C20 190 20 150 52 150 C84 150 84 110 52 110" fill="none" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
+          <!-- 机身 -->
+          <path d="M75 200 L90 130 C92 118 102 110 115 110 L205 110 C218 110 228 118 230 130 L245 200 Z" fill="#1a1a1a"/>
+          <path d="M85 195 L98 135 C100 126 107 120 116 120 L204 120 C213 120 220 126 222 135 L235 195 Z" fill="#f7f1e3"/>
+          <!-- 拨号盘 -->
+          <circle cx="160" cy="160" r="34" fill="#1a1a1a"/>
+          <circle cx="160" cy="160" r="26" fill="#fffdf7"/>
+          <g fill="#1a1a1a">
+            <circle cx="160" cy="140" r="5"/><circle cx="174" cy="144" r="5"/><circle cx="182" cy="156" r="5"/>
+            <circle cx="179" cy="170" r="5"/><circle cx="168" cy="179" r="5"/><circle cx="152" cy="179" r="5"/>
+            <circle cx="141" cy="170" r="5"/><circle cx="138" cy="156" r="5"/><circle cx="146" cy="144" r="5"/>
+          </g>
+          <circle cx="160" cy="160" r="7" fill="#ff1f3c"/>
+          <!-- 支架 -->
+          <rect x="100" y="70" width="120" height="42" rx="14" fill="#1a1a1a"/>
+          <!-- 听筒（可拿起） -->
+          <g id="handset">
+            <rect x="66" y="30" width="188" height="34" rx="17" fill="#1a1a1a"/>
+            <circle cx="76" cy="47" r="24" fill="#1a1a1a"/>
+            <circle cx="244" cy="47" r="24" fill="#1a1a1a"/>
+            <rect x="66" y="36" width="188" height="10" rx="5" fill="#ff1f3c"/>
+          </g>
+        </svg>
       </div>
     </div>
 
-    <div class="card reveal">
-      <div class="thumb"><img src="assets/sony2.jpg" alt="SONY 深海声学城邦"></div>
-      <div class="info">
-        <span class="tag t-red">品牌海报</span>
-        <h3>SONY · 未来之声构筑城邦</h3>
-        <p>深海声学浮城，把「听」做成一场深海漫游。</p>
+    <!-- 简历抽屉 -->
+    <div class="resume-panel" id="resumePanel">
+      <button class="rp-close" id="rpClose">×</button>
+      <div class="rp-head">
+        <h2>黄旭楚<span>个人简历 · AIGC 方向</span></h2>
+        <p>湖北美术学院 · 艺术与科技（影视动画方向）· 本科在读</p>
+        <div class="rp-contact">
+          <a href="tel:13080656398">📞 13080656398</a>
+          <a href="mailto:3435025144@qq.com">📮 3435025144@qq.com</a>
+        </div>
+      </div>
+
+      <div class="rp-sec">
+        <h3>求职意向</h3>
+        <div class="rp-job">
+          <span>AIGC 视觉设计师</span><span>AI 内容生成师</span><span>概念美术</span><span>AI 动画</span><span>数字内容设计师</span>
+        </div>
+      </div>
+
+      <div class="rp-sec">
+        <h3>个人简介</h3>
+        <p>湖北美术学院艺术与科技专业在读，深耕 AIGC 视觉创作赛道，拥有扎实美术功底、镜头叙事能力与 AI 工作流搭建经验。擅长把创意概念转化为精准提示词，把控画面风格、构图、光影、叙事逻辑，熟练完成 AI 出图、图生视频、分镜、角色/场景概念设计，同时会结合后期软件修图、统一画面质感、解决 AI 崩坏问题。</p>
+        <p style="margin-top:6px;">熟悉国风、影视写实、版画、插画等多种视觉风格，独立完成多个课程项目，具备从前期策划、AI 批量生成、素材筛选精修到成片输出的完整流程能力，擅长文化类、叙事向、展览类数字内容创作。</p>
+      </div>
+
+      <div class="rp-sec">
+        <h3>专业技能</h3>
+        <div class="rp-skill"><b>✅ AIGC 核心能力</b><p>精通提示词工程、正向/反向提示词撰写、风格控制、镜头参数设定；熟练文生图、图生图、ControlNet、Lora 模型调用、参考图约束；擅长角色一致性、场景延续性、分镜批量生成，能规避 AI 手部、透视、结构崩坏问题；可制作 AI 短视频、动态镜头、MV 分镜、概念海报。</p></div>
+        <div class="rp-skill"><b>✅ 美术与影视基础</b><p>素描色彩、人体结构、镜头语言、分镜脚本、色彩调性把控；擅长国风、电影质感、新中式、版画、插画等风格。</p></div>
+        <div class="rp-skill"><b>✅ 后期 & 辅助软件</b><p>PS、AI、AE、PR、C4D，用于 AI 素材精修、调色、抠图、版式排版、视频剪辑、画面统一；TouchDesigner、MeshLab 可搭配 AI 资产做交互视觉、三维素材处理。</p></div>
+        <div class="rp-skill"><b>✅ 文案策划</b><p>项目概念、脚本、叙事文案、中英双语提示词撰写。</p></div>
+      </div>
+
+      <div class="rp-sec">
+        <h3>项目经历</h3>
+        <div class="rp-item">
+          <h4>新国风木偶戏叙事动画项目<i>｜AIGC 主视觉 / 分镜师</i></h4>
+          <p>以「传统文化传承」为主题，搭建整套 AI 生产流程：撰写剧本、拆分分镜，设计角色木偶设定，定制 Lora 与风格提示词，批量生成连贯镜头画面，把控水墨国风电影质感，统一角色形象、光影色调；对 AI 生成素材做后期修复、剪辑合成，输出完整叙事短片。</p>
+          <p class="out">▸ 核心产出：连贯分镜序列、角色统一的 AI 动画素材、成片视频</p>
+        </div>
+        <div class="rp-item">
+          <h4>敦煌文物数字重生项目<i>｜AIGC 概念设计师</i></h4>
+          <p>围绕敦煌文化主题，用 AIGC 完成文物复原效果图、氛围场景、粒子消散动态海报、展览主视觉；通过 ControlNet 约束纹样、构图，搭配后期软件做文物数字化再创作，兼顾历史纹样准确性与艺术表现力，作品用于课程展览。</p>
+          <p class="out">▸ 核心产出：敦煌主题概念图、动态视觉海报、展板视觉素材</p>
+        </div>
+        <div class="rp-item">
+          <h4>楚地有声 · 湖北方言可视化项目<i>｜AIGC 视觉设计师</i></h4>
+          <p>提取荆楚地域文化符号，用 AI 生成方言主题插画、信息可视化配图，统一荆楚青绿配色体系，配合展板排版，完成整套地域文化视觉体系，适配展馆展出。</p>
+          <p class="out">▸ 核心产出：系列文化插画、信息图表配图、主视觉海报</p>
+        </div>
+        <div class="rp-item">
+          <h4>VR 沙滩艺术疗愈项目<i>｜AIGC 场景概念设计</i></h4>
+          <p>负责沉浸式疗愈场景的概念草图、氛围图生成，用提示词控制柔和通透色调、空间构图，输出大量 VR 前期参考场景图，给后续交互制作提供视觉基准。</p>
+        </div>
+      </div>
+
+      <div class="rp-sec">
+        <h3>实践经历</h3>
+        <div class="rp-item">
+          <h4>AIGC 创作复盘与工作流沉淀</h4>
+          <p>持续整理提示词模板、风格库、镜头参数库，总结角色保形、场景连贯的方案，能够高效批量产出符合需求的视觉素材，快速迭代修改方案。</p>
+        </div>
+        <div class="rp-item">
+          <h4>展览视觉落地实践</h4>
+          <p>多次负责展览主视觉、展板配图，以 AI 生成素材为基底，精修调整、统一版式，完成课程结展视觉落地。</p>
+        </div>
+      </div>
+
+      <div class="rp-sec">
+        <h3>获奖与证书</h3>
+        <div class="rp-certs">
+          <span>普通话证书</span><span>高中教师资格证</span><span>英语六级</span><span>湖北美术学院 2025 年二等奖学金</span><span>课程创作项目评优 · 优秀作品</span>
+        </div>
+      </div>
+
+      <div class="rp-sec">
+        <h3>自我评价</h3>
+        <div class="rp-item"><p>1. 美术底子扎实，懂镜头、懂叙事，不是单纯输入提示词，而是用 AI 作为创作工具，能把控画面审美、逻辑和风格统一，解决 AI 常见结构、一致性难题。</p></div>
+        <div class="rp-item"><p>2. 熟悉 AIGC 全链路：概念策划 → 提示词调试 → ControlNet/Lora 控制 → 素材精修 → 剪辑成片，适配概念美术、AI 动画、短视频视觉、文创配图等岗位。</p></div>
+        <div class="rp-item"><p>3. 擅长国风、传统文化题材创作，出图稳定，修改迭代快，善于理解需求，按照项目调性调整画面。</p></div>
+        <div class="rp-item"><p>4. 同时具备基础后期、三维辅助能力，AI 素材可以直接对接 AE、PR、TouchDesigner 进行二次加工，适配数字艺术团队工作模式。</p></div>
       </div>
     </div>
 
-    <div class="card reveal">
-      <div class="thumb"><img src="assets/douyin.jpg" alt="抖音像素创艺官"></div>
-      <div class="info">
-        <span class="tag t-blue">活动主视觉</span>
-        <h3>去和世界交手 · 抖音像素创艺官</h3>
-        <p>像素积木撞进蓝天，4 月 10 日冒险启程。</p>
-      </div>
-    </div>
-
-    <div class="card reveal">
-      <div class="thumb"><img src="assets/h5-bee.jpg" alt="快乐测试 H5"></div>
-      <div class="info">
-        <span class="tag t-pink">H5 互动</span>
-        <h3>测测你的狂玩崽冰人格</h3>
-        <p>长图 H5 全案：测试互动 + 人格社交卡 + 玩法转化。</p>
-      </div>
-    </div>
-
-    <div class="card reveal">
-      <div class="thumb"><img src="assets/chando.jpg" alt="自然堂直播视觉"></div>
-      <div class="info">
-        <span class="tag t-green">电商视觉</span>
-        <h3>自然堂草本洗护 · 植萃养发专场</h3>
-        <p>直播间专属视觉，温和修护，还原发丝原生感。</p>
-      </div>
-    </div>
-
-    <div class="card more reveal" id="moreCard">
-      <div class="big">🥚</div>
-      <h3>还有更多小可爱</h3>
-      <p style="text-align:center">点一下，听听蛋里藏着什么惊喜</p>
+    <!-- 右侧竖排菜单 -->
+    <div class="side-menu">
+      <button data-cat="visual">视觉设计</button>
+      <button data-cat="aigc">AIGC设计</button>
+      <button data-cat="board">展板设计</button>
     </div>
   </div>
 </section>
 
-<!-- 关于 -->
-<section class="about">
-  <h2 class="sec-title">关于我</h2>
-  <p>一个靠快乐发电的视觉创作者。</p>
-  <p>海报、H5、电商视觉、品牌企划都爱折腾，坚信「好看」和「好玩」必须兼得。</p>
-  <p>如果你也有一个想被认真对待的疯狂点子 —— 来找我聊聊！</p>
-  <div class="stickers">
-    <span title="微信">💬</span>
-    <span title="邮箱">📮</span>
-    <span title="站酷">🎨</span>
-    <span title="小红书">📕</span>
-    <span title="别点我 👀">🍌</span>
+<!-- ========== 第三面 · AIGC 烤箱 ========== -->
+<section class="page p3" id="p3">
+  <button class="back-btn" id="backBtn">← 回到自我介绍</button>
+  <div class="p3-head">
+    <h2>创意<em>烤箱</em> · OVEN STUDIO</h2>
+    <p>转动右边旋钮调节温度，每一档烤出一道新作品</p>
+  </div>
+
+  <div class="oven-stage">
+    <div class="oven" id="oven">
+      <div class="oven-window">
+        <div class="oven-light"></div>
+        <div class="steam">♨</div><div class="steam">♨</div><div class="steam">♨</div>
+        <div class="oven-glass"></div>
+        <div class="oven-handle"></div>
+        <div class="dish" id="dish"></div>
+      </div>
+      <div class="oven-feet"><span></span><span></span></div>
+    </div>
+
+    <div class="knob-col">
+      <div class="knob-label">温度 / 作品</div>
+      <div class="knob" id="knobWork" title="转动换作品"></div>
+      <div class="knob" id="knobMusic" title="音乐开关"></div>
+      <div class="knob-label">开/关门</div>
+      <div class="knob" id="knobDoor" title="开门回去"></div>
+      <div class="temp-readout" id="tempReadout">180°C<small>预热中…</small></div>
+    </div>
   </div>
 </section>
 
-<footer>© 小宇宙作品集 · MADE WITH 🍬 AND CODE</footer>
-
-<!-- 唱片音乐 -->
+<!-- 音乐唱片 -->
 <div class="vinyl" id="vinyl" title="播放 / 暂停音乐"></div>
 <div class="music-tip" id="musicTip">♪ Diamonds & Thorns</div>
 <audio id="bgm" src="assets/bgm.mp3" loop preload="auto"></audio>
 
 <script>
-/* ===== 封面：按住张嘴 → 吞屏转场 ===== */
+/* ============ 页面切换 ============ */
+const pages = {p1:document.getElementById('p1'), p2:document.getElementById('p2'), p3:document.getElementById('p3')};
+let currentPage = 'p1';
+function showPage(id){
+  if (id === currentPage) return;
+  const from = pages[currentPage], to = pages[id];
+  from.classList.add('leaving'); from.classList.remove('active');
+  setTimeout(()=>{ from.classList.remove('leaving'); }, 550);
+  to.classList.add('active');
+  currentPage = id;
+}
+
+/* ============ 第一面 · 封面吞屏 ============ */
 const girl = document.getElementById('girl');
-const mouth = document.getElementById('mouth');
 const tongue = document.getElementById('tongue');
-const cover = document.getElementById('cover');
 const swallow = document.getElementById('swallow');
 let opened = false;
-
-function openMouth(){
-  girl.classList.add('open');
-  tongue.style.opacity = 1;
-  spawnNotes(window.innerWidth/2, window.innerHeight/2 + 60);
-}
-function closeMouth(){ girl.classList.remove('open'); tongue.style.opacity = 0; }
-
 girl.addEventListener('pointerdown', e => {
   e.preventDefault();
   if (opened) return;
   opened = true;
-  openMouth();
+  girl.classList.add('open');
+  tongue.style.opacity = 1;
+  spawnNotes(window.innerWidth/2, window.innerHeight/2 + 60);
   setTimeout(() => {
+    swallow.style.left = window.innerWidth/2 + 'px';
+    swallow.style.top  = window.innerHeight/2 + 'px';
     swallow.classList.add('grow');
-    cover.classList.add('zooming');
     setTimeout(() => {
-      document.getElementById('works').scrollIntoView({behavior:'auto'});
+      showPage('p2');
       setTimeout(() => {
         swallow.classList.remove('grow');
-        cover.classList.remove('zooming');
-        closeMouth();
+        girl.classList.remove('open'); tongue.style.opacity = 0;
         opened = false;
         burst(window.innerWidth/2, window.innerHeight/2);
-      }, 120);
+      }, 150);
     }, 480);
   }, 520);
 });
-girl.addEventListener('pointerup', () => { if(!opened) closeMouth(); });
 
 /* 眼睛跟随鼠标 */
 const eyeL = document.getElementById('eyeL'), eyeR = document.getElementById('eyeR');
+const girlEl = document.getElementById('girl');
 document.addEventListener('mousemove', e => {
-  const r = girl.getBoundingClientRect();
+  const r = girlEl.getBoundingClientRect();
   const dx = Math.max(-4, Math.min(4, (e.clientX - (r.left + r.width/2)) / 60));
   const dy = Math.max(-4, Math.min(4, (e.clientY - (r.top + r.height/3)) / 60));
   eyeL.setAttribute('transform', `translate(${dx},${dy})`);
   eyeR.setAttribute('transform', `translate(${dx},${dy})`);
 });
 
-/* ===== 卡片 3D 歪头 ===== */
-document.querySelectorAll('.card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - .5;
-    const y = (e.clientY - r.top) / r.height - .5;
-    card.style.transform = `perspective(800px) rotateY(${x*10}deg) rotateX(${-y*10}deg) rotate(var(--tilt)) scale(1.02)`;
-  });
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = '';
-  });
-  card.addEventListener('click', e => burst(e.clientX, e.clientY));
+/* ============ 第二面 · 电话 & 简历 ============ */
+const phoneZone = document.getElementById('phoneZone');
+const resumePanel = document.getElementById('resumePanel');
+phoneZone.addEventListener('click', () => {
+  const opening = !phoneZone.classList.contains('picked');
+  phoneZone.classList.toggle('picked');
+  resumePanel.classList.toggle('open', opening);
+  if (opening){
+    const r = phoneZone.getBoundingClientRect();
+    spawnNotes(r.left + r.width/2, r.top);
+    setTimeout(()=> resumePanel.scrollTo({top:0,behavior:'smooth'}), 700);
+  }
+});
+document.getElementById('rpClose').addEventListener('click', () => {
+  resumePanel.classList.remove('open');
+  phoneZone.classList.remove('picked');
 });
 
-/* 彩蛋：更多卡片 */
-const moreCard = document.getElementById('moreCard');
-const eggs = ['🎉','🍭','🚀','🐣','🌈','🍩'];
-let eggIdx = 0;
-moreCard.addEventListener('click', () => {
-  const big = moreCard.querySelector('.big');
-  big.textContent = eggs[eggIdx++ % eggs.length];
-  big.animate([{transform:'scale(.5)'},{transform:'scale(1.4)'},{transform:'scale(1)'}],{duration:400});
+/* ============ 第三面 · 烤箱 ============ */
+const WORKS = {
+  visual: { name:'视觉设计', works:[
+    {img:'assets/sony1.jpg', title:'SONY × 超感听觉发布', desc:'品牌海报 · 超级降噪、超级沉浸，云上悬浮城邦的沉浸式空间降噪想象。'},
+    {img:'assets/sony2.jpg', title:'SONY · 未来之声构筑城邦', desc:'品牌海报 · 深海声学浮城，把「听」做成一场深海漫游。'},
+    {img:'assets/chando.jpg', title:'自然堂草本洗护 · 植萃养发专场', desc:'电商视觉 · 直播间专属视觉，温和修护，还原发丝原生感。'},
+  ]},
+  aigc: { name:'AIGC设计', works:[
+    {img:'assets/sony1.jpg', title:'SONY × 超感听觉发布', desc:'AI 概念海报 · 提示词控制镜头与光影，云上悬浮城邦。'},
+    {img:'assets/sony2.jpg', title:'SONY · 未来之声构筑城邦', desc:'AI 概念海报 · 深海声学浮城，参考图约束 + 风格统一。'},
+    {img:'assets/douyin.jpg', title:'去和世界交手 · 抖音像素创艺官', desc:'活动主视觉 · 像素积木撞进蓝天，4 月 10 日冒险启程。'},
+    {img:'assets/h5-bee.jpg', title:'测测你的狂玩崽冰人格', desc:'长图 H5 全案 · 测试互动 + 人格社交卡 + 玩法转化。'},
+    {img:'assets/chando.jpg', title:'自然堂草本洗护 · 植萃养发专场', desc:'电商视觉 · 直播间专属视觉，还原发丝原生感。'},
+  ]},
+  board: { name:'展板设计', works:[
+    {img:'assets/douyin.jpg', title:'去和世界交手 · 展板主视觉', desc:'像素创艺官活动展板 · 大字报式排版 + 像素插画。'},
+    {img:'assets/h5-bee.jpg', title:'狂玩崽冰人格 · 互动展板', desc:'长图互动展板 · 分镜式信息排布。'},
+    {img:null, title:'更多展板作品', desc:'烤箱预热中… 敦煌文物数字重生、木偶戏叙事动画等展板素材整理上架。'},
+  ]},
+};
+const TEMPS = [100,130,160,190,220];
+
+const oven = document.getElementById('oven');
+const dish = document.getElementById('dish');
+const tempReadout = document.getElementById('tempReadout');
+const knobWork = document.getElementById('knobWork');
+let curCat = 'aigc';
+let curIdx = 0;
+let knobAngle = 0;
+
+function renderDish(animated){
+  const cat = WORKS[curCat];
+  const w = cat.works[curIdx];
+  if (animated){
+    dish.classList.add('switching');
+    setTimeout(()=> dish.classList.remove('switching'), 320);
+  }
+  setTimeout(()=>{
+    if (w.img){
+      dish.innerHTML = `<img src="${w.img}" alt="${w.title}"><h3>${w.title}</h3><p>${w.desc}</p>`;
+    } else {
+      dish.innerHTML = `<div class="empty-big">🥚</div><h3>${w.title}</h3><p>${w.desc}</p>`;
+    }
+  }, animated ? 300 : 0);
+  const t = TEMPS[curIdx % TEMPS.length];
+  tempReadout.innerHTML = `${t}°C<small>${cat.name} · 第 ${curIdx+1}/${cat.works.length} 道</small>`;
+  oven.classList.add('baking');
+}
+function turnKnob(){
+  knobAngle += 120;
+  knobWork.style.transform = `rotate(${knobAngle}deg)`;
+  curIdx = (curIdx + 1) % WORKS[curCat].works.length;
+  renderDish(true);
+}
+knobWork.addEventListener('click', e => {
+  turnKnob();
+  const r = e.currentTarget.getBoundingClientRect();
+  spawnNotes(r.left + r.width/2, r.top);
 });
 
-/* 彩带纸屑 */
-const colors = ['#ff1f3c','#ffd23f','#4d96ff','#6BCB77','#ff7eb6'];
+/* 右侧菜单 → 烤箱 */
+document.querySelectorAll('.side-menu button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    curCat = btn.dataset.cat;
+    curIdx = 0;
+    renderDish(false);
+    showPage('p3');
+    burst(window.innerWidth/2, window.innerHeight/2);
+  });
+});
+
+/* 返回按钮 */
+document.getElementById('backBtn').addEventListener('click', () => showPage('p2'));
+
+/* 音乐旋钮 & 唱片 */
+const bgm = document.getElementById('bgm');
+const vinyl = document.getElementById('vinyl');
+const knobMusic = document.getElementById('knobMusic');
+const tip = document.getElementById('musicTip');
+let tipTimer;
+function toggleMusic(){
+  if (bgm.paused){ bgm.play(); vinyl.classList.add('spinning'); }
+  else { bgm.pause(); vinyl.classList.remove('spinning'); }
+  showTip();
+}
+function showTip(){
+  tip.classList.add('show');
+  clearTimeout(tipTimer);
+  tipTimer = setTimeout(()=> tip.classList.remove('show'), 2200);
+}
+vinyl.addEventListener('click', toggleMusic);
+knobMusic.addEventListener('click', () => {
+  knobMusic.style.transform = knobMusic.style.transform === 'rotate(180deg)' ? 'rotate(0deg)' : 'rotate(180deg)';
+  toggleMusic();
+});
+window.addEventListener('pointerdown', function once(){
+  if (bgm.paused){ bgm.play().then(()=> vinyl.classList.add('spinning')).catch(()=>{}); }
+  window.removeEventListener('pointerdown', once);
+});
+
+/* 开门旋钮 → 回第二面 */
+document.getElementById('knobDoor').addEventListener('click', () => {
+  oven.classList.remove('baking');
+  showPage('p2');
+});
+
+/* ============ 特效 ============ */
+const colors = ['#ff1f3c','#ffd23f','#4d96ff','#6BCB77','#ff8fb0'];
 function burst(x, y){
   for (let i = 0; i < 22; i++){
     const c = document.createElement('div');
     c.className = 'confetti';
-    c.style.left = x + 'px';
-    c.style.top = y + 'px';
+    c.style.left = x + 'px'; c.style.top = y + 'px';
     c.style.background = colors[i % colors.length];
     c.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
     c.style.setProperty('--dx', (Math.random()*400 - 200) + 'px');
     document.body.appendChild(c);
-    setTimeout(() => c.remove(), 1200);
+    setTimeout(()=> c.remove(), 1200);
   }
 }
-/* 音符 */
 const noteChars = ['🎵','🎶','♪','♫'];
 function spawnNotes(x, y){
   for (let i = 0; i < 6; i++){
@@ -454,10 +749,9 @@ function spawnNotes(x, y){
     n.style.top = y + 'px';
     n.style.setProperty('--dx', (Math.random()*120 - 60) + 'px');
     document.body.appendChild(n);
-    setTimeout(() => n.remove(), 1300);
+    setTimeout(()=> n.remove(), 1300);
   }
 }
-/* 光标拖音符 */
 let lastNote = 0;
 document.addEventListener('mousemove', e => {
   const now = Date.now();
@@ -467,44 +761,8 @@ document.addEventListener('mousemove', e => {
   }
 });
 
-/* ===== 唱片音乐 ===== */
-const vinyl = document.getElementById('vinyl');
-const bgm = document.getElementById('bgm');
-const tip = document.getElementById('musicTip');
-let tipTimer;
-function showTip(){
-  tip.classList.add('show');
-  clearTimeout(tipTimer);
-  tipTimer = setTimeout(() => tip.classList.remove('show'), 2200);
-}
-vinyl.addEventListener('click', () => {
-  if (bgm.paused){ bgm.play(); vinyl.classList.add('spinning'); }
-  else { bgm.pause(); vinyl.classList.remove('spinning'); }
-  showTip();
-});
-/* 首次任意点击后自动起播（浏览器要求用户先交互） */
-window.addEventListener('pointerdown', function once(){
-  if (bgm.paused){ bgm.play().then(() => vinyl.classList.add('spinning')).catch(()=>{}); }
-  window.removeEventListener('pointerdown', once);
-});
-
-/* ===== 滚动出现 ===== */
-const io = new IntersectionObserver(entries => {
-  entries.forEach(en => { if (en.isIntersecting) en.target.classList.add('on'); });
-}, {threshold:.15});
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-/* 彩蛋：连点香蕉 */
-const banana = document.querySelector('.stickers span:last-child');
-let bCount = 0;
-banana.addEventListener('click', () => {
-  if (++bCount >= 5){
-    banana.textContent = '🤯';
-    burst(window.innerWidth/2, window.innerHeight/2);
-    setTimeout(() => banana.textContent = '🍌', 1500);
-    bCount = 0;
-  }
-});
+/* 初始化烤箱默认内容 */
+renderDish(false);
 </script>
 </body>
 </html>
