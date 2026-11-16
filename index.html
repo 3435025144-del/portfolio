@@ -118,12 +118,12 @@
   .dial-num circle{transition:fill .2s;}
   .dial-num:hover circle{fill:var(--yellow);}
   .dial-num text{pointer-events:none;font-family:inherit;font-weight:bold;}
-  /* 听筒拿起动效 */
+  /* 听筒拿起动效：斜向上拿起，关卡片才放回 */
   #handset{
     transition:transform .55s cubic-bezier(.3,1.8,.4,1);
     transform-box:fill-box;transform-origin:center;
   }
-  .phone-zone.lifted #handset{transform:translate(-42px,-112px) rotate(-16deg);}
+  .phone-zone.lifted #handset{transform:translate(38px,-118px) rotate(12deg);}
   .ring-txt{
     position:absolute;top:-36px;left:56%;
     color:var(--red);font-size:19px;letter-spacing:2px;
@@ -259,6 +259,15 @@
     height:100%;max-height:none;width:min(46%,340px);
     object-fit:cover;
   }
+  .dish .tri{
+    display:flex;gap:12px;width:100%;height:100%;
+    align-items:center;justify-content:center;padding:36px 16px 12px;
+  }
+  .dish .tri img{
+    height:92%;width:31%;object-fit:cover;
+    border:3px solid var(--ink);border-radius:12px;background:#fff;
+    box-shadow:4px 4px 0 rgba(26,26,26,.12);
+  }
   .dish h3{font-size:18px;letter-spacing:2px;}
   .dish p{font-size:12.5px;color:#6b6455;letter-spacing:1px;line-height:1.7;text-align:center;max-width:90%;}
   .dish .empty-big{font-size:64px;animation:bounce 1.6s ease-in-out infinite;}
@@ -306,28 +315,6 @@
     box-shadow:4px 4px 0 rgba(26,26,26,.2);min-width:160px;
   }
   .temp-readout small{display:block;font-size:11px;color:#fff;letter-spacing:1px;margin-top:2px;}
-
-  /* 纯音乐按钮 */
-  .music-btn{
-    position:fixed;right:26px;bottom:26px;z-index:100;
-    width:58px;height:58px;border-radius:50%;
-    background:var(--ink);color:var(--yellow);
-    border:3px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,.35);
-    cursor:pointer;display:flex;align-items:center;justify-content:center;
-    font-size:22px;transition:transform .3s;
-  }
-  .music-btn:hover{transform:scale(1.12);}
-  .music-btn.on{animation:vinyl 2.6s linear infinite;}
-  @keyframes vinyl{to{transform:rotate(360deg);}}
-  .music-btn.on:hover{animation-play-state:paused;transform:scale(1.12);}
-  .music-tip{
-    position:fixed;right:94px;bottom:40px;z-index:100;
-    background:#fff;border:2px solid var(--ink);border-radius:12px;
-    padding:6px 14px;font-size:13px;letter-spacing:2px;
-    box-shadow:4px 4px 0 var(--ink);
-    opacity:0;transition:opacity .3s;pointer-events:none;
-  }
-  .music-tip.show{opacity:1;}
 
   /* 纸屑 & 音符 */
   .confetti{position:fixed;width:10px;height:14px;z-index:999;pointer-events:none;animation:drop 1.1s ease-in forwards;}
@@ -534,9 +521,7 @@
   </div>
 </section>
 
-<!-- 纯音乐按钮 -->
-<div class="music-btn" id="musicBtn" title="纯音乐开关">🎶</div>
-<div class="music-tip" id="musicTip">♪ 八音盒纯音乐 · 现场生成中</div>
+<!-- 纯音乐按钮已移除 -->
 
 <script>
 /* ============ 页面切换 ============ */
@@ -711,10 +696,8 @@ function showInfo(n){
   const info = INFO[n];
   if (!info) return;
   dialBeep();
-  /* 听筒拿起 → 停一拍 → 放回 */
+  /* 听筒斜向上拿起，关闭卡片才放回 */
   phoneZone.classList.add('lifted');
-  clearTimeout(showInfo._t);
-  showInfo._t = setTimeout(()=> phoneZone.classList.remove('lifted'), 1800);
   icBadge.textContent = n;
   icTitle.textContent = info.title;
   icSub.textContent = `您拨打的号码是 ${n} · ${info.title}`;
@@ -730,6 +713,7 @@ dialNums.addEventListener('click', e => {
 });
 document.getElementById('icClose').addEventListener('click', () => {
   infoCard.classList.remove('open');
+  phoneZone.classList.remove('lifted');   /* 听筒放回 */
 });
 
 /* ============ 第三面 · 烤箱 ============ */
@@ -745,14 +729,12 @@ const WORKS = {
     {img:'assets/sony1.jpg', title:'SONY × 超感听觉发布', desc:'AI 概念海报 · 提示词控制镜头与光影，云上悬浮城邦。'},
     {img:'assets/sony2.jpg', title:'SONY · 未来之声构筑城邦', desc:'AI 概念海报 · 深海声学浮城，参考图约束 + 风格统一。'},
     {img:'assets/douyin.jpg', title:'去和世界交手 · 抖音像素创艺官', desc:'活动主视觉 · 像素积木撞进蓝天，4 月 10 日冒险启程。'},
-    {img:H5, title:'狂玩崽冰人格 · 上篇', desc:'长图 H5 全案① · 开屏与测试互动引入。', crop:'top'},
-    {img:H5, title:'狂玩崽冰人格 · 中篇', desc:'长图 H5 全案② · 人格测试题与互动玩法。', crop:'center'},
-    {img:H5, title:'狂玩崽冰人格 · 下篇', desc:'长图 H5 全案③ · 人格结果卡与玩法转化。', crop:'bottom'},
+    {img:H5, tri:true, title:'狂玩崽冰人格 · 长图 H5 全案', desc:'长图 H5 全案 · 开屏引入 / 人格测试互动 / 结果卡与玩法转化，一图看完。'},
     {img:'assets/chando.jpg', title:'自然堂草本洗护 · 植萃养发专场', desc:'电商视觉 · 直播间专属视觉，还原发丝原生感。'},
   ]},
   board: { name:'展板设计', works:[
     {img:'assets/douyin.jpg', title:'去和世界交手 · 展板主视觉', desc:'像素创艺官活动展板 · 大字报式排版 + 像素插画。'},
-    {img:H5, title:'狂玩崽冰人格 · 互动展板', desc:'长图互动展板 · 分镜式信息排布。', crop:'top'},
+    {img:H5, tri:true, title:'狂玩崽冰人格 · 互动展板', desc:'长图互动展板 · 分镜式信息排布，上中下三段。'},
     {img:null, title:'更多展板作品', desc:'烤箱预热中… 敦煌文物数字重生、木偶戏叙事动画等展板素材整理上架。'},
   ]},
 };
@@ -774,9 +756,12 @@ function renderDish(animated){
     setTimeout(()=> dish.classList.remove('switching'), 320);
   }
   setTimeout(()=>{
-    if (w.img){
-      const style = w.crop ? `class="crop3" style="object-position:${w.crop};"` : '';
-      dish.innerHTML = `<img src="${w.img}" alt="${w.title}" ${style}><h3>${w.title}</h3><p>${w.desc}</p>`;
+    if (w.tri){
+      const pos = ['top','center','bottom'];
+      const imgs = pos.map(p => `<img src="${w.img}" style="object-position:${p};" alt="${w.title}">`).join('');
+      dish.innerHTML = `<div class="tri">${imgs}</div><h3>${w.title}</h3><p>${w.desc}</p>`;
+    } else if (w.img){
+      dish.innerHTML = `<img src="${w.img}" alt="${w.title}"><h3>${w.title}</h3><p>${w.desc}</p>`;
     } else {
       dish.innerHTML = `<div class="empty-big">🥚</div><h3>${w.title}</h3><p>${w.desc}</p>`;
     }
@@ -807,52 +792,6 @@ document.getElementById('backBtn').addEventListener('click', () => showPage('p2'
 document.getElementById('knobDoor').addEventListener('click', () => {
   oven.classList.remove('baking');
   showPage('p2');
-});
-
-/* ============ 八音盒纯音乐（本地实时生成，无音频文件） ============ */
-const musicBtn = document.getElementById('musicBtn');
-const musicTip = document.getElementById('musicTip');
-let ac, seqTimer = null, step = 0;
-const N = f => f; // Hz
-/* 五声音阶八音盒旋律（C 大调宫调式），-1 表示休止 */
-const MELODY = [
-  523,659,784,659, 880,784,659,-1,
-  523,659,784,880, 1047,880,784,-1,
-  659,784,880,1047, 880,784,659,-1,
-  587,659,784,659, 523,-1,392,440,
-];
-const BASS = [131,165,196,165, 131,165,220,196];
-function playNote(freq, dur, vol, type){
-  if (!ac) return;
-  const o = ac.createOscillator(), g = ac.createGain();
-  o.type = type || 'sine';
-  o.frequency.value = freq;
-  g.gain.setValueAtTime(vol, ac.currentTime);
-  g.gain.exponentialRampToValueAtTime(.0001, ac.currentTime + dur);
-  o.connect(g); g.connect(ac.destination);
-  o.start(); o.stop(ac.currentTime + dur);
-}
-function startMusic(){
-  ac = ac || new (window.AudioContext || window.webkitAudioContext)();
-  if (ac.state === 'suspended') ac.resume();
-  seqTimer = setInterval(() => {
-    const f = MELODY[step % MELODY.length];
-    if (f > 0) playNote(f, .9, .09, 'triangle');
-    if (step % 4 === 0) playNote(BASS[(step/4) % BASS.length], 1.6, .06, 'sine');
-    step++;
-  }, 270);
-}
-function stopMusic(){ clearInterval(seqTimer); seqTimer = null; }
-let tipTimer;
-function showTip(){
-  musicTip.classList.add('show');
-  clearTimeout(tipTimer);
-  tipTimer = setTimeout(()=> musicTip.classList.remove('show'), 2000);
-}
-musicBtn.addEventListener('click', () => {
-  if (!seqTimer){ startMusic(); musicBtn.classList.add('on'); }
-  else { stopMusic(); musicBtn.classList.remove('on'); }
-  showTip();
 });
 
 /* ============ 特效 ============ */
