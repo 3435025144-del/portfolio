@@ -57,8 +57,10 @@
   .girl-wrap{position:relative;z-index:2;width:min(44vh,340px);transition:transform .2s;}
   .girl-wrap:active{transform:scale(.96);}
   #girlSVG{width:100%;display:block;filter:drop-shadow(0 14px 0 rgba(0,0,0,.15));}
-  #mouth{transform-origin:center;transform:scaleY(.12);transition:transform .45s cubic-bezier(.5,1.6,.4,1);}
-  .girl-wrap.open #mouth{transform:scaleY(1);}
+  #mouth{transform-box:fill-box;transform-origin:center;transform:scaleY(.55);transition:transform .45s cubic-bezier(.5,1.6,.4,1);}
+  .girl-wrap.open #mouth{transform:scaleY(1.35);}
+  #eyeL,#eyeR{transform-box:fill-box;transform-origin:center;animation:blinkEyes 5.5s ease-in-out infinite;}
+  @keyframes blinkEyes{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
   .hint{
     position:absolute;left:50%;bottom:-52px;transform:translateX(-50%);
     color:#fff;font-size:15px;letter-spacing:3px;white-space:nowrap;
@@ -116,6 +118,19 @@
   .dial-num circle{transition:fill .2s;}
   .dial-num:hover circle{fill:var(--yellow);}
   .dial-num text{pointer-events:none;font-family:inherit;font-weight:bold;}
+  /* 听筒拿起动效 */
+  #handset{
+    transition:transform .55s cubic-bezier(.3,1.8,.4,1);
+    transform-box:fill-box;transform-origin:center;
+  }
+  .phone-zone.lifted #handset{transform:translate(-42px,-112px) rotate(-16deg);}
+  .ring-txt{
+    position:absolute;top:-36px;left:56%;
+    color:var(--red);font-size:19px;letter-spacing:2px;
+    opacity:0;white-space:nowrap;transition:opacity .25s;z-index:5;
+    animation:blink 1.2s ease-in-out infinite;
+  }
+  .phone-zone.lifted .ring-txt{opacity:1;}
 
   /* 信息卡片 */
   .info-card{
@@ -357,23 +372,45 @@
 
   <div class="girl-wrap" id="girl">
     <svg id="girlSVG" viewBox="0 0 300 340">
-      <circle cx="150" cy="52" r="30" fill="#1a1a1a"/>
-      <rect x="140" y="60" width="20" height="26" fill="#1a1a1a"/>
-      <path d="M150 58 C68 58 44 130 46 210 C46 268 70 300 96 300 L96 170 C96 110 118 88 150 88 C182 88 204 110 204 170 L204 300 C230 300 254 268 254 210 C256 130 232 58 150 58 Z" fill="#1a1a1a"/>
-      <ellipse cx="150" cy="185" rx="62" ry="72" fill="#ffe3d0"/>
-      <path d="M92 150 C92 100 118 84 150 84 C182 84 208 100 208 150 C186 132 168 126 150 126 C132 126 114 132 92 150 Z" fill="#1a1a1a"/>
-      <circle cx="122" cy="182" r="26" fill="#fff" stroke="#ff1f3c" stroke-width="6"/>
-      <circle cx="178" cy="182" r="26" fill="#fff" stroke="#ff1f3c" stroke-width="6"/>
-      <line x1="148" y1="180" x2="152" y2="180" stroke="#ff1f3c" stroke-width="6"/>
-      <circle id="eyeL" cx="122" cy="184" r="7" fill="#1a1a1a"/>
-      <circle id="eyeR" cx="178" cy="184" r="7" fill="#1a1a1a"/>
-      <circle cx="124" cy="181" r="2.5" fill="#fff"/>
-      <circle cx="180" cy="181" r="2.5" fill="#fff"/>
-      <ellipse cx="106" cy="212" rx="12" ry="7" fill="#ff9aa8" opacity=".8"/>
-      <ellipse cx="194" cy="212" rx="12" ry="7" fill="#ff9aa8" opacity=".8"/>
-      <ellipse id="mouth" cx="150" cy="232" rx="18" ry="20" fill="#7a1020"/>
-      <ellipse id="tongue" cx="150" cy="242" rx="10" ry="6" fill="#ff6b81" opacity="0"/>
-      <path d="M212 120 l22 -12 -4 16 14 10 -20 4 Z" fill="#ff1f3c"/>
+      <!-- 后层头发（齐耳短发） -->
+      <path d="M150 40 C70 40 40 110 42 200 C43 262 66 300 92 302 L92 190 C92 130 116 105 150 105 C184 105 208 130 208 190 L208 302 C234 300 257 262 258 200 C260 110 230 40 150 40 Z" fill="#1a1a1a"/>
+      <!-- 脸 -->
+      <circle cx="150" cy="200" r="66" fill="#ffe9dc"/>
+      <!-- 刘海 -->
+      <path d="M86 182 C86 118 112 96 150 96 C188 96 214 118 214 182 C196 156 176 146 150 146 C124 146 104 156 86 182 Z" fill="#1a1a1a"/>
+      <!-- 侧发 -->
+      <ellipse cx="88" cy="238" rx="20" ry="44" fill="#1a1a1a"/>
+      <ellipse cx="212" cy="238" rx="20" ry="44" fill="#1a1a1a"/>
+      <!-- 星星发夹 -->
+      <path d="M196 118 l6 -14 6 14 15 2 -11 11 3 15 -13 -8 -13 8 3 -15 -11 -11 Z" fill="#fff" stroke="#e8b64c" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="202" cy="118" r="4" fill="#e0457b"/>
+      <!-- 眼睛（外层跟随鼠标，内层眨眼） -->
+      <g id="trackL"><g id="eyeL">
+        <circle cx="118" cy="200" r="14" fill="#1a1a1a"/>
+        <circle cx="122" cy="195" r="5" fill="#fff"/>
+        <circle cx="113" cy="205" r="2.5" fill="#fff" opacity=".8"/>
+      </g></g>
+      <g id="trackR"><g id="eyeR">
+        <circle cx="182" cy="200" r="14" fill="#1a1a1a"/>
+        <circle cx="186" cy="195" r="5" fill="#fff"/>
+        <circle cx="177" cy="205" r="2.5" fill="#fff" opacity=".8"/>
+      </g></g>
+      <!-- 睫毛 -->
+      <path d="M102 192 l-8 -5 M106 186 l-6 -7 M198 186 l6 -7 M202 192 l8 -5" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- 腮红 + 雀斑 -->
+      <ellipse cx="103" cy="228" rx="13" ry="8" fill="#ffb0a6" opacity=".8"/>
+      <ellipse cx="197" cy="228" rx="13" ry="8" fill="#ffb0a6" opacity=".8"/>
+      <g fill="#e8938a" opacity=".8">
+        <circle cx="98" cy="222" r="1.6"/><circle cx="106" cy="231" r="1.6"/><circle cx="94" cy="230" r="1.6"/>
+        <circle cx="202" cy="222" r="1.6"/><circle cx="194" cy="231" r="1.6"/><circle cx="206" cy="230" r="1.6"/>
+      </g>
+      <!-- 小鼻子 -->
+      <path d="M148 220 q2 3 4 0" stroke="#d9a08e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- 圆嘴巴（位于下巴上方，点击张大） -->
+      <ellipse id="mouth" cx="150" cy="252" rx="14" ry="15" fill="#8a1030"/>
+      <ellipse id="tongue" cx="150" cy="261" rx="8" ry="5" fill="#ff6b81" opacity="0"/>
+      <!-- 蝴蝶结 -->
+      <path d="M216 92 l24 -13 -4 18 15 11 -22 5 Z" fill="#ff1f3c"/>
     </svg>
     <div class="hint">按住不放 · 我要张嘴啦 ↓</div>
   </div>
@@ -394,6 +431,7 @@
     </div>
 
     <div class="phone-zone" id="phoneZone">
+      <div class="ring-txt">叮铃铃~ 接电话啦 ☎</div>
       <svg id="phoneSVG" viewBox="0 0 420 370">
         <defs>
           <!-- 蜡笔手绘滤镜：让线条自然歪扭 -->
@@ -542,14 +580,14 @@ girl.addEventListener('pointerdown', e => {
 });
 
 /* 眼睛跟随鼠标 */
-const eyeL = document.getElementById('eyeL'), eyeR = document.getElementById('eyeR');
+const trackL = document.getElementById('trackL'), trackR = document.getElementById('trackR');
 const girlEl = document.getElementById('girl');
 document.addEventListener('mousemove', e => {
   const r = girlEl.getBoundingClientRect();
   const dx = Math.max(-4, Math.min(4, (e.clientX - (r.left + r.width/2)) / 60));
   const dy = Math.max(-4, Math.min(4, (e.clientY - (r.top + r.height/3)) / 60));
-  eyeL.setAttribute('transform', `translate(${dx},${dy})`);
-  eyeR.setAttribute('transform', `translate(${dx},${dy})`);
+  trackL.setAttribute('transform', `translate(${dx},${dy})`);
+  trackR.setAttribute('transform', `translate(${dx},${dy})`);
 });
 
 /* ============ 第二面 · 拨号电话 ============ */
@@ -668,10 +706,15 @@ function dialBeep(){
   }catch(e){}
 }
 
+const phoneZone = document.getElementById('phoneZone');
 function showInfo(n){
   const info = INFO[n];
   if (!info) return;
   dialBeep();
+  /* 听筒拿起 → 停一拍 → 放回 */
+  phoneZone.classList.add('lifted');
+  clearTimeout(showInfo._t);
+  showInfo._t = setTimeout(()=> phoneZone.classList.remove('lifted'), 1800);
   icBadge.textContent = n;
   icTitle.textContent = info.title;
   icSub.textContent = `您拨打的号码是 ${n} · ${info.title}`;
