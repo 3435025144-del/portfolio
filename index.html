@@ -85,6 +85,8 @@
   .mag-float{animation:floaty 5s ease-in-out infinite;}
   .mag-scene.no-float .mag-float{animation:none;}
   #toySVG{width:100%;display:block;filter:drop-shadow(0 26px 26px rgba(31,28,26,.2));}
+  /* 转场时关闭阴影滤镜，避免放大卡顿 */
+  .mag-scene.no-float #toySVG{filter:none;}
   .mag-hey{
     position:absolute;left:5vw;top:52vh;z-index:3;
     font-family:"Archivo Black",Impact,sans-serif;
@@ -475,19 +477,13 @@
             <radialGradient id="blushG" cx="50%" cy="50%" r="50%">
               <stop offset="0" stop-color="#ffb0a6" stop-opacity=".9"/><stop offset="1" stop-color="#ffb0a6" stop-opacity="0"/>
             </radialGradient>
-            <!-- 蜡笔手绘滤镜：线条自然歪扭 -->
-            <filter id="crayonToy" x="-15%" y="-15%" width="130%" height="130%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="4" seed="7" result="n"/>
-              <feDisplacementMap in="SourceGraphic" in2="n" scale="7"/>
-            </filter>
           </defs>
 
-          <g filter="url(#crayonToy)">
           <!-- 地面投影 -->
           <ellipse cx="150" cy="352" rx="94" ry="11" fill="rgba(31,28,26,.16)"/>
           <!-- 脖子（连接头与身体） -->
-          <path d="M136 234 L136 288 L164 288 L164 234 Z" fill="#f6c9ac" stroke="#141210" stroke-width="5"/>
-          <path d="M140 248 L140 280" stroke="#e3a982" stroke-width="4" stroke-linecap="round" opacity=".55"/>
+          <path d="M138 244 L138 284 L162 284 L162 244 Z" fill="#f6c9ac" stroke="#141210" stroke-width="5"/>
+          <path d="M142 252 L142 276" stroke="#e3a982" stroke-width="4" stroke-linecap="round" opacity=".55"/>
           <!-- 身体 -->
           <path d="M78 358 C78 300 108 272 150 272 C192 272 222 300 222 358 Z" fill="url(#dressG)" stroke="#141210" stroke-width="6" stroke-linejoin="round"/>
           <path d="M122 280 C136 296 164 296 178 280" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round"/>
@@ -545,7 +541,6 @@
               <ellipse id="magMouth" cx="150" cy="219" rx="13" ry="14" fill="#8a1030"/>
               <ellipse id="magTongue" cx="150" cy="226" rx="7" ry="4.5" fill="#ff6b81" opacity="0"/>
             </g>
-          </g>
           </g>
         </svg>
       </div>
