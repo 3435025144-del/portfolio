@@ -112,12 +112,6 @@
   }
   .phone-zone:hover{transform:translateX(-50%) translateY(-6px);}
   #phoneSVG{width:100%;display:block;filter:drop-shadow(10px 12px 0 rgba(26,26,26,.12));}
-  .dial-spin{animation:dialSpin 1s cubic-bezier(.3,1.4,.4,1);}
-  @keyframes dialSpin{
-    0%{transform:rotate(0deg);}
-    45%{transform:rotate(-110deg);}
-    100%{transform:rotate(0deg);}
-  }
   .dial-num{cursor:pointer;}
   .dial-num circle{transition:fill .2s;}
   .dial-num:hover circle{fill:var(--yellow);}
@@ -400,36 +394,53 @@
     </div>
 
     <div class="phone-zone" id="phoneZone">
-      <svg id="phoneSVG" viewBox="0 0 360 320">
-        <!-- 卷曲电话线 -->
-        <path d="M300 170 C350 170 350 198 300 198 C250 198 250 226 300 226 C350 226 350 254 300 254"
-              fill="none" stroke="#7a1020" stroke-width="8" stroke-linecap="round" opacity=".9"/>
-        <!-- 机身（红色蜡笔风） -->
-        <path d="M95 300 L110 160 C112 140 126 128 145 128 L225 128 C244 128 258 140 260 160 L275 300 Z"
-              fill="#ff4d5e" stroke="#3a3a3a" stroke-width="6" stroke-linejoin="round"/>
-        <path d="M108 292 L120 166" stroke="#d92842" stroke-width="10" stroke-linecap="round" opacity=".7"/>
-        <path d="M258 292 L248 170" stroke="#d92842" stroke-width="10" stroke-linecap="round" opacity=".7"/>
-        <!-- 底部脚 -->
-        <rect x="112" y="296" width="46" height="14" rx="6" fill="#3a3a3a"/>
-        <rect x="212" y="296" width="46" height="14" rx="6" fill="#3a3a3a"/>
-        <!-- 听筒支架 -->
-        <path d="M100 126 L120 92 L250 92 L270 126 Z" fill="#e63950" stroke="#3a3a3a" stroke-width="6" stroke-linejoin="round"/>
-        <!-- 听筒 -->
-        <g id="handset">
-          <path d="M58 80 C58 54 90 40 185 40 C280 40 312 54 312 80 L312 88 C312 96 304 100 296 100 L74 100 C66 100 58 96 58 88 Z"
-                fill="#ff4d5e" stroke="#3a3a3a" stroke-width="6" stroke-linejoin="round"/>
-          <path d="M60 66 C60 52 92 44 185 44 C278 44 310 52 310 66" fill="none" stroke="#ff8a94" stroke-width="8" stroke-linecap="round" opacity=".85"/>
-          <circle cx="70" cy="80" r="21" fill="#e63950" stroke="#3a3a3a" stroke-width="6"/>
-          <circle cx="300" cy="80" r="21" fill="#e63950" stroke="#3a3a3a" stroke-width="6"/>
+      <svg id="phoneSVG" viewBox="0 0 420 370">
+        <defs>
+          <!-- 蜡笔手绘滤镜：让线条自然歪扭 -->
+          <filter id="crayon" x="-15%" y="-15%" width="130%" height="130%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="4" seed="11" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="10"/>
+          </filter>
+          <linearGradient id="bodyG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ff6b7d"/>
+            <stop offset="1" stop-color="#e63950"/>
+          </linearGradient>
+          <linearGradient id="hsG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ff5468"/>
+            <stop offset="1" stop-color="#d92842"/>
+          </linearGradient>
+        </defs>
+
+        <g filter="url(#crayon)">
+          <!-- 卷曲电话线 -->
+          <path d="M332 205 C390 205 390 233 332 233 C274 233 274 261 332 261 C390 261 390 289 332 289"
+                fill="none" stroke="#8a1030" stroke-width="9" stroke-linecap="round" opacity=".9"/>
+          <!-- 听筒支架 -->
+          <path d="M106 154 L130 110 L290 110 L314 154 Z" fill="#e63950" stroke="#3a3a3a" stroke-width="6" stroke-linejoin="round"/>
+          <!-- 机身 -->
+          <rect x="80" y="150" width="260" height="196" rx="36" fill="url(#bodyG)" stroke="#3a3a3a" stroke-width="6"/>
+          <!-- 机身水彩高光与阴影 -->
+          <path d="M106 178 L118 298" stroke="#ff97a4" stroke-width="11" stroke-linecap="round" opacity=".6"/>
+          <path d="M314 178 L304 298" stroke="#c22038" stroke-width="11" stroke-linecap="round" opacity=".45"/>
+          <!-- 脚 -->
+          <rect x="116" y="341" width="48" height="15" rx="7" fill="#3a3a3a"/>
+          <rect x="256" y="341" width="48" height="15" rx="7" fill="#3a3a3a"/>
+          <!-- 听筒 -->
+          <path d="M64 84 C64 54 104 38 210 38 C316 38 356 54 356 84 L356 96 C356 108 344 114 330 114 L90 114 C76 114 64 108 64 96 Z"
+                fill="url(#hsG)" stroke="#3a3a3a" stroke-width="6" stroke-linejoin="round"/>
+          <path d="M68 70 C68 56 102 46 210 46 C318 46 352 56 352 70" fill="none" stroke="#ff8a94" stroke-width="9" stroke-linecap="round" opacity=".85"/>
+          <circle cx="78" cy="88" r="24" fill="#e63950" stroke="#3a3a3a" stroke-width="6"/>
+          <circle cx="342" cy="88" r="24" fill="#e63950" stroke="#3a3a3a" stroke-width="6"/>
+          <!-- 拨号盘 -->
+          <circle cx="210" cy="242" r="80" fill="#d92842" stroke="#3a3a3a" stroke-width="6"/>
+          <circle cx="210" cy="242" r="50" fill="#ff4d5e" stroke="#3a3a3a" stroke-width="5"/>
+          <circle cx="210" cy="242" r="14" fill="#e63950" stroke="#3a3a3a" stroke-width="4"/>
+          <!-- 手指挡杆 -->
+          <rect x="274" y="166" width="9" height="42" rx="4" fill="#3a3a3a" transform="rotate(28 278 187)"/>
         </g>
-        <!-- 拨号盘 -->
-        <g id="dialG">
-          <circle cx="185" cy="205" r="74" fill="#d92842" stroke="#3a3a3a" stroke-width="6"/>
-          <circle cx="185" cy="205" r="46" fill="#ff4d5e" stroke="#3a3a3a" stroke-width="5"/>
-          <circle cx="185" cy="205" r="13" fill="#e63950" stroke="#3a3a3a" stroke-width="4"/>
-          <g id="dialNums"></g>
-          <rect x="243" y="140" width="8" height="36" rx="4" fill="#3a3a3a" transform="rotate(30 247 158)"/>
-        </g>
+
+        <!-- 数字孔（不套蜡笔滤镜，保持清晰可点） -->
+        <g id="dialNums"></g>
       </svg>
     </div>
 
@@ -543,7 +554,7 @@ document.addEventListener('mousemove', e => {
 
 /* ============ 第二面 · 拨号电话 ============ */
 const dialNums = document.getElementById('dialNums');
-const cx = 185, cy = 205, R = 60;
+const cx = 210, cy = 242, R = 61;
 const order = [1,2,3,4,5,6,7,8,9,0];
 const startAngle = -58;
 const NS = 'http://www.w3.org/2000/svg';
@@ -555,11 +566,11 @@ order.forEach((n, i) => {
   g.setAttribute('class', 'dial-num');
   g.dataset.n = n;
   const c = document.createElementNS(NS, 'circle');
-  c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 16);
+  c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 17);
   c.setAttribute('fill', '#fff3e6'); c.setAttribute('stroke', '#3a3a3a'); c.setAttribute('stroke-width', 4);
   const t = document.createElementNS(NS, 'text');
   t.setAttribute('x', x); t.setAttribute('y', y + 6);
-  t.setAttribute('text-anchor', 'middle'); t.setAttribute('font-size', 17);
+  t.setAttribute('text-anchor', 'middle'); t.setAttribute('font-size', 18);
   t.setAttribute('fill', '#b31230');
   t.textContent = n;
   g.appendChild(c); g.appendChild(t);
@@ -661,9 +672,6 @@ function showInfo(n){
   const info = INFO[n];
   if (!info) return;
   dialBeep();
-  dialG.classList.remove('dial-spin');
-  void dialG.getBoundingClientRect();
-  dialG.classList.add('dial-spin');
   icBadge.textContent = n;
   icTitle.textContent = info.title;
   icSub.textContent = `您拨打的号码是 ${n} · ${info.title}`;
