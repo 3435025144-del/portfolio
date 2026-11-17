@@ -999,7 +999,7 @@ function startZoom(){
 mouthGrp.addEventListener('pointerdown', e => { e.preventDefault(); startZoom(); });
 
 /* ============ 第二页 · 电话拨号 ============ */
-/* 只画 1-5（分类号），其余孔为装饰 */
+/* 1-5 = 作品分类，6-0 = 特别节目（关于/技能/联络/回封面/彩蛋） */
 const dialNums = document.getElementById('dialNums');
 const DCX = 210, DCY = 246, DR = 61;
 const NS = 'http://www.w3.org/2000/svg';
@@ -1012,7 +1012,7 @@ holes.forEach(({n, a}) => {
   const x = DCX + DR * Math.sin(rad);
   const y = DCY - DR * Math.cos(rad);
   const g = document.createElementNS(NS, 'g');
-  g.setAttribute('class', 'dial-num' + (n >= 1 && n <= 5 ? '' : ' dim'));
+  g.setAttribute('class', 'dial-num');
   g.dataset.n = n;
   const c = document.createElementNS(NS, 'circle');
   c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 17);
@@ -1057,8 +1057,16 @@ function previewHTML(cat){
   return `<img src="${w.img}" alt="">`;
 }
 
+/* 6-0 的特别节目 */
+const EXTRA = {
+  6:{title:'关于我', en:'ABOUT ME', go:'about', desc:'湖北美术学院艺术与科技（影视动画方向）在读，深耕 AIGC 视觉创作赛道。想了解我的经历、项目与获奖？「关于」页见。', prev:'🎓 湖美 · 艺术与科技<br>简历已装订成册', label:'前往关于页 →'},
+  7:{title:'技能速览', en:'SKILLS', go:'skills', desc:'AIGC 全链路 · 美术影视基础 · 后期软件 · 文案策划，四条技能能量条已经充满，去看看我的武器库。', prev:'🛠️ AIGC · 美术 · 后期<br>武器库一览', label:'前往技能页 →'},
+  8:{title:'联络方式', en:'CONTACT', go:'contact', desc:'有合作或项目邀约？拨通电话或写封邮件，小宇宙随时在线。', prev:'📮 电话 · 邮箱<br>都在联络页等你', label:'前往联络页 →'},
+  9:{title:'回到封面', en:'BACK TO COVER', desc:'想再看看会眨眼的小宇宙女孩？按下这里带你回封面，重新开始这场冒险。', prev:'🌏 小宇宙女孩在封面等你', label:'回到封面 →'},
+  0:{title:'神秘彩蛋', en:'SURPRISE ME', desc:'不按套路出牌！随机跳进一个作品分类，看看命运把你带到哪里。', prev:'🎲 命运转盘已就位', label:'随机出发 →'},
+};
+
 function dialNumber(n){
-  if (n < 1 || n > 5) { tone(180, .12, .08); return; }   // 6-0 空号音
   dialBeep();
   /* 数字按压动画 */
   const gEl = document.querySelector(`.dial-num[data-n="${n}"]`);
@@ -1074,14 +1082,27 @@ function dialNumber(n){
   phoneZone.classList.add('lifted');
   tone(660, .3, .1, 'sine', .15);
   tone(660, .3, .1, 'sine', .5);
-  /* 分类信息卡 */
-  const cat = Object.keys(DATA)[n-1];
-  const d = DATA[cat];
-  document.getElementById('icBadge').textContent = n;
-  document.getElementById('icTitle').textContent = d.zh;
-  document.getElementById('icSub').textContent = d.en;
-  document.getElementById('icDesc').textContent = d.desc;
-  document.getElementById('icPreview').innerHTML = previewHTML(cat);
+  /* 信息卡 */
+  const icBadge = document.getElementById('icBadge');
+  const icGo = document.getElementById('icGo');
+  if (n <= 5){
+    const cat = Object.keys(DATA)[n-1];
+    const d = DATA[cat];
+    icBadge.textContent = n;
+    document.getElementById('icTitle').textContent = d.zh;
+    document.getElementById('icSub').textContent = d.en;
+    document.getElementById('icDesc').textContent = d.desc;
+    document.getElementById('icPreview').innerHTML = previewHTML(cat);
+    icGo.textContent = '进入分类 →';
+  } else {
+    const e = EXTRA[n];
+    icBadge.textContent = n;
+    document.getElementById('icTitle').textContent = e.title;
+    document.getElementById('icSub').textContent = e.en;
+    document.getElementById('icDesc').textContent = e.desc;
+    document.getElementById('icPreview').innerHTML = `<div class="ph">${e.prev}</div>`;
+    icGo.textContent = e.label;
+  }
   document.getElementById('infoCard').classList.add('open');
   document.getElementById('infoCard').scrollTop = 0;
 }
@@ -1101,7 +1122,16 @@ function hangUp(){
 }
 document.getElementById('icHang').addEventListener('click', hangUp);
 document.getElementById('icGo').addEventListener('click', () => {
-  if (currentCat) openCategory(Object.keys(DATA)[currentCat-1]);
+  if (currentCat == null) return;
+  if (currentCat <= 5){
+    openCategory(Object.keys(DATA)[currentCat-1]);
+  } else if (currentCat === 9){
+    showPage('p1'); hangUp();
+  } else if (currentCat === 0){
+    openCategory(Object.keys(DATA)[Math.floor(Math.random()*5)]);
+  } else {
+    showPage(EXTRA[currentCat].go); hangUp();
+  }
 });
 
 /* ============ 第三页 · 作品画廊 ============ */
