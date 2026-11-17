@@ -38,91 +38,77 @@
   .page.leaving{transform:scale(1.12);opacity:0;z-index:3;}
   .page.scroll{overflow-y:auto;overflow-x:hidden;justify-content:flex-start;}
 
-  .swallow{
-    position:fixed;background:#000;border-radius:50%;
-    width:20px;height:20px;left:50%;top:50%;
-    transform:translate(-50%,-50%) scale(0);
-    pointer-events:none;z-index:200;
+  /* ============ 第一页 · 可爱复古插画封面 ============ */
+  .p1{
+    background:
+      radial-gradient(110% 110% at 50% -10%, #ff6a58 0%, var(--tomato) 48%, var(--cherry) 100%);
+    color:var(--paper);
   }
-  .swallow.grow{animation:grow .6s ease-in forwards;}
-  @keyframes grow{to{transform:translate(-50%,-50%) scale(140);}}
-
-  /* ============ 第一页 · RETRO EDITORIAL 杂志封面 ============ */
-  .p1{background:var(--cream);}
-  .p1::before{
-    content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;
-    background-image:radial-gradient(rgba(31,28,26,.065) 1px, transparent 1.4px);
-    background-size:18px 18px;
+  .p1 .grain{
+    position:absolute;inset:0;opacity:.08;pointer-events:none;
+    background-image:radial-gradient(#fff 1.2px, transparent 1.8px);
+    background-size:26px 26px;
   }
-  .mag-scene{position:absolute;inset:0;will-change:transform;}
-  .mag-top{
-    position:absolute;top:0;left:0;right:0;z-index:4;
-    display:flex;justify-content:space-between;align-items:center;
-    padding:20px 4vw 13px;border-bottom:2.5px solid var(--ink);
-    font-family:"Space Mono",monospace;font-size:12px;letter-spacing:3px;
+  .cover-scene{position:absolute;inset:0;will-change:transform;}
+  .cover-inner{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;}
+  .p1-kicker{
+    margin-top:5.5vh;font-family:"Space Mono",monospace;
+    font-size:clamp(10px,1.2vw,14px);letter-spacing:6px;color:#ffd9d2;
   }
-  .mag-top b{color:var(--tomato);font-weight:700;}
-  .mag-headline{position:absolute;left:4vw;top:9vh;z-index:3;}
-  .mag-hello{
-    font-family:"Archivo Black",Impact,"Arial Black",sans-serif;
-    font-size:clamp(64px,12vw,150px);line-height:.85;color:var(--tomato);
-    letter-spacing:-1px;text-shadow:5px 5px 0 rgba(31,28,26,.12);
+  .p1-title{
+    font-family:"ZCOOL KuaiLe","Archivo Black",Impact,sans-serif;
+    font-size:clamp(36px,6.2vw,84px);letter-spacing:3px;color:var(--paper);
+    text-shadow:4px 4px 0 rgba(140,10,25,.45);line-height:1;margin-top:10px;
   }
-  .mag-name{
-    font-weight:900;font-size:clamp(34px,5.6vw,76px);letter-spacing:10px;
-    color:var(--ink);margin-top:6px;
+  .p1-title em{font-style:normal;color:var(--yellow);}
+  .p1-sub{
+    font-family:"Space Mono",monospace;font-size:clamp(11px,1.4vw,16px);
+    letter-spacing:5px;color:var(--paper);margin-top:12px;
+    background:rgba(140,10,25,.35);border-radius:999px;padding:7px 22px;
   }
-  .mag-sub{
-    font-family:"Space Mono",monospace;font-size:clamp(11px,1.2vw,14px);
-    letter-spacing:4px;margin-top:13px;color:var(--ink);
-    border-bottom:3px solid var(--tomato);display:inline-block;padding-bottom:6px;
+  .toy-wrap{
+    position:relative;width:min(54vh,42vw,460px);margin-top:2vh;
+    animation:floaty 4.6s ease-in-out infinite;z-index:3;
   }
-  .mag-toy{
-    position:absolute;left:50%;top:56%;transform:translate(-50%,-44%);
-    width:min(46vh,36vw,440px);z-index:2;
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
+  #toySVG{width:100%;display:block;filter:drop-shadow(0 24px 24px rgba(120,0,15,.38));}
+  .cover-scene.no-float .toy-wrap{animation:none;}
+  .cover-scene.no-float #toySVG{filter:none;}
+  /* 眼睛自动眨眼（跟随由 JS 控制外层分组） */
+  #eyeL,#eyeR{transform-box:fill-box;transform-origin:center;animation:blinkEyes 5s ease-in-out infinite;}
+  @keyframes blinkEyes{0%,92.5%,100%{transform:scaleY(1)}95.5%{transform:scaleY(.08)}}
+  /* 嘴巴：真正独立的可交互入口 */
+  #mouthGrp{cursor:pointer;transform-box:fill-box;transform-origin:center;transition:transform .8s cubic-bezier(.55,0,.85,.4);}
+  #mouthGrp .lip{transition:transform .25s;}
+  #mouthGrp:hover .lip{transform:scale(1.12,1.3);}
+  .cover-scene.open #mouthGrp{transform:scale(8);}
+  /* CLICK ME 小气泡 */
+  #clickTip{
+    position:absolute;left:63%;top:53%;z-index:6;
+    background:var(--paper);color:var(--cherry);border:2.5px solid var(--ink);
+    border-radius:12px;padding:5px 13px;font-family:"Space Mono",monospace;
+    font-size:12.5px;letter-spacing:1.5px;box-shadow:3px 3px 0 var(--ink);
+    opacity:0;transform:rotate(6deg) translateY(8px);transition:all .25s;pointer-events:none;
   }
-  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-  .mag-float{animation:floaty 5s ease-in-out infinite;}
-  .mag-scene.no-float .mag-float{animation:none;}
-  #toySVG{width:100%;display:block;filter:drop-shadow(0 26px 26px rgba(31,28,26,.2));}
-  /* 转场时关闭阴影滤镜，避免放大卡顿 */
-  .mag-scene.no-float #toySVG{filter:none;}
-  .mag-hey{
-    position:absolute;left:5vw;top:52vh;z-index:3;
-    font-family:"Archivo Black",Impact,sans-serif;
-    font-size:clamp(15px,2vw,24px);color:var(--ink);
-    letter-spacing:2px;transform:rotate(-7deg);
+  #clickTip.show{opacity:1;transform:rotate(6deg) translateY(0);animation:tipBob 1s ease-in-out infinite;}
+  @keyframes tipBob{0%,100%{margin-top:0}50%{margin-top:-5px}}
+  #clickTip::before{
+    content:"";position:absolute;left:-15px;bottom:8px;
+    border:7px solid transparent;border-right-color:var(--paper);
   }
-  .mag-hey svg{display:block;margin-top:4px;}
-  .mag-tip{
-    position:absolute;left:50%;bottom:11vh;transform:translateX(-50%);z-index:3;
-    font-size:clamp(12px,1.4vw,16px);letter-spacing:4px;color:var(--tomato);
-    animation:blinkTip 1.8s ease-in-out infinite;white-space:nowrap;
+  .p1-bottom{
+    margin-top:auto;margin-bottom:3vh;font-family:"Space Mono",monospace;
+    font-size:clamp(11px,1.3vw,14px);letter-spacing:5px;color:#ffd9d2;
+    animation:blinkTip 2s ease-in-out infinite;z-index:3;
   }
-  .mag-bottom{
-    position:absolute;bottom:0;left:0;right:0;z-index:4;
-    display:flex;justify-content:space-between;align-items:center;
-    padding:13px 4vw 18px;border-top:2.5px solid var(--ink);
-    font-family:"Space Mono",monospace;font-size:11px;letter-spacing:3px;
-  }
-  .mag-bottom .mid{color:var(--tomato);letter-spacing:5px;}
-  .deco{position:absolute;pointer-events:none;z-index:1;color:var(--tomato);}
-  .deco.star{font-size:clamp(16px,2.2vw,28px);}
-  .deco.star.big{font-size:clamp(24px,3.4vw,42px);animation:spinSlow 14s linear infinite;}
+  @keyframes blinkTip{0%,100%{opacity:.95}50%{opacity:.45}}
+  .doodle{position:absolute;pointer-events:none;z-index:1;}
   @keyframes spinSlow{to{transform:rotate(360deg);}}
-  .deco.plus{font-family:"Space Mono",monospace;font-size:15px;color:var(--ink);opacity:.45;}
-  /* 嘴巴：唯一入口 */
-  #mouthGrp{cursor:pointer;}
-  #magMouth{transform-box:fill-box;transform-origin:center;transition:transform .25s, fill .25s;}
-  #mouthGrp:hover #magMouth{transform:scale(1.18);fill:#a31230;}
-  /* 张嘴 + 镜头推进 */
-  #mouthGrp{transform-box:fill-box;transform-origin:center;transition:transform .85s cubic-bezier(.55,0,.85,.4);}
-  #toySVG.open #mouthGrp{transform:scale(6);}
+  /* 转场红色幕布 */
   #blackHole{
-    position:fixed;inset:0;background:#0d0507;
+    position:fixed;inset:0;background:#a31230;
     z-index:150;pointer-events:none;display:none;
   }
-  @keyframes blinkTip{0%,100%{opacity:.95}50%{opacity:.4}}
 
   /* ============ 固定侧边导航 ============ */
   .side-nav{
@@ -143,90 +129,152 @@
   .side-nav .nav-gap{height:10px;}
   .side-nav .nav-mini{font-size:11px;padding:9px 6px;letter-spacing:2px;}
 
-  /* ============ 第二页 · 电话 ============ */
-  .p2{background:
-      radial-gradient(90% 90% at 50% 110%, #efe4cd 0%, transparent 60%),
-      var(--cream);}
-  .p2-inner{position:relative;width:100%;height:100%;}
-  .p2-deco{position:absolute;top:28px;left:38px;color:#b8b0a0;font-size:13px;letter-spacing:4px;}
-  .p2-head{position:absolute;top:4vh;left:50%;transform:translateX(-50%);text-align:center;z-index:3;}
-  .p2-head h2{font-size:clamp(24px,3.4vw,42px);letter-spacing:6px;}
-  .p2-head h2 em{font-style:normal;color:var(--red);}
-  .p2-head p{color:var(--gray);font-size:13.5px;letter-spacing:3px;margin-top:8px;}
-  .phone-zone{
-    position:absolute;left:50%;bottom:-2%;
-    transform:translateX(-50%);
-    width:min(72vh,54vw);
-    z-index:2;
+  /* ============ 第二页 · 来电！复古电话 ============ */
+  .p2{
+    background:
+      radial-gradient(105% 105% at 50% 0%, #ff6a58 0%, var(--tomato) 52%, #b31e36 100%);
+    color:var(--paper);
   }
-  #phoneSVG{width:100%;display:block;filter:drop-shadow(12px 14px 16px rgba(90,20,20,.25));}
-
+  .p2-inner{position:relative;width:100%;height:100%;}
+  /* 奶油白拱形舞台 */
+  .p2-arch{
+    position:absolute;left:50%;bottom:-8%;transform:translateX(-50%);
+    width:min(92vw,1040px);height:72%;
+    background:var(--paper);border-radius:520px 520px 0 0;
+  }
+  .p2-calltag{
+    position:absolute;top:4.2vh;left:50%;transform:translateX(-50%);z-index:5;
+    background:var(--paper);color:var(--cherry);border:2.5px solid var(--ink);
+    border-radius:999px;padding:7px 20px;font-family:"Space Mono",monospace;
+    font-size:clamp(11px,1.2vw,14px);letter-spacing:4px;box-shadow:3px 3px 0 var(--ink);
+    animation:blinkTip 1.4s ease-in-out infinite;white-space:nowrap;
+  }
+  .p2-title{
+    position:absolute;top:10.2vh;left:0;right:0;text-align:center;z-index:5;
+    font-family:"ZCOOL KuaiLe","Archivo Black",sans-serif;
+    font-size:clamp(24px,3.8vw,50px);letter-spacing:4px;
+    text-shadow:4px 4px 0 rgba(140,10,25,.4);
+  }
+  .p2-title em{font-style:normal;color:var(--yellow);}
+  .p2-calltip{
+    position:absolute;top:19vh;left:0;right:0;text-align:center;z-index:5;
+    font-family:"Space Mono",monospace;font-size:clamp(11px,1.3vw,14px);
+    letter-spacing:4px;color:#ffd9d2;
+  }
+  .mute-btn{
+    position:absolute;top:4.2vh;right:4vw;z-index:9;
+    background:var(--paper);color:var(--ink);border:2.5px solid var(--ink);
+    border-radius:999px;padding:7px 14px;font-size:12px;letter-spacing:2px;
+    cursor:pointer;font-family:inherit;box-shadow:3px 3px 0 var(--ink);transition:all .2s;
+  }
+  .mute-btn:hover{transform:translateY(-2px);}
+  .mute-btn.off{color:#a89f8c;}
+  /* 电话 */
+  .phone-zone{
+    position:absolute;left:50%;bottom:-6%;transform:translateX(-50%);
+    width:min(56vh,44vw);z-index:6;
+  }
+  #phoneSVG{width:100%;display:block;filter:drop-shadow(10px 14px 18px rgba(120,0,15,.3));}
+  .phone-zone.ringing{animation:phoneShake .52s ease-in-out infinite;}
+  @keyframes phoneShake{0%,100%{transform:translateX(-50%) rotate(-1.4deg)}50%{transform:translateX(-50%) rotate(1.4deg)}}
+  .phone-zone.ringing #handset{animation:hsJump .9s ease-in-out infinite;}
+  @keyframes hsJump{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
   /* 听筒：独立可动部件，绕右端旋转 */
   #handset{
     transform-box:fill-box;transform-origin:94% 55%;
     transition:transform .8s cubic-bezier(.34,1.4,.35,1);
   }
-  .phone-zone.lifted #handset{transform:rotate(-38deg) translateY(-16px);cursor:pointer;}
+  .phone-zone.lifted #handset{transform:rotate(-34deg) translateY(-14px);}
   #handsetShadow{transition:opacity .6s, transform .6s;transform-box:fill-box;transform-origin:center;}
   .phone-zone.lifted #handsetShadow{opacity:.15;transform:translateY(26px) scale(.92);}
-  .ring-txt{
-    position:absolute;top:-30px;left:54%;
-    color:var(--cherry);font-size:18px;letter-spacing:3px;
-    opacity:0;white-space:nowrap;transition:opacity .3s;z-index:5;
+  .cord-wiggle{transform-box:fill-box;transform-origin:left center;}
+  .phone-zone.lifted .cord-wiggle{animation:cordWig 1.1s ease-in-out 2;}
+  @keyframes cordWig{0%,100%{transform:rotate(0)}30%{transform:rotate(3deg)}65%{transform:rotate(-3deg)}}
+  /* 接听 / 挂断按钮 */
+  .call-btns{
+    position:absolute;left:50%;bottom:5vh;transform:translateX(-50%);
+    display:flex;gap:30px;z-index:8;
   }
-  .phone-zone.lifted .ring-txt{opacity:1;animation:ringPop .7s ease;}
-  @keyframes ringPop{0%{transform:scale(.5)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
-  .dial-num{cursor:pointer;}
-  .dial-num circle{transition:fill .18s;}
-  .dial-num:hover circle{fill:var(--yellow);}
-  .dial-num text{pointer-events:none;font-family:inherit;font-weight:bold;}
-  .dial-num.dim circle{fill:#e8e0d0 !important;}
-  .dial-num.dim text{fill:#b0a896;}
-  .dial-num.pressed circle{fill:var(--yellow);}
-  #dialG{transform-box:fill-box;transform-origin:center;transition:transform .5s cubic-bezier(.3,1.3,.4,1);}
-  .phone-zone.dialturn #dialG{transform:rotate(9deg);}
-
-  /* 分类信息卡 */
-  .info-card{
-    position:absolute;left:4vw;top:46%;
-    transform:translate(-150%,-50%) rotate(-3deg) scale(.85);
-    width:min(440px,88vw);max-height:70vh;overflow-y:auto;
-    background:var(--paper);border:3px solid var(--ink);border-radius:20px;
-    box-shadow:12px 12px 0 rgba(230,57,80,.22);
-    padding:24px 26px;z-index:10;
-    opacity:0;visibility:hidden;
-    transition:all .5s cubic-bezier(.2,.9,.3,1.15);
+  .call-btns.hide{opacity:0;pointer-events:none;transition:opacity .3s;}
+  .cbtn-wrap{display:flex;flex-direction:column;align-items:center;gap:9px;}
+  .cbtn-wrap span{
+    font-family:"Space Mono",monospace;font-size:11px;letter-spacing:2px;color:var(--cherry);
   }
-  .info-card.open{opacity:1;visibility:visible;transform:translate(0,-50%) rotate(-1deg) scale(1);}
-  .info-card::-webkit-scrollbar{width:7px;}
-  .info-card::-webkit-scrollbar-thumb{background:var(--pink);border-radius:4px;}
-  .ic-badge{
-    width:52px;height:52px;border-radius:50%;
-    background:var(--red);color:#fff;font-size:24px;
+  .cbtn{
+    width:72px;height:72px;border-radius:50%;border:3.5px solid var(--ink);
+    font-size:28px;cursor:pointer;font-family:inherit;line-height:1;
     display:flex;align-items:center;justify-content:center;
-    border:3px solid var(--ink);margin-bottom:12px;
+    transition:all .2s;box-shadow:0 6px 0 var(--ink);
   }
-  .ic-head h3{font-size:22px;letter-spacing:3px;}
-  .ic-head small{display:block;font-size:11px;color:var(--gray);letter-spacing:3px;margin-top:4px;}
-  .ic-preview{
-    width:100%;aspect-ratio:16/10;border:3px solid var(--ink);border-radius:14px;
-    overflow:hidden;margin:14px 0;background:#efe8da;
-    display:flex;align-items:center;justify-content:center;position:relative;
+  .cbtn.green{background:#3fae6e;color:#fff;}
+  .cbtn.red{background:#e03131;color:#fff;}
+  .cbtn.green:hover,.cbtn.red:hover{transform:translateY(-4px) scale(1.07);box-shadow:0 10px 0 var(--ink);}
+  .cbtn.green:active,.cbtn.red:active{transform:translateY(2px);box-shadow:0 2px 0 var(--ink);}
+  /* 接通后的卡片：女孩 + 聊天气泡 + 档案贴纸 */
+  .call-card{
+    position:absolute;left:4vw;top:50%;
+    transform:translate(-165%,-50%) rotate(-3deg);
+    width:min(430px,92vw);max-height:88vh;overflow-y:auto;
+    background:var(--paper);border:3px solid var(--ink);border-radius:22px;
+    box-shadow:12px 12px 0 rgba(140,10,25,.35);
+    padding:18px 20px 22px;z-index:10;opacity:0;visibility:hidden;
+    transition:all .55s cubic-bezier(.2,.9,.3,1.15);
   }
-  .ic-preview img{width:100%;height:100%;object-fit:cover;}
-  .ic-preview img.tri3{width:33.4%;height:100%;object-fit:cover;}
-  .ic-preview .ph{color:#a89f8c;font-size:13px;letter-spacing:2px;text-align:center;padding:14px;line-height:1.9;}
-  .ic-body p{font-size:13px;line-height:1.95;color:#4a443b;letter-spacing:.5px;}
-  .ic-btns{display:flex;gap:10px;margin-top:16px;}
-  .ic-btns button{
-    flex:1;border:3px solid var(--ink);border-radius:999px;padding:11px 0;
-    font-size:14px;letter-spacing:2px;font-family:inherit;cursor:pointer;
-    transition:all .2s;
+  .call-card.open{opacity:1;visibility:visible;transform:translate(0,-50%) rotate(-1deg);}
+  .call-card::-webkit-scrollbar{width:7px;}
+  .call-card::-webkit-scrollbar-thumb{background:var(--pink);border-radius:4px;}
+  .call-girl{
+    width:100%;display:block;border:3px solid var(--ink);border-radius:16px;
+    background:#dff1ec;margin-bottom:10px;
   }
-  .btn-go{background:var(--red);color:#fff;box-shadow:4px 4px 0 var(--ink);}
-  .btn-go:hover{transform:translateY(-2px);box-shadow:5px 6px 0 var(--ink);}
-  .btn-hang{background:var(--paper);color:var(--ink);box-shadow:4px 4px 0 var(--ink);}
-  .btn-hang:hover{background:var(--ink);color:#fff;}
+  .bubble{
+    max-width:90%;margin:9px 0;padding:11px 15px;border:2.5px solid var(--ink);
+    border-radius:16px;font-size:13.5px;line-height:1.9;letter-spacing:.8px;color:var(--ink);
+    opacity:0;transform:translateY(14px) scale(.92);transition:all .45s cubic-bezier(.2,.9,.3,1.2);
+  }
+  .bubble.show{opacity:1;transform:none;}
+  .bubble.b1{
+    background:var(--red);color:#fff;font-family:"ZCOOL KuaiLe",sans-serif;
+    font-size:18px;letter-spacing:2px;
+  }
+  .bubble.b2,.bubble.b4{background:#e9f6ee;}
+  .bubble.b3{background:#fff3c9;}
+  /* 复古档案贴纸 */
+  .about-me h4{
+    font-family:"Space Mono",monospace;font-size:12px;letter-spacing:3px;
+    color:var(--cherry);margin:16px 0 10px;text-align:center;
+  }
+  .stickers{display:flex;flex-wrap:wrap;gap:10px;}
+  .sticker{
+    border:2.5px solid var(--ink);border-radius:12px;padding:8px 12px;
+    font-size:12.5px;letter-spacing:1px;color:var(--ink);cursor:default;
+    box-shadow:3px 3px 0 rgba(31,28,26,.18);
+    opacity:0;transform:scale(.5) rotate(-10deg);
+    transition:all .4s cubic-bezier(.2,.9,.3,1.3);
+  }
+  .sticker.show{opacity:1;transform:rotate(var(--r,-3deg));}
+  .sticker:hover{transform:scale(1.12) rotate(0deg);box-shadow:4px 6px 0 rgba(31,28,26,.25);}
+  .sticker b{
+    display:block;font-size:10px;font-family:"Space Mono",monospace;
+    letter-spacing:2px;opacity:.6;margin-bottom:2px;
+  }
+  .sticker.s1{background:#d9f2e6;}
+  .sticker.s2{background:#fff3c4;}
+  .sticker.s3{background:#ffdfe5;}
+  .sticker.s4{background:#f4efe2;}
+  .sticker.s5{background:#ffe9d6;}
+  /* 去作品墙按钮 */
+  .works-btn{
+    margin-top:18px;width:100%;border:3px solid var(--ink);border-radius:999px;
+    background:var(--paper);color:var(--red);padding:14px 0;font-size:16px;
+    letter-spacing:3px;font-family:inherit;cursor:pointer;font-weight:bold;
+    box-shadow:5px 5px 0 var(--ink);transition:all .25s;
+    opacity:0;transform:translateY(16px);pointer-events:none;
+  }
+  .works-btn.show{opacity:1;transform:none;pointer-events:auto;}
+  .works-btn:hover{transform:scale(1.04);background:var(--yellow);color:var(--ink);}
+  .works-btn .arr{display:inline-block;transition:transform .25s;}
+  .works-btn:hover .arr{transform:translateX(7px);}
 
   /* ============ 第三页 · 作品展示 ============ */
   .p3{background:var(--cream);padding:0 0 60px;}
@@ -404,25 +452,21 @@
 
   /* ============ 响应式 ============ */
   @media (max-width:960px){
-    .mag-headline{top:11vh;}
-    .mag-name{letter-spacing:6px;}
-    .mag-toy{top:57%;width:min(64vw,320px);}
-    .mag-hey{top:auto;bottom:29vh;left:5vw;font-size:14px;}
-    .mag-hey svg{width:52px;height:35px;}
-    .mag-tip{bottom:12vh;font-size:12px;letter-spacing:3px;}
-    .mag-top,.mag-bottom{font-size:9px;letter-spacing:2px;padding-left:5vw;padding-right:5vw;}
-    .deco.plus{display:none;}
+    .p1-title{letter-spacing:1px;}
+    .toy-wrap{width:min(58vw,320px);margin-top:2.6vh;}
+    #clickTip{left:60%;top:50%;}
+    .doodle{transform:scale(.8);}
     .side-nav{right:8px;gap:7px;}
     .side-nav button{padding:9px 5px;font-size:11px;letter-spacing:2px;box-shadow:2px 2px 0 var(--ink);}
     .side-nav .nav-mini{display:none;}
-    .phone-zone{width:min(110vw,600px);}
-    .info-card{
-      left:50%;top:40%;
-      transform:translate(-50%,-130%) rotate(-2deg) scale(.9);
-      width:92vw;max-height:62vh;z-index:20;
+    .phone-zone{width:min(108vw,600px);}
+    .call-card{
+      left:50%;top:46%;
+      transform:translate(-50%,-135%) rotate(-2deg) scale(.95);
+      width:92vw;max-height:60vh;z-index:20;
     }
-    .info-card.open{transform:translate(-50%,-50%) rotate(-1deg) scale(1);}
-    .p2-bigword{display:none;}
+    .call-card.open{transform:translate(-50%,-50%) rotate(-1deg) scale(1);}
+    .p2-calltip{display:none;}
     .g-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
     .g-card.big{grid-column:span 1;}
     .detail-card{padding:24px 20px;}
@@ -433,139 +477,150 @@
 </head>
 <body>
 
-<div class="swallow" id="swallow"></div>
-
-<!-- ============ 第一页 · RETRO EDITORIAL 杂志封面 ============ -->
+<!-- ============ 第一页 · 可爱复古插画封面 ============ -->
 <section class="page p1 active" id="p1">
-  <div class="mag-scene" id="magScene">
+  <div class="grain"></div>
+  <div class="cover-scene" id="coverScene">
+    <div class="cover-inner">
 
-    <!-- 顶部刊头 -->
-    <div class="mag-top">
-      <span><b>XU CHU'S</b> CREATIVE WORLD</span>
-      <span>VOL. 01 / 2026</span>
-    </div>
+      <!-- 手绘装饰：星星 / 波浪线 / 小花 -->
+      <svg class="doodle" style="left:7vw;top:15vh;width:44px;animation:spinSlow 16s linear infinite;" viewBox="0 0 40 40">
+        <path d="M20 2 l4.5 11.5 12.5 1 -9.5 8 3 12 -10.5 -6.5 -10.5 6.5 3 -12 -9.5 -8 12.5 -1 Z" fill="#f4c542" stroke="#241812" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+      <svg class="doodle" style="right:8vw;top:13vh;width:60px;" viewBox="0 0 62 30">
+        <path d="M2 16 q7 -14 14 0 t14 0 t14 0 t14 0" fill="none" stroke="#ffd9d2" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <svg class="doodle" style="left:9vw;bottom:20vh;width:50px;" viewBox="0 0 50 50">
+        <g transform="translate(25 25)">
+          <g fill="#ffd6de" stroke="#241812" stroke-width="2.5">
+            <ellipse cx="0" cy="-13" rx="6.5" ry="10"/>
+            <ellipse cx="0" cy="-13" rx="6.5" ry="10" transform="rotate(72)"/>
+            <ellipse cx="0" cy="-13" rx="6.5" ry="10" transform="rotate(144)"/>
+            <ellipse cx="0" cy="-13" rx="6.5" ry="10" transform="rotate(216)"/>
+            <ellipse cx="0" cy="-13" rx="6.5" ry="10" transform="rotate(288)"/>
+          </g>
+          <circle r="6.5" fill="#f4c542" stroke="#241812" stroke-width="2.5"/>
+        </g>
+      </svg>
+      <svg class="doodle" style="right:6vw;bottom:30vh;width:40px;animation:spinSlow 12s linear infinite reverse;" viewBox="0 0 40 40">
+        <path d="M20 2 l4.5 11.5 12.5 1 -9.5 8 3 12 -10.5 -6.5 -10.5 6.5 3 -12 -9.5 -8 12.5 -1 Z" fill="#ffd6de" stroke="#241812" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+      <div class="doodle" style="left:4vw;bottom:6vh;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:3px;color:#ffd9d2;opacity:.8;">✷ EST. 2026 ✷</div>
+      <div class="doodle" style="right:4vw;bottom:6vh;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:3px;color:#ffd9d2;opacity:.8;">VOL.01 ✷</div>
 
-    <!-- 主标题区 -->
-    <div class="mag-headline">
-      <h1 class="mag-hello">HELLO!</h1>
-      <div class="mag-name">我是黄旭楚</div>
-      <div class="mag-sub">WELCOME TO MY LITTLE UNIVERSE.</div>
-    </div>
+      <!-- 文案 -->
+      <div class="p1-kicker">A CREATIVE PORTFOLIO BY HUANG XUCHU.</div>
+      <h1 class="p1-title">HELLO, <em>STRANGER!</em></h1>
+      <div class="p1-sub">WELCOME TO MY LITTLE WORLD.</div>
 
-    <!-- 装饰 -->
-    <div class="deco star big" style="left:57vw;top:15vh;">✦</div>
-    <div class="deco star" style="left:7vw;top:60vh;">✦</div>
-    <div class="deco star" style="right:9vw;top:62vh;">✦</div>
-    <div class="deco plus" style="left:45vw;top:12vh;">+</div>
-    <div class="deco plus" style="right:6vw;bottom:26vh;">+</div>
-    <div class="deco plus" style="left:2.5vw;top:40vh;">+</div>
-
-    <!-- 人物（原创 3D 感插画） -->
-    <div class="mag-toy">
-      <div class="mag-float">
-        <svg id="toySVG" viewBox="0 14 300 260">
+      <!-- 原创卡通女孩（完整角色：丸子头 + 蝴蝶结 + 小裙子） -->
+      <div class="toy-wrap">
+        <svg id="toySVG" viewBox="0 0 320 430">
           <defs>
             <radialGradient id="skinG" cx="42%" cy="34%" r="75%">
               <stop offset="0" stop-color="#fff4e8"/><stop offset=".6" stop-color="#ffe6d2"/><stop offset="1" stop-color="#f3c3a5"/>
             </radialGradient>
             <radialGradient id="hairG" cx="35%" cy="25%" r="85%">
-              <stop offset="0" stop-color="#4a4440"/><stop offset=".55" stop-color="#26221f"/><stop offset="1" stop-color="#100e0c"/>
+              <stop offset="0" stop-color="#5a4a42"/><stop offset=".55" stop-color="#3a2a24"/><stop offset="1" stop-color="#241812"/>
             </radialGradient>
             <linearGradient id="dressG" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#ff6a58"/><stop offset="1" stop-color="#d92842"/>
+              <stop offset="0" stop-color="#fff6ea"/><stop offset="1" stop-color="#ffe9d6"/>
             </linearGradient>
             <radialGradient id="blushG" cx="50%" cy="50%" r="50%">
-              <stop offset="0" stop-color="#ffb0a6" stop-opacity=".9"/><stop offset="1" stop-color="#ffb0a6" stop-opacity="0"/>
+              <stop offset="0" stop-color="#ff9a8c" stop-opacity=".75"/><stop offset="1" stop-color="#ff9a8c" stop-opacity="0"/>
             </radialGradient>
           </defs>
 
-          <!-- 侧发团 -->
-          <ellipse cx="76" cy="196" rx="27" ry="54" fill="url(#hairG)" stroke="#141210" stroke-width="5"/>
-          <ellipse cx="224" cy="196" rx="27" ry="54" fill="url(#hairG)" stroke="#141210" stroke-width="5"/>
+          <!-- 双丸子头 -->
+          <circle cx="58" cy="215" r="40" fill="url(#hairG)" stroke="#241812" stroke-width="5"/>
+          <circle cx="262" cy="215" r="40" fill="url(#hairG)" stroke="#241812" stroke-width="5"/>
+          <!-- 蝴蝶结 -->
+          <g transform="translate(52 176) rotate(-12)">
+            <path d="M0 0 L-20 -11 L-18 9 Z" fill="#f4c542" stroke="#241812" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M0 0 L20 -11 L18 9 Z" fill="#f4c542" stroke="#241812" stroke-width="4" stroke-linejoin="round"/>
+            <circle r="7" fill="#e63950" stroke="#241812" stroke-width="3.5"/>
+          </g>
+          <g transform="translate(268 176) rotate(12)">
+            <path d="M0 0 L-20 -11 L-18 9 Z" fill="#f4c542" stroke="#241812" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M0 0 L20 -11 L18 9 Z" fill="#f4c542" stroke="#241812" stroke-width="4" stroke-linejoin="round"/>
+            <circle r="7" fill="#e63950" stroke="#241812" stroke-width="3.5"/>
+          </g>
+          <!-- 后层头发 -->
+          <path d="M160 52 C82 52 54 122 56 210 C57 258 72 292 92 300 L96 214 C98 148 124 120 160 120 C196 120 222 148 224 214 L228 300 C248 292 263 258 264 210 C266 122 238 52 160 52 Z" fill="url(#hairG)" stroke="#241812" stroke-width="5"/>
+          <!-- 身体（奶油白小裙子） -->
+          <path d="M104 428 C104 362 128 334 160 334 C192 334 216 362 216 428 Z" fill="url(#dressG)" stroke="#241812" stroke-width="6"/>
+          <!-- 脖子 -->
+          <path d="M146 292 L146 336 L174 336 L174 292 Z" fill="#f6c9ac" stroke="#241812" stroke-width="5"/>
+          <!-- 红色领口 + 扣子 -->
+          <path d="M136 344 C146 358 174 358 184 344" fill="none" stroke="#e63950" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="160" cy="374" r="7" fill="#e63950" stroke="#241812" stroke-width="3.5"/>
+          <!-- 小手 -->
+          <ellipse cx="110" cy="400" rx="15" ry="12" fill="url(#skinG)" stroke="#241812" stroke-width="4.5" transform="rotate(-16 110 400)"/>
+          <ellipse cx="210" cy="400" rx="15" ry="12" fill="url(#skinG)" stroke="#241812" stroke-width="4.5" transform="rotate(16 210 400)"/>
 
           <g id="toyHead">
-            <!-- 后层头发 -->
-            <path d="M150 28 C72 28 44 96 46 180 C47 224 61 254 80 262 L84 180 C86 116 112 90 150 90 C188 90 214 116 216 180 L220 262 C239 254 253 224 254 180 C256 96 228 28 150 28 Z" fill="url(#hairG)" stroke="#141210" stroke-width="5" stroke-linejoin="round"/>
             <!-- 脸 -->
-            <circle cx="150" cy="172" r="65" fill="url(#skinG)" stroke="#e8b490" stroke-width="2"/>
+            <circle cx="160" cy="196" r="78" fill="url(#skinG)" stroke="#e8b490" stroke-width="2"/>
             <!-- 刘海 -->
-            <path d="M87 158 C87 94 113 72 150 72 C187 72 213 94 213 158 C196 133 176 123 150 123 C124 123 104 133 87 158 Z" fill="url(#hairG)" stroke="#141210" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M84 180 C84 106 116 80 160 80 C204 80 236 106 236 180 C216 152 192 140 160 140 C128 140 104 152 84 180 Z" fill="url(#hairG)" stroke="#241812" stroke-width="5"/>
             <!-- 头发光泽 -->
-            <path d="M106 94 C122 82 146 77 166 81" fill="none" stroke="#7a7069" stroke-width="6" stroke-linecap="round" opacity=".6"/>
-            <ellipse cx="120" cy="84" rx="14" ry="6" fill="#fff" opacity=".22" transform="rotate(-18 120 84)"/>
-            <!-- 星星发夹 -->
-            <path d="M194 94 l5.5 -13 5.5 13 14 2 -10.5 10 3 14 -12 -7.5 -12 7.5 3 -14 -10.5 -10 Z" fill="#f4c542" stroke="#141210" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M110 108 C128 94 156 88 180 94" fill="none" stroke="#8a6f5f" stroke-width="7" stroke-linecap="round" opacity=".55"/>
+            <ellipse cx="126" cy="100" rx="16" ry="7" fill="#fff" opacity=".22" transform="rotate(-16 126 100)"/>
+            <!-- 眉毛 -->
+            <path d="M112 176 q12 -7 26 -2 M182 174 q14 -5 26 3" stroke="#4a342c" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <!-- 睫毛 -->
+            <path d="M96 192 l-10 -6 M100 184 l-8 -8 M224 184 l8 -8 M228 192 l10 -6" stroke="#241812" stroke-width="3" stroke-linecap="round"/>
             <!-- 眼睛（可跟随） -->
-            <g id="eyeL">
-              <ellipse cx="119" cy="182" rx="15.5" ry="16.5" fill="#141210"/>
-              <g class="glint">
-                <circle cx="124" cy="176" r="5.8" fill="#fff"/>
-                <circle cx="113.5" cy="188" r="2.8" fill="#fff" opacity=".85"/>
-                <circle cx="128" cy="189" r="1.8" fill="#ff9a8c" opacity=".7"/>
-              </g>
-            </g>
-            <g id="eyeR">
-              <ellipse cx="181" cy="182" rx="15.5" ry="16.5" fill="#141210"/>
-              <g class="glint">
-                <circle cx="186" cy="176" r="5.8" fill="#fff"/>
-                <circle cx="175.5" cy="188" r="2.8" fill="#fff" opacity=".85"/>
-                <circle cx="190" cy="189" r="1.8" fill="#ff9a8c" opacity=".7"/>
-              </g>
-            </g>
-            <!-- 睫毛/眉毛 -->
-            <path d="M102 174 l-9 -5 M106 167 l-7 -8 M198 167 l7 -8 M202 174 l9 -5" stroke="#141210" stroke-width="2.6" stroke-linecap="round"/>
-            <path d="M108 156 q10 -6 22 -2 M170 154 q12 -4 22 2" stroke="#3d3a38" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-            <!-- 腮红雀斑 -->
-            <ellipse cx="101" cy="205" rx="15" ry="9" fill="url(#blushG)"/>
-            <ellipse cx="199" cy="205" rx="15" ry="9" fill="url(#blushG)"/>
-            <g fill="#e8938a" opacity=".75">
-              <circle cx="96" cy="200" r="1.5"/><circle cx="104" cy="209" r="1.5"/><circle cx="92" cy="208" r="1.5"/>
-              <circle cx="204" cy="200" r="1.5"/><circle cx="196" cy="209" r="1.5"/><circle cx="208" cy="208" r="1.5"/>
+            <g id="trackL"><g id="eyeL">
+              <ellipse cx="128" cy="206" rx="17" ry="18" fill="#241812"/>
+              <circle cx="134" cy="199" r="6.5" fill="#fff"/>
+              <circle cx="121" cy="212" r="3.2" fill="#fff" opacity=".85"/>
+              <circle cx="139" cy="214" r="2" fill="#ff9a8c" opacity=".7"/>
+            </g></g>
+            <g id="trackR"><g id="eyeR">
+              <ellipse cx="192" cy="206" rx="17" ry="18" fill="#241812"/>
+              <circle cx="198" cy="199" r="6.5" fill="#fff"/>
+              <circle cx="185" cy="212" r="3.2" fill="#fff" opacity=".85"/>
+              <circle cx="203" cy="214" r="2" fill="#ff9a8c" opacity=".7"/>
+            </g></g>
+            <!-- 腮红 + 雀斑 -->
+            <ellipse cx="104" cy="236" rx="17" ry="10" fill="url(#blushG)"/>
+            <ellipse cx="216" cy="236" rx="17" ry="10" fill="url(#blushG)"/>
+            <g fill="#e8938a" opacity=".7">
+              <circle cx="98" cy="230" r="1.6"/><circle cx="107" cy="240" r="1.6"/><circle cx="93" cy="238" r="1.6"/>
+              <circle cx="222" cy="230" r="1.6"/><circle cx="213" cy="240" r="1.6"/><circle cx="227" cy="238" r="1.6"/>
             </g>
             <!-- 鼻子 -->
-            <path d="M148 193 q2 3 4 0" stroke="#d9a08e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            <!-- 嘴巴：唯一入口 -->
+            <path d="M158 226 q2.5 3.5 5 0" stroke="#d9a08e" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <!-- 嘴巴（真正独立的可交互入口） -->
             <g id="mouthGrp">
-              <ellipse id="magMouth" cx="150" cy="219" rx="13" ry="14" fill="#8a1030"/>
-              <ellipse id="magTongue" cx="150" cy="226" rx="7" ry="4.5" fill="#ff6b81" opacity="0"/>
+              <ellipse class="lip" cx="160" cy="254" rx="14" ry="15" fill="#8a1030"/>
+              <ellipse class="lip" id="tongueEl" cx="160" cy="261" rx="8" ry="4.5" fill="#ff6b81" opacity="0"/>
             </g>
           </g>
         </svg>
+        <div id="clickTip">CLICK ME!</div>
       </div>
-    </div>
 
-    <!-- 人物旁装饰文字 + 手绘箭头 -->
-    <div class="mag-hey">HEY! LOOK AT ME!
-      <svg width="72" height="48" viewBox="0 0 72 48" fill="none">
-        <path d="M4 6 C28 4 54 12 62 34" stroke="#e63950" stroke-width="3.5" stroke-linecap="round"/>
-        <path d="M51 30 L63 36 L64 23" stroke="#e63950" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-
-    <!-- 嘴巴下方交互提示 -->
-    <div class="mag-tip">点击我的嘴巴，开启创意冒险</div>
-
-    <!-- 底部 -->
-    <div class="mag-bottom">
-      <span>DESIGN · ART · IMAGINATION</span>
-      <span class="mid">A LITTLE WORLD FULL OF BIG IDEAS.</span>
-      <span>EST. 2026</span>
+      <!-- 底部提示 -->
+      <div class="p1-bottom">PSSST... CLICK MY MOUTH!</div>
     </div>
   </div>
 </section>
 <div id="blackHole"></div>
 
-<!-- ============ 第二页 · 复古电话 ============ -->
+<!-- ============ 第二页 · 来电！复古电话 ============ -->
 <section class="page p2" id="p2">
   <div class="p2-inner">
-    <div class="p2-deco">2022—2025 · PHOTOGRAPHY &amp; AIGC</div>
-    <div class="p2-head">
-      <h2>拨通我的<em>创意热线</em></h2>
-      <p>点击拨号盘数字 1—5 · 每个号码对应一个作品分类 · 听筒会真的被拿起</p>
-    </div>
+    <div class="p2-arch"></div>
 
+    <div class="p2-calltag">☎ INCOMING CALL...</div>
+    <button class="mute-btn off" id="muteBtn" title="铃声开关">🔕 铃声已静音</button>
+    <h2 class="p2-title">SOMEONE IS <em>CALLING YOU!</em></h2>
+    <div class="p2-calltip">HEY! PICK UP THE PHONE!</div>
+
+    <!-- 复古电话（听筒为独立可动部件） -->
     <div class="phone-zone" id="phoneZone">
-      <div class="ring-txt">叮铃铃~ 检测到来电 ☎</div>
       <svg id="phoneSVG" viewBox="0 0 420 380">
         <defs>
           <filter id="crayon" x="-15%" y="-15%" width="130%" height="130%">
@@ -581,25 +636,24 @@
         </defs>
 
         <g filter="url(#crayon)">
-          <!-- 卷曲电话线 -->
-          <path d="M334 210 C392 210 392 238 334 238 C276 238 276 266 334 266 C392 266 392 294 334 294"
+          <!-- 卷曲电话线（接通时轻轻晃动） -->
+          <path class="cord-wiggle" d="M334 210 C392 210 392 238 334 238 C276 238 276 266 334 266 C392 266 392 294 334 294"
                 fill="none" stroke="#8a1030" stroke-width="9" stroke-linecap="round" opacity=".9"/>
           <!-- 听筒支架 -->
-          <path d="M104 158 L128 112 L292 112 L316 158 Z" fill="#c92840" stroke="#141210" stroke-width="6" stroke-linejoin="round"/>
+          <path d="M104 158 L128 112 L292 112 L316 158 Z" fill="#c92840" stroke="#241812" stroke-width="6" stroke-linejoin="round"/>
           <!-- 机身 -->
-          <rect x="78" y="152" width="264" height="200" rx="38" fill="url(#bodyG)" stroke="#141210" stroke-width="6"/>
+          <rect x="78" y="152" width="264" height="200" rx="38" fill="url(#bodyG)" stroke="#241812" stroke-width="6"/>
           <path d="M104 182 L118 302" stroke="#ff97a4" stroke-width="11" stroke-linecap="round" opacity=".55"/>
           <path d="M316 182 L304 302" stroke="#a3122c" stroke-width="11" stroke-linecap="round" opacity=".5"/>
           <!-- 脚 -->
-          <rect x="116" y="346" width="50" height="16" rx="7" fill="#141210"/>
-          <rect x="254" y="346" width="50" height="16" rx="7" fill="#141210"/>
-
-          <!-- 拨号盘 -->
+          <rect x="116" y="346" width="50" height="16" rx="7" fill="#241812"/>
+          <rect x="254" y="346" width="50" height="16" rx="7" fill="#241812"/>
+          <!-- 装饰转盘 -->
           <g id="dialG">
-            <circle cx="210" cy="246" r="80" fill="url(#dialG2)" stroke="#141210" stroke-width="6"/>
-            <circle cx="210" cy="246" r="50" fill="#ff5a48" stroke="#141210" stroke-width="5"/>
-            <circle cx="210" cy="246" r="14" fill="#c92840" stroke="#141210" stroke-width="4"/>
-            <rect x="276" y="170" width="9" height="42" rx="4" fill="#141210" transform="rotate(28 280 191)"/>
+            <circle cx="210" cy="246" r="80" fill="url(#dialG2)" stroke="#241812" stroke-width="6"/>
+            <circle cx="210" cy="246" r="50" fill="#ff5a48" stroke="#241812" stroke-width="5"/>
+            <circle cx="210" cy="246" r="14" fill="#c92840" stroke="#241812" stroke-width="4"/>
+            <rect x="276" y="170" width="9" height="42" rx="4" fill="#241812" transform="rotate(28 280 191)"/>
           </g>
         </g>
 
@@ -607,32 +661,77 @@
         <ellipse id="handsetShadow" cx="210" cy="118" rx="150" ry="14" fill="#5a0a16" opacity=".25"/>
         <g id="handset" filter="url(#crayon)">
           <path d="M64 86 C64 56 104 40 210 40 C316 40 356 56 356 86 L356 98 C356 110 344 116 330 116 L90 116 C76 116 64 110 64 98 Z"
-                fill="#e63950" stroke="#141210" stroke-width="6" stroke-linejoin="round"/>
+                fill="#e63950" stroke="#241812" stroke-width="6" stroke-linejoin="round"/>
           <path d="M68 72 C68 58 102 48 210 48 C318 48 352 58 352 72" fill="none" stroke="#ff8a94" stroke-width="9" stroke-linecap="round" opacity=".85"/>
-          <circle cx="78" cy="90" r="24" fill="#c92840" stroke="#141210" stroke-width="6"/>
-          <circle cx="342" cy="90" r="24" fill="#c92840" stroke="#141210" stroke-width="6"/>
+          <circle cx="78" cy="90" r="24" fill="#c92840" stroke="#241812" stroke-width="6"/>
+          <circle cx="342" cy="90" r="24" fill="#c92840" stroke="#241812" stroke-width="6"/>
           <circle cx="72" cy="84" r="7" fill="#ff8a94" opacity=".8"/>
           <circle cx="336" cy="84" r="7" fill="#ff8a94" opacity=".8"/>
         </g>
-
-        <!-- 数字孔（不套蜡笔滤镜，清晰可点） -->
-        <g id="dialNums"></g>
       </svg>
     </div>
 
-    <!-- 分类信息卡 -->
-    <div class="info-card" id="infoCard">
-      <div class="ic-badge" id="icBadge">1</div>
-      <div class="ic-head">
-        <h3 id="icTitle">视觉设计</h3>
-        <small id="icSub">VISUAL DESIGN</small>
+    <!-- 接听 / 挂断 -->
+    <div class="call-btns" id="callBtns">
+      <div class="cbtn-wrap">
+        <button class="cbtn green" id="btnAnswer" title="接听电话">✆</button>
+        <span>ANSWER</span>
       </div>
-      <div class="ic-preview" id="icPreview"></div>
-      <div class="ic-body"><p id="icDesc"></p></div>
-      <div class="ic-btns">
-        <button class="btn-go" id="icGo">进入分类 →</button>
-        <button class="btn-hang" id="icHang">✕ 挂断</button>
+      <div class="cbtn-wrap">
+        <button class="cbtn red" id="btnHang" title="挂断电话">✕</button>
+        <span>HANG UP</span>
       </div>
+    </div>
+
+    <!-- 接通后：女孩接电话 + 聊天气泡 + 档案贴纸 -->
+    <div class="call-card" id="callCard">
+      <svg class="call-girl" viewBox="0 0 300 200">
+        <defs>
+          <radialGradient id="cgSkin" cx="42%" cy="34%" r="75%">
+            <stop offset="0" stop-color="#fff4e8"/><stop offset="1" stop-color="#f3c3a5"/>
+          </radialGradient>
+          <radialGradient id="cgHair" cx="35%" cy="25%" r="85%">
+            <stop offset="0" stop-color="#5a4a42"/><stop offset="1" stop-color="#241812"/>
+          </radialGradient>
+        </defs>
+        <!-- 双丸子 -->
+        <circle cx="88" cy="86" r="26" fill="url(#cgHair)" stroke="#241812" stroke-width="4"/>
+        <circle cx="212" cy="86" r="26" fill="url(#cgHair)" stroke="#241812" stroke-width="4"/>
+        <!-- 头 -->
+        <circle cx="150" cy="96" r="56" fill="url(#cgSkin)" stroke="#e8b490" stroke-width="2"/>
+        <path d="M96 88 C96 44 120 30 150 30 C180 30 204 44 204 88 C188 68 170 62 150 62 C130 62 112 68 96 88 Z" fill="url(#cgHair)" stroke="#241812" stroke-width="4"/>
+        <!-- 开心弯弯眼 -->
+        <path d="M118 98 q8 -9 16 0 M166 98 q8 -9 16 0" stroke="#241812" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <!-- 腮红 -->
+        <ellipse cx="112" cy="118" rx="11" ry="6.5" fill="#ff9a8c" opacity=".6"/>
+        <ellipse cx="188" cy="118" rx="11" ry="6.5" fill="#ff9a8c" opacity=".6"/>
+        <!-- 说话的小嘴 -->
+        <ellipse cx="150" cy="136" rx="12" ry="9" fill="#8a1030"/>
+        <!-- 听筒举到耳边 -->
+        <g id="callHandset" transform="rotate(-24 96 108)">
+          <rect x="66" y="96" width="62" height="24" rx="12" fill="#e63950" stroke="#241812" stroke-width="4"/>
+          <circle cx="72" cy="108" r="10" fill="#c92840" stroke="#241812" stroke-width="3.5"/>
+        </g>
+        <path class="cord-wiggle" d="M72 122 C64 150 96 168 128 164" fill="none" stroke="#8a1030" stroke-width="5" stroke-linecap="round"/>
+      </svg>
+
+      <div class="bubble b1">HELLO! IT'S ME! ☎</div>
+      <div class="bubble b2">你好，我是黄旭楚！一名来自湖北美术学院的设计专业学生，目前专注于 AIGC 与视觉设计方向。</div>
+      <div class="bubble b3">我喜欢插画、视觉创作和探索 AI 带来的各种可能性，也喜欢把天马行空的想法变成真实的设计作品。</div>
+      <div class="bubble b4">希望通过设计，让每一个创意都拥有自己的表达方式。</div>
+
+      <div class="about-me">
+        <h4>—— A LITTLE ABOUT ME ——</h4>
+        <div class="stickers">
+          <div class="sticker s1" style="--r:-3deg"><b>NAME</b>黄旭楚</div>
+          <div class="sticker s2" style="--r:2deg"><b>SCHOOL</b>湖北美术学院</div>
+          <div class="sticker s3" style="--r:-2deg"><b>MAJOR</b>AIGC 方向</div>
+          <div class="sticker s4" style="--r:3deg"><b>INTERESTS</b>视觉设计 / 插画 / AIGC / 数字交互</div>
+          <div class="sticker s5" style="--r:-2deg"><b>TOOLS</b>Photoshop / Illustrator / Figma / ComfyUI</div>
+        </div>
+      </div>
+
+      <button class="works-btn" id="worksBtn">LET'S SEE MY WORKS <span class="arr">→</span></button>
     </div>
   </div>
 </section>
@@ -908,6 +1007,7 @@ function showPage(id){
     if (btn) btn.classList.add('on');
   }
   if (id === 'skills') animateSkillBars();
+  if (id === 'p2') startRinging();   /* 回到电话页自动来电（接听后不再响） */
 }
 
 /* 侧边导航 */
@@ -919,67 +1019,65 @@ navBtns.forEach(btn => {
   });
 });
 
-/* ============ 第一页 · 杂志封面：眼神跟随 + 嘴巴唯一入口 ============ */
-const magScene = document.getElementById('magScene');
+/* ============ 第一页 · 封面：眼神跟随 + 嘴巴唯一入口 ============ */
+const coverScene = document.getElementById('coverScene');
 const toySvg = document.getElementById('toySVG');
-const magMouth = document.getElementById('magMouth');
 const mouthGrp = document.getElementById('mouthGrp');
-const magTongue = document.getElementById('magTongue');
+const tongueEl = document.getElementById('tongueEl');
+const clickTip = document.getElementById('clickTip');
 const blackHole = document.getElementById('blackHole');
 let zooming = false;
 
 /* 眼睛跟随鼠标 */
 document.addEventListener('mousemove', e => {
   if (currentPage !== 'p1' || zooming) return;
-  const dx = Math.max(-1, Math.min(1, (e.clientX - innerWidth/2) / (innerWidth*0.45)));
-  const dy = Math.max(-1, Math.min(1, (e.clientY - innerHeight*0.55) / (innerHeight*0.45)));
-  ['eyeL','eyeR'].forEach(id => {
-    const g = document.getElementById(id);
-    g.setAttribute('transform', `translate(${(dx*7).toFixed(1)},${(dy*5).toFixed(1)})`);
-    g.querySelector('.glint').setAttribute('transform', `translate(${(dx*15).toFixed(1)},${(dy*11).toFixed(1)})`);
+  const r = toySvg.getBoundingClientRect();
+  const dx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width/2)) / (innerWidth*0.4)));
+  const dy = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height*0.45)) / (innerHeight*0.4)));
+  ['trackL','trackR'].forEach(id => {
+    document.getElementById(id).setAttribute('transform', `translate(${(dx*8).toFixed(1)},${(dy*6).toFixed(1)})`);
   });
 });
-/* 自动眨眼 */
-setInterval(() => {
-  if (currentPage !== 'p1' || zooming) return;
-  ['eyeL','eyeR'].forEach(id => {
-    const g = document.getElementById(id);
-    g.style.transformBox = 'fill-box'; g.style.transformOrigin = 'center';
-    g.style.transform = 'scaleY(.06)';
-    setTimeout(()=> g.style.transform = '', 150);
-  });
-}, 4600);
+/* 鼠标靠近嘴巴 → 轻微张开 + CLICK ME 提示 */
+mouthGrp.addEventListener('mouseenter', () => {
+  if (zooming) return;
+  clickTip.classList.add('show');
+  tongueEl.style.opacity = 1;
+});
+mouthGrp.addEventListener('mouseleave', () => {
+  clickTip.classList.remove('show');
+  tongueEl.style.opacity = 0;
+});
 
-/* 嘴巴镜头推进转场：以嘴巴中心为缩放焦点，圆形遮罩扩张吞屏 */
+/* 点击嘴巴 → 镜头以嘴巴中心推进，红色幕布吞屏转场 */
 function startZoom(){
   if (zooming) return;
   zooming = true;
+  clickTip.classList.remove('show');
+  tongueEl.style.opacity = 1;
   const vw = innerWidth, vh = innerHeight;
-  const r = magMouth.getBoundingClientRect();
+  const r = mouthGrp.getBoundingClientRect();
   const mx = r.left + r.width/2, my = r.top + r.height/2;   /* 嘴巴中心实时坐标 */
-  /* 人物张嘴 */
-  toySvg.classList.add('open');
-  magTongue.style.opacity = 1;
-  magScene.classList.add('no-float');
-  /* 镜头推进：缩放焦点 = 嘴巴中心，同时把嘴巴移到屏幕正中 */
+  /* 嘴巴平滑放大（缩放焦点锁定嘴巴中心，同时把嘴巴移到屏幕正中） */
+  coverScene.classList.add('no-float','open');
   const tx = vw/2 - mx, ty = vh/2 - my;
-  const MAX_S = 15;
+  const MAX_S = 9;
   const maxR = Math.hypot(Math.max(mx, vw-mx), Math.max(my, vh-my)) + 60;
   blackHole.style.display = 'block';
   blackHole.style.opacity = 1;
   blackHole.style.clipPath = `circle(0px at ${mx}px ${my}px)`;
   tone(520,.12,.12); tone(660,.18,.12,'sine',.12);
-  const t0 = performance.now(), DUR = 1450;
+  const t0 = performance.now(), DUR = 1500;
   function frame(now){
     const t = Math.min(1, (now-t0)/DUR);
     const ez = t<.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2;   /* 缓入缓出 */
     const s = 1 + (MAX_S-1)*ez;
-    magScene.style.transformOrigin = `${mx}px ${my}px`;
-    magScene.style.transform = `translate(${tx}px,${ty}px) scale(${s.toFixed(3)})`;
-    const bt = Math.max(0, (t-.28)/.72);
+    coverScene.style.transformOrigin = `${mx}px ${my}px`;
+    coverScene.style.transform = `translate(${tx}px,${ty}px) scale(${s.toFixed(3)})`;
+    const bt = Math.max(0, (t-.3)/.7);
     blackHole.style.clipPath = `circle(${(maxR*bt*bt).toFixed(1)}px at ${mx}px ${my}px)`;
     if (t < 1){ requestAnimationFrame(frame); return; }
-    /* 黑幕完全覆盖 → 显示第二页 → 揭开 */
+    /* 红幕完全覆盖 → 显示第二页 → 揭开（电话正在响铃） */
     showPage('p2');
     burst(vw/2, vh/2);
     blackHole.style.transition = 'opacity .55s';
@@ -987,10 +1085,9 @@ function startZoom(){
     setTimeout(() => {
       blackHole.style.display = 'none';
       blackHole.style.transition = '';
-      magScene.style.transform = '';
-      toySvg.classList.remove('open');
-      magTongue.style.opacity = 0;
-      magScene.classList.remove('no-float');
+      coverScene.style.transform = '';
+      coverScene.classList.remove('no-float','open');
+      tongueEl.style.opacity = 0;
       zooming = false;
     }, 600);
   }
@@ -998,39 +1095,11 @@ function startZoom(){
 }
 mouthGrp.addEventListener('pointerdown', e => { e.preventDefault(); startZoom(); });
 
-/* ============ 第二页 · 电话拨号 ============ */
-/* 1-5 = 作品分类，6-0 = 特别节目（关于/技能/联络/回封面/彩蛋） */
-const dialNums = document.getElementById('dialNums');
-const DCX = 210, DCY = 246, DR = 61;
-const NS = 'http://www.w3.org/2000/svg';
-const holes = [
-  {n:1, a:-58},{n:2, a:-28},{n:3, a:2},{n:4, a:32},{n:5, a:62},
-  {n:6, a:92},{n:7, a:122},{n:8, a:152},{n:9, a:182},{n:0, a:212},
-];
-holes.forEach(({n, a}) => {
-  const rad = a * Math.PI / 180;
-  const x = DCX + DR * Math.sin(rad);
-  const y = DCY - DR * Math.cos(rad);
-  const g = document.createElementNS(NS, 'g');
-  g.setAttribute('class', 'dial-num');
-  g.dataset.n = n;
-  const c = document.createElementNS(NS, 'circle');
-  c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 17);
-  c.setAttribute('fill', '#fff3e6'); c.setAttribute('stroke', '#141210'); c.setAttribute('stroke-width', 4);
-  const t = document.createElementNS(NS, 'text');
-  t.setAttribute('x', x); t.setAttribute('y', y + 6.5);
-  t.setAttribute('text-anchor', 'middle'); t.setAttribute('font-size', 18);
-  t.setAttribute('fill', '#b31230');
-  t.textContent = n;
-  g.appendChild(c); g.appendChild(t);
-  dialNums.appendChild(g);
-});
-
+/* ============ 第二页 · 来电！接听流程 ============ */
 const phoneZone = document.getElementById('phoneZone');
-const dialG = document.getElementById('dialG');
-let audioCtx, currentCat = null;
+let audioCtx, soundOn = false, ringTimer = null, callDone = false;
 
-/* 拨号音 & 铃声（本地合成） */
+/* 音效合成 */
 function tone(freq, dur, vol, type, when){
   try{
     audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
@@ -1044,94 +1113,88 @@ function tone(freq, dur, vol, type, when){
     o.start(t0); o.stop(t0 + dur + .05);
   }catch(e){}
 }
-const dialBeep = () => tone(440 + Math.random()*220, .16, .14);
-
-/* 分类数据预览图（取该分类第一个有图作品；支持三联画） */
-function previewHTML(cat){
-  const w = DATA[cat].works.find(w => w.img);
-  if (!w) return `<div class="ph">该分类图片整理中<br>占位区已在作品页就位</div>`;
-  if (w.tri){
-    const pos = ['top','center','bottom'];
-    return pos.map(p => `<img class="tri3" src="${w.img}" style="object-position:${p};" alt="">`).join('');
-  }
-  return `<img src="${w.img}" alt="">`;
+function ringOnce(){
+  if (!soundOn) return;
+  tone(920,.32,.11,'triangle'); tone(690,.32,.09,'triangle',.02);
+  setTimeout(()=>{ if (soundOn){ tone(920,.32,.11,'triangle'); tone(690,.32,.09,'triangle',.02); } }, 560);
 }
 
-/* 6-0 的特别节目 */
-const EXTRA = {
-  6:{title:'关于我', en:'ABOUT ME', go:'about', desc:'湖北美术学院艺术与科技（影视动画方向）在读，深耕 AIGC 视觉创作赛道。想了解我的经历、项目与获奖？「关于」页见。', prev:'🎓 湖美 · 艺术与科技<br>简历已装订成册', label:'前往关于页 →'},
-  7:{title:'技能速览', en:'SKILLS', go:'skills', desc:'AIGC 全链路 · 美术影视基础 · 后期软件 · 文案策划，四条技能能量条已经充满，去看看我的武器库。', prev:'🛠️ AIGC · 美术 · 后期<br>武器库一览', label:'前往技能页 →'},
-  8:{title:'联络方式', en:'CONTACT', go:'contact', desc:'有合作或项目邀约？拨通电话或写封邮件，小宇宙随时在线。', prev:'📮 电话 · 邮箱<br>都在联络页等你', label:'前往联络页 →'},
-  9:{title:'回到封面', en:'BACK TO COVER', desc:'想再看看会眨眼的小宇宙女孩？按下这里带你回封面，重新开始这场冒险。', prev:'🌏 小宇宙女孩在封面等你', label:'回到封面 →'},
-  0:{title:'神秘彩蛋', en:'SURPRISE ME', desc:'不按套路出牌！随机跳进一个作品分类，看看命运把你带到哪里。', prev:'🎲 命运转盘已就位', label:'随机出发 →'},
-};
+/* 来电响铃（默认静音，可手动开启；只晃动不出声） */
+function startRinging(){
+  if (callDone || phoneZone.classList.contains('ringing')) return;
+  phoneZone.classList.add('ringing');
+  ringOnce();
+  clearInterval(ringTimer);
+  ringTimer = setInterval(ringOnce, 1900);
+}
+function stopRinging(){
+  clearInterval(ringTimer); ringTimer = null;
+  phoneZone.classList.remove('ringing');
+}
+const muteBtn = document.getElementById('muteBtn');
+muteBtn.addEventListener('click', () => {
+  soundOn = !soundOn;
+  muteBtn.textContent = soundOn ? '🔔 铃声已开启' : '🔕 铃声已静音';
+  muteBtn.classList.toggle('off', !soundOn);
+  if (soundOn) tone(880,.18,.12);
+});
 
-function dialNumber(n){
-  dialBeep();
-  /* 数字按压动画 */
-  const gEl = document.querySelector(`.dial-num[data-n="${n}"]`);
-  gEl.classList.add('pressed');
-  setTimeout(()=> gEl.classList.remove('pressed'), 220);
-  /* 拨号盘轻微旋转后回位 */
-  phoneZone.classList.remove('dialturn');
-  void phoneZone.getBoundingClientRect();
-  phoneZone.classList.add('dialturn');
-  setTimeout(()=> phoneZone.classList.remove('dialturn'), 520);
-  /* 听筒拿起 + 铃声 */
-  currentCat = n;
+/* 接听 / 挂断 */
+document.getElementById('btnAnswer').addEventListener('click', answerCall);
+document.getElementById('btnHang').addEventListener('click', () => {
+  tone(240,.28,.1,'sine');
+  stopRinging();
+  setTimeout(startRinging, 3800);   /* 过一会儿再次来电，不会错过 */
+});
+function answerCall(){
+  if (callDone){ document.getElementById('callCard').classList.add('open'); return; }
+  callDone = true;
+  stopRinging();
+  document.getElementById('callBtns').classList.add('hide');   /* 接听按钮退场 */
+  tone(660,.25,.1); tone(880,.3,.1,'sine',.18);
+  /* 第一步：听筒抬起（独立部件绕端点旋转） */
   phoneZone.classList.add('lifted');
-  tone(660, .3, .1, 'sine', .15);
-  tone(660, .3, .1, 'sine', .5);
-  /* 信息卡 */
-  const icBadge = document.getElementById('icBadge');
-  const icGo = document.getElementById('icGo');
-  if (n <= 5){
-    const cat = Object.keys(DATA)[n-1];
-    const d = DATA[cat];
-    icBadge.textContent = n;
-    document.getElementById('icTitle').textContent = d.zh;
-    document.getElementById('icSub').textContent = d.en;
-    document.getElementById('icDesc').textContent = d.desc;
-    document.getElementById('icPreview').innerHTML = previewHTML(cat);
-    icGo.textContent = '进入分类 →';
-  } else {
-    const e = EXTRA[n];
-    icBadge.textContent = n;
-    document.getElementById('icTitle').textContent = e.title;
-    document.getElementById('icSub').textContent = e.en;
-    document.getElementById('icDesc').textContent = e.desc;
-    document.getElementById('icPreview').innerHTML = `<div class="ph">${e.prev}</div>`;
-    icGo.textContent = e.label;
-  }
-  document.getElementById('infoCard').classList.add('open');
-  document.getElementById('infoCard').scrollTop = 0;
+  /* 第二步：接通动画 → 电话线轻晃（CSS 已配合 .lifted 播放两次） */
+  /* 第三步：女孩拿着听筒出现，逐条气泡说话 */
+  setTimeout(() => {
+    document.getElementById('callCard').classList.add('open');
+    showBubbles();
+  }, 850);
 }
-dialNums.addEventListener('click', e => {
-  const g = e.target.closest('.dial-num');
-  if (g) dialNumber(+g.dataset.n);
-});
-/* 点击举起中的听筒 → 进入当前分类 */
-document.getElementById('handset').addEventListener('click', () => {
-  if (phoneZone.classList.contains('lifted') && currentCat){
-    openCategory(Object.keys(DATA)[currentCat-1]);
-  }
-});
-function hangUp(){
-  phoneZone.classList.remove('lifted');
-  document.getElementById('infoCard').classList.remove('open');
+function showBubbles(){
+  const bubbles = document.querySelectorAll('#callCard .bubble');
+  bubbles.forEach((b,i) => setTimeout(() => b.classList.add('show'), 350 + i*900));
+  const stickers = document.querySelectorAll('#callCard .sticker');
+  const base = 350 + bubbles.length*900 + 350;
+  stickers.forEach((s,i) => setTimeout(() => s.classList.add('show'), base + i*150));
+  setTimeout(() => document.getElementById('worksBtn').classList.add('show'), base + stickers.length*150 + 300);
 }
-document.getElementById('icHang').addEventListener('click', hangUp);
-document.getElementById('icGo').addEventListener('click', () => {
-  if (currentCat == null) return;
-  if (currentCat <= 5){
-    openCategory(Object.keys(DATA)[currentCat-1]);
-  } else if (currentCat === 9){
-    showPage('p1'); hangUp();
-  } else if (currentCat === 0){
-    openCategory(Object.keys(DATA)[Math.floor(Math.random()*5)]);
-  } else {
-    showPage(EXTRA[currentCat].go); hangUp();
+
+/* LET'S SEE MY WORKS → 红色圆形幕布转场进作品页 */
+document.getElementById('worksBtn').addEventListener('click', function(){
+  const vw = innerWidth, vh = innerHeight;
+  const r = this.getBoundingClientRect();
+  const mx = r.left + r.width/2, my = r.top + r.height/2;
+  const maxR = Math.hypot(Math.max(mx, vw-mx), Math.max(my, vh-my)) + 60;
+  blackHole.style.display = 'block';
+  blackHole.style.opacity = 1;
+  blackHole.style.clipPath = `circle(0px at ${mx}px ${my}px)`;
+  tone(520,.12,.12); tone(660,.18,.12,'sine',.12);
+  const t0 = performance.now(), DUR = 900;
+  function frame(now){
+    const t = Math.min(1, (now-t0)/DUR);
+    blackHole.style.clipPath = `circle(${(maxR*t*t).toFixed(1)}px at ${mx}px ${my}px)`;
+    if (t < 1){ requestAnimationFrame(frame); return; }
+    showPage('p3');
+    burst(vw/2, vh/2);
+    blackHole.style.transition = 'opacity .55s';
+    blackHole.style.opacity = 0;
+    setTimeout(() => {
+      blackHole.style.display = 'none';
+      blackHole.style.transition = '';
+    }, 600);
   }
+  requestAnimationFrame(frame);
 });
 
 /* ============ 第三页 · 作品画廊 ============ */
