@@ -17,6 +17,17 @@
     --ink:#1f1c1a;
     --gray:#8a8272;
   }
+  /* 三套可切换主题：01 RED / 02 MINT / 03 GOLDEN */
+  body[data-theme="mint"]{
+    --tomato:#2f9e6e;--cherry:#1f7a50;--red:#3fae6e;
+    --cream:#eef6ee;--yellow:#ffd95e;--pink:#bfe8d2;
+    --ink:#17251d;--gray:#7e8f83;
+  }
+  body[data-theme="golden"]{
+    --tomato:#e0a428;--cherry:#b97e14;--red:#d99a1f;
+    --cream:#f8f2e4;--yellow:#ffcf5e;--pink:#ffe3ae;
+    --ink:#241c10;--gray:#948a74;
+  }
   *{margin:0;padding:0;box-sizing:border-box;}
   html,body{height:100%;overflow:hidden;}
   body{
@@ -38,75 +49,150 @@
   .page.leaving{transform:scale(1.12);opacity:0;z-index:3;}
   .page.scroll{overflow-y:auto;overflow-x:hidden;justify-content:flex-start;}
 
-  /* ============ 第一页 · 可爱复古插画封面 ============ */
-  .p1{
-    background:
-      radial-gradient(110% 110% at 50% -10%, #ff6a58 0%, var(--tomato) 48%, var(--cherry) 100%);
-    color:var(--paper);
+  /* ============ 加载层 · 正在展开纸片 ============ */
+  .preloader{
+    position:fixed;inset:0;z-index:400;
+    background:var(--paper);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+    transition:transform .7s cubic-bezier(.7,0,.3,1), opacity .5s;
+    perspective:900px;
   }
+  .preloader.done{transform:translateY(-100%);opacity:0;pointer-events:none;}
+  .pl-stage{width:min(180px,40vw);height:min(126px,28vw);perspective:900px;}
+  .pl-paper{
+    width:100%;height:100%;background:var(--red);
+    border:3px solid var(--ink);border-radius:14px;
+    transform-origin:50% 100%;
+    animation:paperUnfold 1.5s cubic-bezier(.2,.8,.3,1) forwards;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:8px 10px 0 rgba(31,28,26,.12);
+  }
+  .pl-paper::after{content:"★";font-size:34px;color:var(--yellow);text-shadow:2px 2px 0 var(--ink);}
+  @keyframes paperUnfold{
+    0%{transform:rotateX(88deg) scale(.6);opacity:0;}
+    45%{transform:rotateX(30deg) scale(1.04);opacity:1;}
+    70%{transform:rotateX(-6deg) scale(.98);}
+    100%{transform:rotateX(0) scale(1);}
+  }
+  .pl-txt{
+    font-family:"Space Mono",monospace;font-size:13px;letter-spacing:4px;color:var(--gray);
+  }
+  .pl-txt i{font-style:normal;animation:plDots 1.2s steps(4) infinite;}
+  @keyframes plDots{0%{clip-path:inset(0 100% 0 0)}100%{clip-path:inset(0 0 0 0)}}
+
+  /* ============ 第一页 · 纸片工作室封面 ============ */
+  .p1{background:var(--paper);}
   .p1 .grain{
-    position:absolute;inset:0;opacity:.08;pointer-events:none;
-    background-image:radial-gradient(#fff 1.2px, transparent 1.8px);
-    background-size:26px 26px;
+    position:absolute;inset:0;opacity:.5;pointer-events:none;
+    background-image:radial-gradient(rgba(31,28,26,.07) 1px, transparent 1.4px);
+    background-size:20px 20px;
   }
   .cover-scene{position:absolute;inset:0;will-change:transform;}
-  .cover-inner{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;}
-  .p1-kicker{
-    margin-top:5.5vh;font-family:"Space Mono",monospace;
-    font-size:clamp(10px,1.2vw,14px);letter-spacing:6px;color:#ffd9d2;
+  .cover-inner{
+    position:relative;height:100%;display:flex;flex-direction:column;
+    padding:0 5vw;
   }
-  .p1-title{
-    font-family:"ZCOOL KuaiLe","Archivo Black",Impact,sans-serif;
-    font-size:clamp(36px,6.2vw,84px);letter-spacing:3px;color:var(--paper);
-    text-shadow:4px 4px 0 rgba(140,10,25,.45);line-height:1;margin-top:10px;
+  /* 封面入场：纸片依次展开 */
+  .cv-rv{opacity:0;transform:rotateX(38deg) translateY(26px);transform-origin:50% 100%;}
+  .p1.revealed .cv-rv{animation:cvIn .8s cubic-bezier(.2,.8,.3,1.1) forwards;}
+  .p1.revealed .cv-rv.d1{animation-delay:.05s}
+  .p1.revealed .cv-rv.d2{animation-delay:.18s}
+  .p1.revealed .cv-rv.d3{animation-delay:.32s}
+  .p1.revealed .cv-rv.d4{animation-delay:.46s}
+  .p1.revealed .cv-rv.d5{animation-delay:.6s}
+  @keyframes cvIn{to{opacity:1;transform:rotateX(0) translateY(0);}}
+  /* 顶栏 */
+  .cv-top{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-top:26px;font-family:"Space Mono",monospace;
+    font-size:12px;letter-spacing:3px;color:var(--ink);
+    border-bottom:2px solid var(--ink);padding-bottom:14px;
   }
-  .p1-title em{font-style:normal;color:var(--yellow);}
-  .p1-sub{
-    font-family:"Space Mono",monospace;font-size:clamp(11px,1.4vw,16px);
-    letter-spacing:5px;color:var(--paper);margin-top:12px;
-    background:rgba(140,10,25,.35);border-radius:999px;padding:7px 22px;
+  .cv-contact{
+    background:none;border:2px solid var(--ink);border-radius:999px;
+    padding:7px 16px;font-family:inherit;font-size:12px;letter-spacing:2px;
+    color:var(--ink);cursor:pointer;transition:all .2s;box-shadow:3px 3px 0 var(--ink);
   }
-  .toy-wrap{
-    position:relative;width:min(54vh,42vw,460px);margin-top:2vh;
-    animation:floaty 4.6s ease-in-out infinite;z-index:3;
+  .cv-contact:hover{background:var(--red);color:#fff;transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink);}
+  /* 主题切换器 */
+  .cv-themes{
+    position:absolute;right:5vw;top:14vh;z-index:6;
+    display:flex;flex-direction:column;gap:10px;align-items:flex-end;
+    font-family:"Space Mono",monospace;
   }
-  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
-  #toySVG{width:100%;display:block;filter:drop-shadow(0 24px 24px rgba(120,0,15,.38));}
-  .cover-scene.no-float .toy-wrap{animation:none;}
-  .cover-scene.no-float #toySVG{filter:none;}
-  /* 眼睛自动眨眼（跟随由 JS 控制外层分组） */
-  #eyeL,#eyeR{transform-box:fill-box;transform-origin:center;animation:blinkEyes 5s ease-in-out infinite;}
-  @keyframes blinkEyes{0%,92.5%,100%{transform:scaleY(1)}95.5%{transform:scaleY(.08)}}
-  /* 嘴巴：真正独立的可交互入口 */
-  #mouthGrp{cursor:pointer;transform-box:fill-box;transform-origin:center;transition:transform .8s cubic-bezier(.55,0,.85,.4);}
-  #mouthGrp .lip{transition:transform .25s;}
-  #mouthGrp:hover .lip{transform:scale(1.12,1.3);}
-  .cover-scene.open #mouthGrp{transform:scale(8);}
-  /* CLICK ME 小气泡 */
-  #clickTip{
-    position:absolute;left:63%;top:53%;z-index:6;
-    background:var(--paper);color:var(--cherry);border:2.5px solid var(--ink);
-    border-radius:12px;padding:5px 13px;font-family:"Space Mono",monospace;
-    font-size:12.5px;letter-spacing:1.5px;box-shadow:3px 3px 0 var(--ink);
-    opacity:0;transform:rotate(6deg) translateY(8px);transition:all .25s;pointer-events:none;
+  .cv-themes button{
+    background:none;border:none;font-family:inherit;font-size:13px;
+    letter-spacing:3px;color:var(--gray);cursor:pointer;
+    display:flex;align-items:center;gap:9px;transition:all .2s;
+    padding:4px 0;
   }
-  #clickTip.show{opacity:1;transform:rotate(6deg) translateY(0);animation:tipBob 1s ease-in-out infinite;}
-  @keyframes tipBob{0%,100%{margin-top:0}50%{margin-top:-5px}}
-  #clickTip::before{
-    content:"";position:absolute;left:-15px;bottom:8px;
-    border:7px solid transparent;border-right-color:var(--paper);
+  .cv-themes button::before{
+    content:"";width:13px;height:13px;border-radius:50%;
+    border:2px solid var(--ink);background:var(--dot,#ccc);
+    transition:transform .2s;
   }
-  .p1-bottom{
-    margin-top:auto;margin-bottom:3vh;font-family:"Space Mono",monospace;
-    font-size:clamp(11px,1.3vw,14px);letter-spacing:5px;color:#ffd9d2;
-    animation:blinkTip 2s ease-in-out infinite;z-index:3;
+  .cv-themes button:hover{color:var(--ink);transform:translateX(-4px);}
+  .cv-themes button.on{color:var(--ink);font-weight:bold;}
+  .cv-themes button.on::before{transform:scale(1.25);}
+  .cv-themes .t-red::before{background:var(--tomato);}
+  .cv-themes .t-mint::before{background:#2f9e6e;}
+  .cv-themes .t-golden::before{background:#e0a428;}
+  /* 主标题区 */
+  .cv-main{flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;}
+  .cv-kicker{
+    font-family:"Space Mono",monospace;font-size:clamp(11px,1.2vw,14px);
+    letter-spacing:6px;color:var(--gray);margin-bottom:14px;
   }
-  @keyframes blinkTip{0%,100%{opacity:.95}50%{opacity:.45}}
-  .doodle{position:absolute;pointer-events:none;z-index:1;}
-  @keyframes spinSlow{to{transform:rotate(360deg);}}
+  .cv-title{
+    font-family:"Archivo Black",Impact,"Arial Black",sans-serif;
+    font-size:clamp(64px,13.5vw,196px);line-height:.88;color:var(--ink);
+    letter-spacing:-2px;
+  }
+  .cv-title em{
+    font-style:normal;color:var(--red);
+    text-shadow:5px 5px 0 rgba(31,28,26,.14);
+  }
+  .cv-title .row2{display:block;}
+  .cv-sub{
+    margin-top:22px;font-size:clamp(14px,1.8vw,20px);
+    letter-spacing:4px;color:var(--ink);
+  }
+  .cv-tags{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+  .cv-tags span{
+    font-family:"Space Mono",monospace;font-size:11.5px;letter-spacing:2px;
+    border:2px solid var(--ink);border-radius:999px;padding:5px 14px;
+    background:var(--cream);transition:transform .2s;cursor:default;
+  }
+  .cv-tags span:hover{transform:rotate(-3deg) scale(1.08);}
+  .cv-tags .hot{background:var(--red);color:#fff;}
+  /* 贴纸装饰卡片 */
+  .cv-sticker{
+    position:absolute;z-index:2;pointer-events:none;
+    animation:stickFloat 5s ease-in-out infinite;
+  }
+  .cv-sticker.s1{right:16vw;top:-6vh;width:120px;transform:rotate(10deg);}
+  .cv-sticker.s2{right:7vw;bottom:2vh;width:96px;transform:rotate(-8deg);animation-delay:1.2s;}
+  .cv-sticker.s3{left:44vw;top:4vh;width:74px;transform:rotate(-14deg);animation-delay:2.1s;}
+  @keyframes stickFloat{0%,100%{margin-top:0}50%{margin-top:-10px}}
+  /* 进入按钮 */
+  .cv-enter{
+    margin-top:34px;align-self:flex-start;
+    background:var(--red);color:#fff;border:3px solid var(--ink);
+    border-radius:999px;padding:16px 42px;font-size:17px;letter-spacing:3px;
+    font-family:inherit;cursor:pointer;box-shadow:6px 6px 0 var(--ink);
+    transition:all .22s;
+  }
+  .cv-enter:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--ink);background:var(--tomato);}
+  .cv-enter:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink);}
+  /* 底栏 */
+  .cv-bottom{
+    display:flex;justify-content:space-between;padding:16px 0 24px;
+    border-top:2px solid var(--ink);
+    font-family:"Space Mono",monospace;font-size:11px;letter-spacing:3px;color:var(--gray);
+  }
   /* 转场红色幕布 */
   #blackHole{
-    position:fixed;inset:0;background:#a31230;
+    position:fixed;inset:0;background:var(--cherry);
     z-index:150;pointer-events:none;display:none;
   }
 
@@ -132,7 +218,7 @@
   /* ============ 第二页 · 来电！复古电话 ============ */
   .p2{
     background:
-      radial-gradient(105% 105% at 50% 0%, #ff6a58 0%, var(--tomato) 52%, #b31e36 100%);
+      radial-gradient(105% 105% at 50% 0%, var(--tomato) 0%, var(--cherry) 100%);
     color:var(--paper);
   }
   .p2-inner{position:relative;width:100%;height:100%;}
@@ -452,10 +538,13 @@
 
   /* ============ 响应式 ============ */
   @media (max-width:960px){
-    .p1-title{letter-spacing:1px;}
-    .toy-wrap{width:min(58vw,320px);margin-top:2.6vh;}
-    #clickTip{left:60%;top:50%;}
-    .doodle{transform:scale(.8);}
+    .cv-title{letter-spacing:0;}
+    .cv-themes{top:auto;bottom:14vh;right:5vw;flex-direction:row;gap:16px;}
+    .cv-sticker.s1{right:8vw;top:6vh;width:84px;}
+    .cv-sticker.s2{width:64px;}
+    .cv-sticker.s3{display:none;}
+    .cv-enter{padding:14px 30px;font-size:15px;}
+    .cv-top{font-size:10px;letter-spacing:2px;}
     .side-nav{right:8px;gap:7px;}
     .side-nav button{padding:9px 5px;font-size:11px;letter-spacing:2px;box-shadow:2px 2px 0 var(--ink);}
     .side-nav .nav-mini{display:none;}
@@ -477,133 +566,67 @@
 </head>
 <body>
 
-<!-- ============ 第一页 · 可爱复古插画封面 ============ -->
+<!-- ============ 第一页 · 纸片工作室封面 ============ -->
 <section class="page p1 active" id="p1">
   <div class="grain"></div>
-  <div class="cover-scene" id="coverScene">
+  <div class="cover-scene">
     <div class="cover-inner">
 
-      <!-- 手绘装饰：星星 / 波浪线 / 小花 -->
-      <svg class="doodle" style="left:7vw;top:15vh;width:44px;animation:spinSlow 16s linear infinite;" viewBox="0 0 40 40">
-        <path d="M20 2 l4.5 11.5 12.5 1 -9.5 8 3 12 -10.5 -6.5 -10.5 6.5 3 -12 -9.5 -8 12.5 -1 Z" fill="#f4c542" stroke="#241812" stroke-width="2.5" stroke-linejoin="round"/>
-      </svg>
-      <svg class="doodle" style="right:8vw;top:13vh;width:60px;" viewBox="0 0 62 30">
-        <path d="M2 16 q7 -14 14 0 t14 0 t14 0 t14 0" fill="none" stroke="#ffd9d2" stroke-width="4" stroke-linecap="round"/>
-      </svg>
-      <svg class="doodle" style="left:9vw;bottom:20vh;width:50px;" viewBox="0 0 50 50">
-        <g transform="translate(25 25)">
-          <g fill="#ffd6de" stroke="#241812" stroke-width="2.5">
-            <ellipse cx="0" cy="-13" rx="6.5" ry="10"/>
-            <ellipse cx="0" cy="-13" rx="6.5" ry="10" transform="rotate(72)"/>
-            <ellipse cx="0" cy="-13" rx="6.5" ry="10" transform="rotate(144)"/>
-            <ellipse cx="0" cy="-13" rx="6.5" ry="10" transform="rotate(216)"/>
-            <ellipse cx="0" cy="-13" rx="6.5" ry="10" transform="rotate(288)"/>
-          </g>
-          <circle r="6.5" fill="#f4c542" stroke="#241812" stroke-width="2.5"/>
-        </g>
-      </svg>
-      <svg class="doodle" style="right:6vw;bottom:30vh;width:40px;animation:spinSlow 12s linear infinite reverse;" viewBox="0 0 40 40">
-        <path d="M20 2 l4.5 11.5 12.5 1 -9.5 8 3 12 -10.5 -6.5 -10.5 6.5 3 -12 -9.5 -8 12.5 -1 Z" fill="#ffd6de" stroke="#241812" stroke-width="2.5" stroke-linejoin="round"/>
-      </svg>
-      <div class="doodle" style="left:4vw;bottom:6vh;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:3px;color:#ffd9d2;opacity:.8;">✷ EST. 2026 ✷</div>
-      <div class="doodle" style="right:4vw;bottom:6vh;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:3px;color:#ffd9d2;opacity:.8;">VOL.01 ✷</div>
-
-      <!-- 文案 -->
-      <div class="p1-kicker">A CREATIVE PORTFOLIO BY HUANG XUCHU.</div>
-      <h1 class="p1-title">HELLO, <em>STRANGER!</em></h1>
-      <div class="p1-sub">WELCOME TO MY LITTLE WORLD.</div>
-
-      <!-- 原创卡通女孩（完整角色：丸子头 + 蝴蝶结 + 小裙子） -->
-      <div class="toy-wrap">
-        <svg id="toySVG" viewBox="0 0 320 430">
-          <defs>
-            <radialGradient id="skinG" cx="42%" cy="34%" r="75%">
-              <stop offset="0" stop-color="#fff4e8"/><stop offset=".6" stop-color="#ffe6d2"/><stop offset="1" stop-color="#f3c3a5"/>
-            </radialGradient>
-            <radialGradient id="hairG" cx="35%" cy="25%" r="85%">
-              <stop offset="0" stop-color="#5a4a42"/><stop offset=".55" stop-color="#3a2a24"/><stop offset="1" stop-color="#241812"/>
-            </radialGradient>
-            <linearGradient id="dressG" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#fff6ea"/><stop offset="1" stop-color="#ffe9d6"/>
-            </linearGradient>
-            <radialGradient id="blushG" cx="50%" cy="50%" r="50%">
-              <stop offset="0" stop-color="#ff9a8c" stop-opacity=".75"/><stop offset="1" stop-color="#ff9a8c" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-
-          <!-- 双丸子头 -->
-          <circle cx="58" cy="215" r="40" fill="url(#hairG)" stroke="#241812" stroke-width="5"/>
-          <circle cx="262" cy="215" r="40" fill="url(#hairG)" stroke="#241812" stroke-width="5"/>
-          <!-- 蝴蝶结 -->
-          <g transform="translate(52 176) rotate(-12)">
-            <path d="M0 0 L-20 -11 L-18 9 Z" fill="#f4c542" stroke="#241812" stroke-width="4" stroke-linejoin="round"/>
-            <path d="M0 0 L20 -11 L18 9 Z" fill="#f4c542" stroke="#241812" stroke-width="4" stroke-linejoin="round"/>
-            <circle r="7" fill="#e63950" stroke="#241812" stroke-width="3.5"/>
-          </g>
-          <g transform="translate(268 176) rotate(12)">
-            <path d="M0 0 L-20 -11 L-18 9 Z" fill="#f4c542" stroke="#241812" stroke-width="4" stroke-linejoin="round"/>
-            <path d="M0 0 L20 -11 L18 9 Z" fill="#f4c542" stroke="#241812" stroke-width="4" stroke-linejoin="round"/>
-            <circle r="7" fill="#e63950" stroke="#241812" stroke-width="3.5"/>
-          </g>
-          <!-- 后层头发 -->
-          <path d="M160 52 C82 52 54 122 56 210 C57 258 72 292 92 300 L96 214 C98 148 124 120 160 120 C196 120 222 148 224 214 L228 300 C248 292 263 258 264 210 C266 122 238 52 160 52 Z" fill="url(#hairG)" stroke="#241812" stroke-width="5"/>
-          <!-- 身体（奶油白小裙子） -->
-          <path d="M104 428 C104 362 128 334 160 334 C192 334 216 362 216 428 Z" fill="url(#dressG)" stroke="#241812" stroke-width="6"/>
-          <!-- 脖子 -->
-          <path d="M146 292 L146 336 L174 336 L174 292 Z" fill="#f6c9ac" stroke="#241812" stroke-width="5"/>
-          <!-- 红色领口 + 扣子 -->
-          <path d="M136 344 C146 358 174 358 184 344" fill="none" stroke="#e63950" stroke-width="8" stroke-linecap="round"/>
-          <circle cx="160" cy="374" r="7" fill="#e63950" stroke="#241812" stroke-width="3.5"/>
-          <!-- 小手 -->
-          <ellipse cx="110" cy="400" rx="15" ry="12" fill="url(#skinG)" stroke="#241812" stroke-width="4.5" transform="rotate(-16 110 400)"/>
-          <ellipse cx="210" cy="400" rx="15" ry="12" fill="url(#skinG)" stroke="#241812" stroke-width="4.5" transform="rotate(16 210 400)"/>
-
-          <g id="toyHead">
-            <!-- 脸 -->
-            <circle cx="160" cy="196" r="78" fill="url(#skinG)" stroke="#e8b490" stroke-width="2"/>
-            <!-- 刘海 -->
-            <path d="M84 180 C84 106 116 80 160 80 C204 80 236 106 236 180 C216 152 192 140 160 140 C128 140 104 152 84 180 Z" fill="url(#hairG)" stroke="#241812" stroke-width="5"/>
-            <!-- 头发光泽 -->
-            <path d="M110 108 C128 94 156 88 180 94" fill="none" stroke="#8a6f5f" stroke-width="7" stroke-linecap="round" opacity=".55"/>
-            <ellipse cx="126" cy="100" rx="16" ry="7" fill="#fff" opacity=".22" transform="rotate(-16 126 100)"/>
-            <!-- 眉毛 -->
-            <path d="M112 176 q12 -7 26 -2 M182 174 q14 -5 26 3" stroke="#4a342c" stroke-width="4" fill="none" stroke-linecap="round"/>
-            <!-- 睫毛 -->
-            <path d="M96 192 l-10 -6 M100 184 l-8 -8 M224 184 l8 -8 M228 192 l10 -6" stroke="#241812" stroke-width="3" stroke-linecap="round"/>
-            <!-- 眼睛（可跟随） -->
-            <g id="trackL"><g id="eyeL">
-              <ellipse cx="128" cy="206" rx="17" ry="18" fill="#241812"/>
-              <circle cx="134" cy="199" r="6.5" fill="#fff"/>
-              <circle cx="121" cy="212" r="3.2" fill="#fff" opacity=".85"/>
-              <circle cx="139" cy="214" r="2" fill="#ff9a8c" opacity=".7"/>
-            </g></g>
-            <g id="trackR"><g id="eyeR">
-              <ellipse cx="192" cy="206" rx="17" ry="18" fill="#241812"/>
-              <circle cx="198" cy="199" r="6.5" fill="#fff"/>
-              <circle cx="185" cy="212" r="3.2" fill="#fff" opacity=".85"/>
-              <circle cx="203" cy="214" r="2" fill="#ff9a8c" opacity=".7"/>
-            </g></g>
-            <!-- 腮红 + 雀斑 -->
-            <ellipse cx="104" cy="236" rx="17" ry="10" fill="url(#blushG)"/>
-            <ellipse cx="216" cy="236" rx="17" ry="10" fill="url(#blushG)"/>
-            <g fill="#e8938a" opacity=".7">
-              <circle cx="98" cy="230" r="1.6"/><circle cx="107" cy="240" r="1.6"/><circle cx="93" cy="238" r="1.6"/>
-              <circle cx="222" cy="230" r="1.6"/><circle cx="213" cy="240" r="1.6"/><circle cx="227" cy="238" r="1.6"/>
-            </g>
-            <!-- 鼻子 -->
-            <path d="M158 226 q2.5 3.5 5 0" stroke="#d9a08e" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <!-- 嘴巴（真正独立的可交互入口） -->
-            <g id="mouthGrp">
-              <ellipse class="lip" cx="160" cy="254" rx="14" ry="15" fill="#8a1030"/>
-              <ellipse class="lip" id="tongueEl" cx="160" cy="261" rx="8" ry="4.5" fill="#ff6b81" opacity="0"/>
-            </g>
-          </g>
-        </svg>
-        <div id="clickTip">CLICK ME!</div>
+      <!-- 加载层 -->
+      <div class="preloader" id="preloader">
+        <div class="pl-stage"><div class="pl-paper"></div></div>
+        <div class="pl-txt">正在展开纸片<i>……</i></div>
       </div>
 
-      <!-- 底部提示 -->
-      <div class="p1-bottom">PSSST... CLICK MY MOUTH!</div>
+      <!-- 顶栏 -->
+      <header class="cv-top cv-rv d1">
+        <span>HUANG XUCHU — CREATIVE WORLD</span>
+        <button class="cv-contact" data-goto="contact">CONTACT ME ↗</button>
+      </header>
+
+      <!-- 主题切换器 -->
+      <div class="cv-themes cv-rv d2">
+        <button class="t-red on" data-theme-btn="red">01 RED</button>
+        <button class="t-mint" data-theme-btn="mint">02 MINT</button>
+        <button class="t-golden" data-theme-btn="golden">03 GOLDEN</button>
+      </div>
+
+      <!-- 主标题区 -->
+      <main class="cv-main">
+        <svg class="cv-sticker s1" viewBox="0 0 100 100">
+          <path d="M50 6 l9 24 26 2 -20 17 6 26 -21 -13 -21 13 6 -26 -20 -17 26 -2 Z" fill="var(--yellow)" stroke="#1f1c1a" stroke-width="3" stroke-linejoin="round"/>
+        </svg>
+        <svg class="cv-sticker s2" viewBox="0 0 100 100">
+          <g transform="translate(50 50)">
+            <g fill="var(--pink)" stroke="#1f1c1a" stroke-width="3">
+              <ellipse cx="0" cy="-24" rx="12" ry="19"/>
+              <ellipse cx="0" cy="-24" rx="12" ry="19" transform="rotate(72)"/>
+              <ellipse cx="0" cy="-24" rx="12" ry="19" transform="rotate(144)"/>
+              <ellipse cx="0" cy="-24" rx="12" ry="19" transform="rotate(216)"/>
+              <ellipse cx="0" cy="-24" rx="12" ry="19" transform="rotate(288)"/>
+            </g>
+            <circle r="12" fill="var(--yellow)" stroke="#1f1c1a" stroke-width="3"/>
+          </g>
+        </svg>
+        <svg class="cv-sticker s3" viewBox="0 0 80 40">
+          <path d="M4 22 q8 -16 16 0 t16 0 t16 0 t16 0" fill="none" stroke="var(--red)" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+
+        <div class="cv-kicker cv-rv d2">VOL.01 — A CREATIVE PORTFOLIO BY HUANG XUCHU.</div>
+        <h1 class="cv-title cv-rv d3"><span>PORT<em>FOLIO</em></span><span class="row2">OF HUANG XUCHU</span></h1>
+        <div class="cv-sub cv-rv d4">欢迎来到我的小小创意世界 — 小纸片宇宙</div>
+        <div class="cv-tags cv-rv d4">
+          <span class="hot">AIGC</span><span>视觉设计</span><span>插画</span><span>UI / APP</span><span>信息可视化</span>
+        </div>
+        <button class="cv-enter cv-rv d5" data-goto="p3">OPEN THE WORKS →</button>
+      </main>
+
+      <!-- 底栏 -->
+      <footer class="cv-bottom cv-rv d5">
+        <span>EST. 2026</span>
+        <span>LITTLE PAPER UNIVERSE · 湖北美术学院</span>
+        <span>PICK A COLOR, THEN COME IN ☞</span>
+      </footer>
     </div>
   </div>
 </section>
@@ -1019,81 +1042,75 @@ navBtns.forEach(btn => {
   });
 });
 
-/* ============ 第一页 · 封面：眼神跟随 + 嘴巴唯一入口 ============ */
-const coverScene = document.getElementById('coverScene');
-const toySvg = document.getElementById('toySVG');
-const mouthGrp = document.getElementById('mouthGrp');
-const tongueEl = document.getElementById('tongueEl');
-const clickTip = document.getElementById('clickTip');
+/* ============ 第一页 · 纸片封面：加载展开 + 主题切换 + 转场 ============ */
 const blackHole = document.getElementById('blackHole');
-let zooming = false;
+const preloader = document.getElementById('preloader');
+const p1El = document.getElementById('p1');
+let entering = false;
 
-/* 眼睛跟随鼠标 */
-document.addEventListener('mousemove', e => {
-  if (currentPage !== 'p1' || zooming) return;
-  const r = toySvg.getBoundingClientRect();
-  const dx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width/2)) / (innerWidth*0.4)));
-  const dy = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height*0.45)) / (innerHeight*0.4)));
-  ['trackL','trackR'].forEach(id => {
-    document.getElementById(id).setAttribute('transform', `translate(${(dx*8).toFixed(1)},${(dy*6).toFixed(1)})`);
+/* 记忆主题（尊重用户上次选择） */
+try{
+  const saved = localStorage.getItem('theme');
+  if (saved && saved !== 'red') document.body.dataset.theme = saved;
+}catch(e){}
+
+/* 加载动画：纸片展开 → 揭开封面 → 封面元素依次入场 */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    preloader.classList.add('done');
+    p1El.classList.add('revealed');
+    setTimeout(() => preloader.remove(), 800);
+  }, 1500);
+});
+
+/* 主题切换：01 RED / 02 MINT / 03 GOLDEN */
+document.querySelectorAll('[data-theme-btn]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const t = btn.dataset.themeBtn;
+    document.body.dataset.theme = t;
+    document.querySelectorAll('[data-theme-btn]').forEach(b => b.classList.toggle('on', b === btn));
+    tone(t === 'red' ? 520 : t === 'mint' ? 660 : 780, .18, .12);
+    try{ localStorage.setItem('theme', t); }catch(e){}
   });
 });
-/* 鼠标靠近嘴巴 → 轻微张开 + CLICK ME 提示 */
-mouthGrp.addEventListener('mouseenter', () => {
-  if (zooming) return;
-  clickTip.classList.add('show');
-  tongueEl.style.opacity = 1;
-});
-mouthGrp.addEventListener('mouseleave', () => {
-  clickTip.classList.remove('show');
-  tongueEl.style.opacity = 0;
-});
+/* 恢复上次主题的按钮状态 */
+if (document.body.dataset.theme){
+  document.querySelectorAll('[data-theme-btn]').forEach(b =>
+    b.classList.toggle('on', b.dataset.themeBtn === document.body.dataset.theme));
+}
 
-/* 点击嘴巴 → 镜头以嘴巴中心推进，红色幕布吞屏转场 */
-function startZoom(){
-  if (zooming) return;
-  zooming = true;
-  clickTip.classList.remove('show');
-  tongueEl.style.opacity = 1;
+/* 通用纸片转场：圆形幕布从点击处扩张 → 切页 → 揭开 */
+function paperGo(target, e){
+  if (entering) return;
+  entering = true;
   const vw = innerWidth, vh = innerHeight;
-  const r = mouthGrp.getBoundingClientRect();
-  const mx = r.left + r.width/2, my = r.top + r.height/2;   /* 嘴巴中心实时坐标 */
-  /* 嘴巴平滑放大（缩放焦点锁定嘴巴中心，同时把嘴巴移到屏幕正中） */
-  coverScene.classList.add('no-float','open');
-  const tx = vw/2 - mx, ty = vh/2 - my;
-  const MAX_S = 9;
+  const mx = e ? e.clientX : vw/2, my = e ? e.clientY : vh/2;
   const maxR = Math.hypot(Math.max(mx, vw-mx), Math.max(my, vh-my)) + 60;
   blackHole.style.display = 'block';
   blackHole.style.opacity = 1;
   blackHole.style.clipPath = `circle(0px at ${mx}px ${my}px)`;
   tone(520,.12,.12); tone(660,.18,.12,'sine',.12);
-  const t0 = performance.now(), DUR = 1500;
+  const t0 = performance.now(), DUR = 800;
   function frame(now){
     const t = Math.min(1, (now-t0)/DUR);
-    const ez = t<.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2;   /* 缓入缓出 */
-    const s = 1 + (MAX_S-1)*ez;
-    coverScene.style.transformOrigin = `${mx}px ${my}px`;
-    coverScene.style.transform = `translate(${tx}px,${ty}px) scale(${s.toFixed(3)})`;
-    const bt = Math.max(0, (t-.3)/.7);
-    blackHole.style.clipPath = `circle(${(maxR*bt*bt).toFixed(1)}px at ${mx}px ${my}px)`;
+    blackHole.style.clipPath = `circle(${(maxR*t*t).toFixed(1)}px at ${mx}px ${my}px)`;
     if (t < 1){ requestAnimationFrame(frame); return; }
-    /* 红幕完全覆盖 → 显示第二页 → 揭开（电话正在响铃） */
-    showPage('p2');
-    burst(vw/2, vh/2);
+    showPage(target);
+    if (target === 'p3') burst(vw/2, vh/2);
     blackHole.style.transition = 'opacity .55s';
     blackHole.style.opacity = 0;
     setTimeout(() => {
       blackHole.style.display = 'none';
       blackHole.style.transition = '';
-      coverScene.style.transform = '';
-      coverScene.classList.remove('no-float','open');
-      tongueEl.style.opacity = 0;
-      zooming = false;
+      entering = false;
     }, 600);
   }
   requestAnimationFrame(frame);
 }
-mouthGrp.addEventListener('pointerdown', e => { e.preventDefault(); startZoom(); });
+/* 封面上的跳转按钮（CONTACT ME / OPEN THE WORKS） */
+document.querySelectorAll('.cover-scene [data-goto]').forEach(btn => {
+  btn.addEventListener('click', e => paperGo(btn.dataset.goto, e));
+});
 
 /* ============ 第二页 · 来电！接听流程 ============ */
 const phoneZone = document.getElementById('phoneZone');
